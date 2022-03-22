@@ -6,6 +6,9 @@ urlpatterns = [
     path('',views.viewfunction,name='view'),
     path('login',views.userlogin,name='loginview'),
     path('register',views.register,name='register'),
+    path('createBlog',views.createBlog,name='createBlog'),
+    path('editBlog/<str:pk>/',views.editBlog,name='editBlog'),
+
     path('saveTableRow/<str:tableName>/',views.saveTableRow,name="saveTableRow"),
     path('getRowData/<int:id>/<str:tableName>/',views.getRowData,name="getRowData"),
     path('editData/<int:id>/<str:tableName>/',views.editData,name="editData"),

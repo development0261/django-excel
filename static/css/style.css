@@ -120,8 +120,8 @@ a:hover {
     justify-content: center;
 }
 
-.new-row-control button {
-    padding: 0;
+.new-row-control button,.new-row-control a {
+    padding: 4px 0px;
     border: none;
     width: 25px;
     height: 25px;
@@ -131,7 +131,7 @@ a:hover {
     color: #fff;
 }
 
-.new-row-control button.row-add {
+.new-row-control a.row-add {
     background: #5928d3;
 }
 

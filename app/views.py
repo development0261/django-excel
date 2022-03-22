@@ -1,4 +1,5 @@
 import email
+from multiprocessing import AuthenticationError
 from django.shortcuts import render,redirect
 from django.http import HttpResponse, JsonResponse
 from .models import *
@@ -62,199 +63,199 @@ from django.views.decorators.csrf import csrf_exempt
 def saveTableRow(request,tableName):
     if request.method == "POST":
 
-        title = request.POST['title']
+        topic = request.POST['topic']
         author = request.POST['author']
         date = request.POST['date']
 
         if tableName == "Content_Pitching":
-            tableObj = apwire_ContentPitching.objects.create(title = title,author = author,Date = date)
+            tableObj = apwire_ContentPitching.objects.create(topic = topic,author = author,Date = date)
             date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
             formatedDate = date.strftime('%B %d,%Y')
-            return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+            return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
 
         if tableName == "Writing_Rewrite":
-            tableObj = apwire_WritingRewrite.objects.create(title = title,author = author,Date = date)
+            tableObj = apwire_WritingRewrite.objects.create(topic = topic,author = author,Date = date)
             date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
             formatedDate = date.strftime('%B %d,%Y')
-            return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+            return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
 
         if tableName == "Review_Draft_1":
-            tableObj = apwire_ReviewDraft1.objects.create(title = title,author = author,Date = date)
+            tableObj = apwire_ReviewDraft1.objects.create(topic = topic,author = author,Date = date)
             date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
             formatedDate = date.strftime('%B %d,%Y')
-            return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+            return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
 
         if tableName == "Review_Draft_2":
-            tableObj = apwire_ReviewDraft2.objects.create(title = title,author = author,Date = date)
+            tableObj = apwire_ReviewDraft2.objects.create(topic = topic,author = author,Date = date)
             date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
             formatedDate = date.strftime('%B %d,%Y')
-            return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+            return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
         
         if tableName == "FDN_Approval_1":
-            tableObj = apwire_FDNApproval.objects.create(title = title,author = author,Date = date)
+            tableObj = apwire_FDNApproval.objects.create(topic = topic,author = author,Date = date)
             date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
             formatedDate = date.strftime('%B %d,%Y')
-            return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+            return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
 
         if tableName == "Ready_For_Release":
-            tableObj = apwire_ReadyForRelease.objects.create(title = title,author = author,Date = date)
+            tableObj = apwire_ReadyForRelease.objects.create(topic = topic,author = author,Date = date)
             date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
             formatedDate = date.strftime('%B %d,%Y')
-            return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+            return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
 
         if tableName == "App_Published":
-            tableObj = apwire_APPublished.objects.create(title = title,author = author,Date = date)
+            tableObj = apwire_APPublished.objects.create(topic = topic,author = author,Date = date)
             date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
             formatedDate = date.strftime('%B %d,%Y')
-            return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+            return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
 
 def getRowData(request,id,tableName):
     if tableName == "Content_Pitching":
         tableObj = apwire_ContentPitching.objects.get(pk = id)
         date = tableObj.Date
         formatedDate = date.strftime('%Y-%m-%d')
-        return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
 
     if tableName == "Writing_Rewrite":
         tableObj = apwire_WritingRewrite.objects.get(pk = id)
         date = tableObj.Date
         formatedDate = date.strftime('%Y-%m-%d')
-        return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
 
     if tableName == "Review_Draft_1":
         tableObj = apwire_ReviewDraft1.objects.get(pk = id)
         date = tableObj.Date
         formatedDate = date.strftime('%Y-%m-%d')
-        return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
 
     if tableName == "Review_Draft_2":
         tableObj = apwire_ReviewDraft2.objects.get(pk = id)
         date = tableObj.Date
         formatedDate = date.strftime('%Y-%m-%d')
-        return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
 
     if tableName == "FDN_Approval_1":
         tableObj = apwire_FDNApproval.objects.get(pk = id)
         date = tableObj.Date
         formatedDate = date.strftime('%Y-%m-%d')
-        return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
 
     if tableName == "Ready_For_Release":
         tableObj = apwire_ReadyForRelease.objects.get(pk = id)
         date = tableObj.Date
         formatedDate = date.strftime('%Y-%m-%d')
-        return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
 
     if tableName == "App_Published":
         tableObj = apwire_APPublished.objects.get(pk = id)
         date = tableObj.Date
         formatedDate = date.strftime('%Y-%m-%d')
-        return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
         
 
 @csrf_exempt
 def editData(request,id,tableName):
-    title = request.POST['title']
+    topic = request.POST['topic']
     author = request.POST['author']
     date = request.POST['date']
     if tableName == "Content_Pitching":
         tableObj = apwire_ContentPitching.objects.get(pk = id)
         tableObj.Date = date
         tableObj.author = author
-        tableObj.title = title
+        tableObj.topic = topic
         tableObj.save()
 
         date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
         formatedDate = date.strftime('%B %d,%Y')
-        return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
 
     if tableName == "Writing_Rewrite":
         tableObj = apwire_WritingRewrite.objects.get(pk = id)
         tableObj.Date = date
         tableObj.author = author
-        tableObj.title = title
+        tableObj.topic = topic
         tableObj.save()
 
         date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
         formatedDate = date.strftime('%B %d,%Y')
-        return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
 
     if tableName == "Review_Draft_1":
         tableObj = apwire_ReviewDraft1.objects.get(pk = id)
         tableObj.Date = date
         tableObj.author = author
-        tableObj.title = title
+        tableObj.topic = topic
         tableObj.save()
 
         date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
         formatedDate = date.strftime('%B %d,%Y')
-        return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
     
     if tableName == "Review_Draft_2":
         tableObj = apwire_ReviewDraft2.objects.get(pk = id)
         tableObj.Date = date
         tableObj.author = author
-        tableObj.title = title
+        tableObj.topic = topic
         tableObj.save()
 
         date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
         formatedDate = date.strftime('%B %d,%Y')
-        return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
 
     if tableName == "FDN_Approval_1":
         tableObj = apwire_FDNApproval.objects.get(pk = id)
         tableObj.Date = date
         tableObj.author = author
-        tableObj.title = title
+        tableObj.topic = topic
         tableObj.save()
 
         date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
         formatedDate = date.strftime('%B %d,%Y')
-        return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
     
     if tableName == "Ready_For_Release":
         tableObj = apwire_ReadyForRelease.objects.get(pk = id)
         tableObj.Date = date
         tableObj.author = author
-        tableObj.title = title
+        tableObj.topic = topic
         tableObj.save()
 
         date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
         formatedDate = date.strftime('%B %d,%Y')
-        return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
     
     if tableName == "App_Published":
         tableObj = apwire_APPublished.objects.get(pk = id)
         tableObj.Date = date
         tableObj.author = author
-        tableObj.title = title
+        tableObj.topic = topic
         tableObj.save()
 
         date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
         formatedDate = date.strftime('%B %d,%Y')
-        return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
 
 
 def viewfunction(request):
     # qs1 = models.apwire_ContentPitching.objects.get(id=1)
     # context_dict= {}
     # for i in qs1:
-    #     context_dict['Title'] = qs1.title
-    #     context_dict['Title'] = qs1.title
-    #     context_dict['Title'] = qs1.title
+    #     context_dict['topic'] = qs1.topic
+    #     context_dict['topic'] = qs1.topic
+    #     context_dict['topic'] = qs1.topic
 
     # userobj = User.objects.get(username=request.user)
     # roleint = userdata(user=userobj).accessint
     # print(roleint)
 
     if request.user.is_authenticated:
-        apwire_ContentPitching_data = apwire_ContentPitching.objects.all() 
-        apwire_WritingRewrite_data = apwire_WritingRewrite.objects.all()
-        apwire_ReviewDraft1_data = apwire_ReviewDraft1.objects.all()
-        apwire_ReviewDraft2_data = apwire_ReviewDraft2.objects.all()
-        apwire_FDNApproval_data = apwire_FDNApproval.objects.all()
-        apwire_ReadyForRelease_data = apwire_ReadyForRelease.objects.all()
-        apwire_APPublished_data = apwire_APPublished.objects.all()
+        apwire_ContentPitching_data = Blog.objects.filter(status='Content_Pitching') 
+        apwire_WritingRewrite_data = Blog.objects.filter(status='Writing_Rewrite')
+        apwire_ReviewDraft1_data = Blog.objects.filter(status='Review_Draft_1')
+        apwire_ReviewDraft2_data = Blog.objects.filter(status='Review_Draft_2')
+        apwire_FDNApproval_data = Blog.objects.filter(status='FDN_Approval_1')
+        apwire_ReadyForRelease_data = Blog.objects.filter(status='Ready_For_Release')
+        apwire_APPublished_data = Blog.objects.filter(status='App_Published')
         context_dict = {}
         context_dict['Content Pitching'] = apwire_ContentPitching_data
         context_dict['Writing Rewrite'] = apwire_WritingRewrite_data
@@ -268,7 +269,23 @@ def viewfunction(request):
     else:
         return redirect('loginview')
 
+def createBlog(request):
+    if request.method == 'POST':
+        Blog.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description'],image=request.POST['image'],status="Content_Pitching")
+        return redirect('view')
+    return render(request,'createBlog.html')
 
+def editBlog(request,pk):
+    if request.method == 'POST':
+        print(pk)
+        blog = Blog.objects.filter(pk=pk).update(id=pk,topic=request.POST['topic'],author=request.user,description=request.POST['description'])
+        # blog = Blog.objects.update(id=pk,topic=request.POST['topic'],author=request.user,description=request.POST['description'])
+        if 'image' in request.FILES:
+            image=request.POST['image']
+            blog.image = image
+            blog.save()
+        return redirect('view')
+    return render(request,'editblog.html')
 
 @csrf_exempt
 def dropData(request,dropid,removedfrom,addedto):
@@ -277,109 +294,23 @@ def dropData(request,dropid,removedfrom,addedto):
         print(removedfrom)
         print(addedto)
 
-        if removedfrom == "Content_Pitching" and addedto=="Writing_Rewrite":
-            cpobj = apwire_ContentPitching.objects.get(pk = int(dropid))
-            tableObj = apwire_WritingRewrite.objects.create(title = cpobj.title,author = cpobj.author,Date = cpobj.Date)
-            apwire_ContentPitching.objects.get(pk = int(dropid)).delete()
-            
-            formatedDate = tableObj.Date.strftime('%B %d,%Y')
-            return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+        
+        blog = Blog.objects.get(pk=dropid)
+        blog.status= addedto
+        blog.save()
 
-        elif removedfrom == "Writing_Rewrite" and addedto=="Review_Draft_1":
-            cpobj = apwire_WritingRewrite.objects.get(pk = int(dropid))
-            tableObj = apwire_ReviewDraft1.objects.create(title = cpobj.title,author = cpobj.author,Date = cpobj.Date)
-            apwire_WritingRewrite.objects.get(pk = int(dropid)).delete()
-            
-            formatedDate = tableObj.Date.strftime('%B %d,%Y')
-            return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
-
-        elif removedfrom == "Review_Draft_1" and addedto=="Review_Draft_2":
-            cpobj = apwire_ReviewDraft1.objects.get(pk = int(dropid))
-            tableObj = apwire_ReviewDraft2.objects.create(title = cpobj.title,author = cpobj.author,Date = cpobj.Date)
-            apwire_ReviewDraft1.objects.get(pk = int(dropid)).delete()
-            
-            formatedDate = tableObj.Date.strftime('%B %d,%Y')
-            return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
-
-        elif removedfrom == "Review_Draft_2" and addedto=="FDN_Approval_1":
-            cpobj = apwire_ReviewDraft2.objects.get(pk = int(dropid))
-            tableObj = apwire_FDNApproval.objects.create(title = cpobj.title,author = cpobj.author,Date = cpobj.Date)
-            apwire_ReviewDraft2.objects.get(pk = int(dropid)).delete()
-            
-            formatedDate = tableObj.Date.strftime('%B %d,%Y')
-            return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
-
-        elif removedfrom == "FDN_Approval_1" and addedto=="Ready_For_Release":
-            cpobj = apwire_FDNApproval.objects.get(pk = int(dropid))
-            tableObj = apwire_ReadyForRelease.objects.create(title = cpobj.title,author = cpobj.author,Date = cpobj.Date)
-            apwire_FDNApproval.objects.get(pk = int(dropid)).delete()
-            
-            formatedDate = tableObj.Date.strftime('%B %d,%Y')
-            return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
-
-        elif removedfrom == "Ready_For_Release" and addedto=="App_Published":
-            cpobj = apwire_ReadyForRelease.objects.get(pk = int(dropid))
-            tableObj = apwire_APPublished.objects.create(title = cpobj.title,author = cpobj.author,Date = cpobj.Date)
-            apwire_ReadyForRelease.objects.get(pk = int(dropid)).delete()
-            
-            formatedDate = tableObj.Date.strftime('%B %d,%Y')
-            return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
-
-# ///////////////////////////////////////////
-
-        elif removedfrom == "Writing_Rewrite" and addedto=="Content_Pitching":
-            cpobj = apwire_WritingRewrite.objects.get(pk = int(dropid))
-            tableObj = apwire_ContentPitching.objects.create(title = cpobj.title,author = cpobj.author,Date = cpobj.Date)
-            apwire_WritingRewrite.objects.get(pk = int(dropid)).delete()
-            
-            formatedDate = tableObj.Date.strftime('%B %d,%Y')
-            return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
-
-        elif removedfrom == "Review_Draft_1" and addedto=="Writing_Rewrite":
-            cpobj = apwire_ReviewDraft1.objects.get(pk = int(dropid))
-            tableObj = apwire_WritingRewrite.objects.create(title = cpobj.title,author = cpobj.author,Date = cpobj.Date)
-            apwire_ReviewDraft1.objects.get(pk = int(dropid)).delete()
-            
-            formatedDate = tableObj.Date.strftime('%B %d,%Y')
-            return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
-
-        elif removedfrom == "Review_Draft_2" and addedto=="Review_Draft_1":
-            cpobj = apwire_ReviewDraft2.objects.get(pk = int(dropid))
-            tableObj = apwire_ReviewDraft1.objects.create(title = cpobj.title,author = cpobj.author,Date = cpobj.Date)
-            apwire_ReviewDraft2.objects.get(pk = int(dropid)).delete()
-            
-            formatedDate = tableObj.Date.strftime('%B %d,%Y')
-            return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
-
-        elif removedfrom == "FDN_Approval_1" and addedto=="Review_Draft_2":
-            cpobj = apwire_FDNApproval.objects.get(pk = int(dropid))
-            tableObj = apwire_ReviewDraft2.objects.create(title = cpobj.title,author = cpobj.author,Date = cpobj.Date)
-            apwire_FDNApproval.objects.get(pk = int(dropid)).delete()
-            
-            formatedDate = tableObj.Date.strftime('%B %d,%Y')
-            return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
-
-        elif removedfrom == "Ready_For_Release" and addedto=="FDN_Approval_1":
-            cpobj = apwire_ReadyForRelease.objects.get(pk = int(dropid))
-            tableObj = apwire_FDNApproval.objects.create(title = cpobj.title,author = cpobj.author,Date = cpobj.Date)
-            apwire_ReadyForRelease.objects.get(pk = int(dropid)).delete()
-            
-            formatedDate = tableObj.Date.strftime('%B %d,%Y')
-            return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
-
-        elif removedfrom == "App_Published" and addedto=="Ready_For_Release":
-            cpobj = apwire_APPublished.objects.get(pk = int(dropid))
-            tableObj = apwire_ReadyForRelease.objects.create(title = cpobj.title,author = cpobj.author,Date = cpobj.Date)
-            apwire_APPublished.objects.get(pk = int(dropid)).delete()
-            
-            formatedDate = tableObj.Date.strftime('%B %d,%Y')
-            return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
-
-
-
-
+        return JsonResponse({'msg':'success'})
     
 
 def logout_view(request):
     logout(request)
     return redirect('loginview')
+
+# Publisher: All steps - view/ edit/ move/ upload
+# Admin: view/ edit
+# Writer1: step 1 - view/ edit/ move/
+# Writer2: step 2 - view/ edit/ move/
+# Writer3: step 1 - view/ edit/ move/
+# Editor: all steps - view/ edit/ move/
+
+# Add validation for admin on move 
