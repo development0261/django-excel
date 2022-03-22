@@ -247,23 +247,26 @@ def viewfunction(request):
     # roleint = userdata(user=userobj).accessint
     # print(roleint)
 
-    apwire_ContentPitching_data = apwire_ContentPitching.objects.all() 
-    apwire_WritingRewrite_data = apwire_WritingRewrite.objects.all()
-    apwire_ReviewDraft1_data = apwire_ReviewDraft1.objects.all()
-    apwire_ReviewDraft2_data = apwire_ReviewDraft2.objects.all()
-    apwire_FDNApproval_data = apwire_FDNApproval.objects.all()
-    apwire_ReadyForRelease_data = apwire_ReadyForRelease.objects.all()
-    apwire_APPublished_data = apwire_APPublished.objects.all()
-    context_dict = {}
-    context_dict['Content Pitching'] = apwire_ContentPitching_data
-    context_dict['Writing Rewrite'] = apwire_WritingRewrite_data
-    context_dict['Review Draft 1'] = apwire_ReviewDraft1_data
-    context_dict['Review Draft 2'] = apwire_ReviewDraft2_data
-    context_dict['FDN Approval 1'] = apwire_FDNApproval_data
-    context_dict['Ready For Release'] = apwire_ReadyForRelease_data
-    context_dict['App Published'] = apwire_APPublished_data
+    if request.user.is_authenticated:
+        apwire_ContentPitching_data = apwire_ContentPitching.objects.all() 
+        apwire_WritingRewrite_data = apwire_WritingRewrite.objects.all()
+        apwire_ReviewDraft1_data = apwire_ReviewDraft1.objects.all()
+        apwire_ReviewDraft2_data = apwire_ReviewDraft2.objects.all()
+        apwire_FDNApproval_data = apwire_FDNApproval.objects.all()
+        apwire_ReadyForRelease_data = apwire_ReadyForRelease.objects.all()
+        apwire_APPublished_data = apwire_APPublished.objects.all()
+        context_dict = {}
+        context_dict['Content Pitching'] = apwire_ContentPitching_data
+        context_dict['Writing Rewrite'] = apwire_WritingRewrite_data
+        context_dict['Review Draft 1'] = apwire_ReviewDraft1_data
+        context_dict['Review Draft 2'] = apwire_ReviewDraft2_data
+        context_dict['FDN Approval 1'] = apwire_FDNApproval_data
+        context_dict['Ready For Release'] = apwire_ReadyForRelease_data
+        context_dict['App Published'] = apwire_APPublished_data
 
-    return render(request,'index.html',{'context_dict':context_dict})
+        return render(request,'index.html',{'context_dict':context_dict})
+    else:
+        return redirect('loginview')
 
 
 
@@ -318,6 +321,56 @@ def dropData(request,dropid,removedfrom,addedto):
             cpobj = apwire_ReadyForRelease.objects.get(pk = int(dropid))
             tableObj = apwire_APPublished.objects.create(title = cpobj.title,author = cpobj.author,Date = cpobj.Date)
             apwire_ReadyForRelease.objects.get(pk = int(dropid)).delete()
+            
+            formatedDate = tableObj.Date.strftime('%B %d,%Y')
+            return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+
+# ///////////////////////////////////////////
+
+        elif removedfrom == "Writing_Rewrite" and addedto=="Content_Pitching":
+            cpobj = apwire_WritingRewrite.objects.get(pk = int(dropid))
+            tableObj = apwire_ContentPitching.objects.create(title = cpobj.title,author = cpobj.author,Date = cpobj.Date)
+            apwire_WritingRewrite.objects.get(pk = int(dropid)).delete()
+            
+            formatedDate = tableObj.Date.strftime('%B %d,%Y')
+            return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+
+        elif removedfrom == "Review_Draft_1" and addedto=="Writing_Rewrite":
+            cpobj = apwire_ReviewDraft1.objects.get(pk = int(dropid))
+            tableObj = apwire_WritingRewrite.objects.create(title = cpobj.title,author = cpobj.author,Date = cpobj.Date)
+            apwire_ReviewDraft1.objects.get(pk = int(dropid)).delete()
+            
+            formatedDate = tableObj.Date.strftime('%B %d,%Y')
+            return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+
+        elif removedfrom == "Review_Draft_2" and addedto=="Review_Draft_1":
+            cpobj = apwire_ReviewDraft2.objects.get(pk = int(dropid))
+            tableObj = apwire_ReviewDraft1.objects.create(title = cpobj.title,author = cpobj.author,Date = cpobj.Date)
+            apwire_ReviewDraft2.objects.get(pk = int(dropid)).delete()
+            
+            formatedDate = tableObj.Date.strftime('%B %d,%Y')
+            return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+
+        elif removedfrom == "FDN_Approval_1" and addedto=="Review_Draft_2":
+            cpobj = apwire_FDNApproval.objects.get(pk = int(dropid))
+            tableObj = apwire_ReviewDraft2.objects.create(title = cpobj.title,author = cpobj.author,Date = cpobj.Date)
+            apwire_FDNApproval.objects.get(pk = int(dropid)).delete()
+            
+            formatedDate = tableObj.Date.strftime('%B %d,%Y')
+            return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+
+        elif removedfrom == "Ready_For_Release" and addedto=="FDN_Approval_1":
+            cpobj = apwire_ReadyForRelease.objects.get(pk = int(dropid))
+            tableObj = apwire_FDNApproval.objects.create(title = cpobj.title,author = cpobj.author,Date = cpobj.Date)
+            apwire_ReadyForRelease.objects.get(pk = int(dropid)).delete()
+            
+            formatedDate = tableObj.Date.strftime('%B %d,%Y')
+            return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+
+        elif removedfrom == "App_Published" and addedto=="Ready_For_Release":
+            cpobj = apwire_APPublished.objects.get(pk = int(dropid))
+            tableObj = apwire_ReadyForRelease.objects.create(title = cpobj.title,author = cpobj.author,Date = cpobj.Date)
+            apwire_APPublished.objects.get(pk = int(dropid)).delete()
             
             formatedDate = tableObj.Date.strftime('%B %d,%Y')
             return JsonResponse({'title':tableObj.title,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})

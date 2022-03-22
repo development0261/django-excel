@@ -31,6 +31,7 @@ class apwire_ContentPitching(models.Model):
     title = models.CharField(max_length=20)
     author = models.CharField(max_length=20)
     Date = models.DateField()
+    # permissions = models.CharField(max_length=20) 
 
 class apwire_WritingRewrite(models.Model):
     title = models.CharField(max_length=20)

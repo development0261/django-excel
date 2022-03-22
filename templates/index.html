@@ -793,14 +793,14 @@
           console.log($(this))
            var addedTo = $(this).closest("table.mytable")
             
-            console.log(addedTo)
             
             dataa=ui.item[0]
+      
             dropidArray = ui.item[0].id.split("_")
             dropid = dropidArray[dropidArray.length - 1]
             addedto = addedTo.attr('id').slice(7,)
             var idCounter = 0
-            $("table.mytable").each(function(){
+            {% comment %} $("table.mytable").each(function(){
               console.log($(this).attr('id'))
               console.log(addedTo.attr('id'))
                 if($(this).attr('id') == addedTo.attr('id')){
@@ -808,12 +808,16 @@
                 }
                 idCounter = idCounter + 1 
             })
-            console.log(idCounter)
-            console.log($("table.mytable"))
             
-            removedfrom = $("table.mytable")[idCounter-1].id.slice(7,)
+            console.log("idcounter:"+idCounter) {% endcomment %}
             
+
+
+            dropidArray.pop()
+            console.log(dropidArray)
+            removedfrom = dropidArray.join('_')
             
+       
             console.log(addedto)
             console.log(removedfrom)
 
@@ -832,12 +836,7 @@
 
       
     });
-  {% else %}
-  <br>
-    <center><h2>Please login to continue</h2></center>
-    <div style="display:flex;justify-content:center">
-      <a class="btn btn-warning" href="{% url 'loginview' %}"> Login Page</a>
-    </div>
+  
   {% endif %}
   </script>
 </body>
