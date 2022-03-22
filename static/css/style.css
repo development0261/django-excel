@@ -135,6 +135,11 @@ a:hover {
     background: #5928d3;
 }
 
+
+.new-row-control button.row-add {
+    background: #5928d3;
+}
+
 .new-row-control button.row-remove {
     background: #d50707;
 }
