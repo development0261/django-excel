@@ -110,130 +110,42 @@ def saveTableRow(request,tableName):
             return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
 
 def getRowData(request,id,tableName):
-    if tableName == "Content_Pitching":
-        tableObj = apwire_ContentPitching.objects.get(pk = id)
-        date = tableObj.Date
-        formatedDate = date.strftime('%Y-%m-%d')
-        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+    
+    tableObj = Blog.objects.get(pk = id)
+    date = tableObj.date
+    formatedDate = date.strftime('%Y-%m-%d')
+    # image = tableObj.image
+    return JsonResponse({'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':tableObj.image.url})
 
-    if tableName == "Writing_Rewrite":
-        tableObj = apwire_WritingRewrite.objects.get(pk = id)
-        date = tableObj.Date
-        formatedDate = date.strftime('%Y-%m-%d')
-        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
-
-    if tableName == "Review_Draft_1":
-        tableObj = apwire_ReviewDraft1.objects.get(pk = id)
-        date = tableObj.Date
-        formatedDate = date.strftime('%Y-%m-%d')
-        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
-
-    if tableName == "Review_Draft_2":
-        tableObj = apwire_ReviewDraft2.objects.get(pk = id)
-        date = tableObj.Date
-        formatedDate = date.strftime('%Y-%m-%d')
-        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
-
-    if tableName == "FDN_Approval_1":
-        tableObj = apwire_FDNApproval.objects.get(pk = id)
-        date = tableObj.Date
-        formatedDate = date.strftime('%Y-%m-%d')
-        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
-
-    if tableName == "Ready_For_Release":
-        tableObj = apwire_ReadyForRelease.objects.get(pk = id)
-        date = tableObj.Date
-        formatedDate = date.strftime('%Y-%m-%d')
-        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
-
-    if tableName == "App_Published":
-        tableObj = apwire_APPublished.objects.get(pk = id)
-        date = tableObj.Date
-        formatedDate = date.strftime('%Y-%m-%d')
-        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
-        
+def editBlog(request,pk):
+    if request.method == 'POST':
+        print(pk)
+        blog = Blog.objects.filter(pk=pk).update(id=pk,topic=request.POST['topic'],author=request.user,description=request.POST['description'])
+        # blog = Blog.objects.update(id=pk,topic=request.POST['topic'],author=request.user,description=request.POST['description'])
+        if 'image' in request.FILES:
+            image=request.POST['image']
+            blog.image = image
+            blog.save()
+        return redirect('view')
+    return render(request,'editblog.html')  
 
 @csrf_exempt
 def editData(request,id,tableName):
     topic = request.POST['topic']
-    author = request.POST['author']
-    date = request.POST['date']
-    if tableName == "Content_Pitching":
-        tableObj = apwire_ContentPitching.objects.get(pk = id)
-        tableObj.Date = date
-        tableObj.author = author
-        tableObj.topic = topic
-        tableObj.save()
-
-        date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
-        formatedDate = date.strftime('%B %d,%Y')
-        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
-
-    if tableName == "Writing_Rewrite":
-        tableObj = apwire_WritingRewrite.objects.get(pk = id)
-        tableObj.Date = date
-        tableObj.author = author
-        tableObj.topic = topic
-        tableObj.save()
-
-        date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
-        formatedDate = date.strftime('%B %d,%Y')
-        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
-
-    if tableName == "Review_Draft_1":
-        tableObj = apwire_ReviewDraft1.objects.get(pk = id)
-        tableObj.Date = date
-        tableObj.author = author
-        tableObj.topic = topic
-        tableObj.save()
-
-        date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
-        formatedDate = date.strftime('%B %d,%Y')
-        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+    description = request.POST['description']
+ 
     
-    if tableName == "Review_Draft_2":
-        tableObj = apwire_ReviewDraft2.objects.get(pk = id)
-        tableObj.Date = date
-        tableObj.author = author
-        tableObj.topic = topic
-        tableObj.save()
-
-        date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
-        formatedDate = date.strftime('%B %d,%Y')
-        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
-
-    if tableName == "FDN_Approval_1":
-        tableObj = apwire_FDNApproval.objects.get(pk = id)
-        tableObj.Date = date
-        tableObj.author = author
-        tableObj.topic = topic
-        tableObj.save()
-
-        date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
-        formatedDate = date.strftime('%B %d,%Y')
-        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+    tableObj = Blog.objects.get(pk = id)
     
-    if tableName == "Ready_For_Release":
-        tableObj = apwire_ReadyForRelease.objects.get(pk = id)
-        tableObj.Date = date
-        tableObj.author = author
-        tableObj.topic = topic
-        tableObj.save()
+    tableObj.description = description
+    tableObj.topic = topic
+    tableObj.save()
 
-        date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
-        formatedDate = date.strftime('%B %d,%Y')
-        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
-    
-    if tableName == "App_Published":
-        tableObj = apwire_APPublished.objects.get(pk = id)
-        tableObj.Date = date
-        tableObj.author = author
-        tableObj.topic = topic
-        tableObj.save()
+    date = datetime.strptime(str(tableObj.date), '%Y-%m-%d')
 
-        date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
-        formatedDate = date.strftime('%B %d,%Y')
-        return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+    formatedDate = date.strftime('%B %d,%Y')
+    return JsonResponse({'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})
+
 
 
 def viewfunction(request):
@@ -271,21 +183,11 @@ def viewfunction(request):
 
 def createBlog(request):
     if request.method == 'POST':
-        Blog.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description'],image=request.POST['image'],status="Content_Pitching")
+        Blog.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description'],image=request.FILES['image'],status="Content_Pitching")
         return redirect('view')
     return render(request,'createBlog.html')
 
-def editBlog(request,pk):
-    if request.method == 'POST':
-        print(pk)
-        blog = Blog.objects.filter(pk=pk).update(id=pk,topic=request.POST['topic'],author=request.user,description=request.POST['description'])
-        # blog = Blog.objects.update(id=pk,topic=request.POST['topic'],author=request.user,description=request.POST['description'])
-        if 'image' in request.FILES:
-            image=request.POST['image']
-            blog.image = image
-            blog.save()
-        return redirect('view')
-    return render(request,'editblog.html')
+
 
 @csrf_exempt
 def dropData(request,dropid,removedfrom,addedto):
@@ -294,12 +196,16 @@ def dropData(request,dropid,removedfrom,addedto):
         print(removedfrom)
         print(addedto)
 
-        
+        roles = request.user.get_table_role()
+        print(roles[addedto])
         blog = Blog.objects.get(pk=dropid)
         blog.status= addedto
         blog.save()
 
-        return JsonResponse({'msg':'success'})
+        key_list = list(roles.keys())
+        index = key_list.index(addedto)
+
+        return JsonResponse({'msg':'success','role':roles[addedto],'tableIndex':index+1})
     
 
 def logout_view(request):
@@ -313,4 +219,11 @@ def logout_view(request):
 # Writer3: step 1 - view/ edit/ move/
 # Editor: all steps - view/ edit/ move/
 
-# Add validation for admin on move 
+# # Add validation for admin on move 
+
+# - Create View Button Beside Edit (No any Conditions applied on it)
+# - AddUnique Id ViewBlog_{{key|.....}}
+# - Add Same class to all ViewBlog
+# - Click event on ViewBlog
+# - Create Single New Model same as Add Blog and make body empty(also give id)
+# - Retrive data from backend as we doing for editview and append data in modal body 

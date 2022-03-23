@@ -37,6 +37,17 @@ class UserCustom(AbstractUser):
         MinValueValidator(limit_value=1)
     ],null=True,blank=True)
 
+    def get_table_role(self):
+        return {
+            'Content_Pitching':self.Content_Pitching,
+            'Writing_Rewrite':self.Writing_Rewrite,
+            'Review_Draft_1':self.ReviewDraft1,
+            'Review_Draft_2':self.ReviewDraft2,
+            'FDN_Approval_1':self.FDNApproval,
+            'Ready_For_Release':self.ReadyForRelease,
+            'App_Published':self.APPublished
+        }
+
     # def get_role_data(self):
     #     return UserTableConnection.objects.filter(user = self)
 # class userdata(models.Model):
@@ -54,7 +65,15 @@ class Blog(models.Model):
     image = models.ImageField()
     date = models.DateField(auto_now_add=True)
     status = models.CharField(choices=tables_choice,max_length=30,default="APWire_Content_Pitching")
-    
+
+class Blog2(models.Model):
+    topic = models.CharField(max_length=30)
+    author = models.ForeignKey(UserCustom,on_delete=models.CASCADE)
+    description = models.TextField(max_length=300)
+    image = models.ImageField()
+    date = models.DateField(auto_now_add=True)
+    status = models.CharField(choices=tables_choice,max_length=30,default="APWire_Content_Pitching")
+   
 
 # class apwire_ContentPitching(models.Model):
 #     title = models.CharField(max_length=20)

@@ -251,3 +251,12 @@ a:hover {
     font-weight: 400;
 }
 .remember a:hover{text-decoration: underline;}
+
+
+
+
+
+/* Model*/
+.modal-header {
+    border-bottom: none;
+}
