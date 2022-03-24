@@ -1,4 +1,3 @@
-import email
 from multiprocessing import AuthenticationError
 from django.shortcuts import render,redirect
 from django.http import HttpResponse, JsonResponse
@@ -7,12 +6,13 @@ from django.contrib.auth import login,logout,authenticate
 from .forms import userform
 from datetime import datetime
 from django.contrib.auth import get_user_model
+from django.contrib import messages
 User = get_user_model()
 
 
 def userlogin(request):
     if request.method == 'POST':
-        print("456")
+        # print("456")
         username = request.POST.get("username")
         password = request.POST.get("password")
 
@@ -25,13 +25,18 @@ def userlogin(request):
                 return redirect('view')
 
             else:
-                return HttpResponse("inactive user")
+                messages.error(request, 'user is inactive') 
+                return redirect('loginview')
 
         else:
-            return HttpResponse("Incorrect credentials")
+            messages.error(request, 'Please check your password!!!') 
+            return redirect('loginview')
 
     else:
         return render(request,'login.html')
+
+# def logfail(req):
+#     return render(req,'logfail.html')
 
 def register(request):
     registered=False
@@ -115,7 +120,21 @@ def getRowData(request,id,tableName):
     date = tableObj.date
     formatedDate = date.strftime('%Y-%m-%d')
     # image = tableObj.image
-    return JsonResponse({'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':tableObj.image.url})
+    imageobj = None
+    if tableObj.image:
+        imageobj =tableObj.image.url
+    return JsonResponse({'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj})
+
+def getRowData2(request,id,tableName):
+    
+    tableObj = Blog2.objects.get(pk = id)
+    date = tableObj.date
+    formatedDate = date.strftime('%Y-%m-%d')
+    imageobj = None
+    if tableObj.image:
+        imageobj =tableObj.image.url
+    return JsonResponse({'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj})
+
 
 def editBlog(request,pk):
     if request.method == 'POST':
@@ -136,6 +155,23 @@ def editData(request,id,tableName):
  
     
     tableObj = Blog.objects.get(pk = id)
+    
+    tableObj.description = description
+    tableObj.topic = topic
+    tableObj.save()
+
+    date = datetime.strptime(str(tableObj.date), '%Y-%m-%d')
+
+    formatedDate = date.strftime('%B %d,%Y')
+    return JsonResponse({'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})
+
+@csrf_exempt
+def editData2(request,id,tableName):
+    topic = request.POST['topic']
+    description = request.POST['description']
+ 
+    
+    tableObj = Blog2.objects.get(pk = id)
     
     tableObj.description = description
     tableObj.topic = topic
@@ -177,15 +213,68 @@ def viewfunction(request):
         context_dict['Ready For Release'] = apwire_ReadyForRelease_data
         context_dict['App Published'] = apwire_APPublished_data
 
-        return render(request,'index.html',{'context_dict':context_dict})
+
+        apnews_ContentPitching_data = Blog2.objects.filter(status='Content_Pitching') 
+        apnews_WritingRewrite_data = Blog2.objects.filter(status='Writing_Rewrite')
+        apnews_ReviewDraft1_data = Blog2.objects.filter(status='Review_Draft_1')
+        apnews_ReviewDraft2_data = Blog2.objects.filter(status='Review_Draft_2')
+        apnews_FDNApproval_data = Blog2.objects.filter(status='FDN_Approval_1')
+        apnews_ReadyForRelease_data = Blog2.objects.filter(status='Ready_For_Release')
+        apnews_APPublished_data = Blog2.objects.filter(status='App_Published')
+        context_dict1 = {}
+        context_dict1['Content Pitching'] = apnews_ContentPitching_data
+        context_dict1['Writing Rewrite'] = apnews_WritingRewrite_data
+        context_dict1['Review Draft 1'] = apnews_ReviewDraft1_data
+        context_dict1['Review Draft 2'] = apnews_ReviewDraft2_data
+        context_dict1['FDN Approval 1'] = apnews_FDNApproval_data
+        context_dict1['Ready For Release'] = apnews_ReadyForRelease_data
+        context_dict1['App Published'] = apnews_APPublished_data
+
+
+
+
+        return render(request,'index.html',{'context_dict':context_dict,'context_dict1':context_dict1})
     else:
         return redirect('loginview')
 
+def viewfunction2(request):
+    
+    # qs1 = models.apwire_ContentPitching.objects.get(id=1)
+    # context_dict= {}
+    # for i in qs1:
+    #     context_dict['topic'] = qs1.topic
+    #     context_dict['topic'] = qs1.topic
+    #     context_dict['topic'] = qs1.topic
+
+    # userobj = User.objects.get(username=request.user)
+    # roleint = userdata(user=userobj).accessint
+    # print(roleint)
+
+    if request.user.is_authenticated:
+      
+        return render(request,'index.html',{'context_dict2':context_dict})
+    else:
+        return redirect('loginview')
+
+
 def createBlog(request):
+    print("Createblog")
     if request.method == 'POST':
         blog = Blog.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description'],status="Content_Pitching")
         if 'image' in request.FILES:
-            image=request.POST['image']
+            image=request.FILES['image']
+            blog.image = image
+            blog.save()
+        return redirect('view')
+
+    return render(request,'createBlog.html')
+
+def createBlog2(request):
+    print("Createblog2")
+    if request.method == 'POST':
+        blog = Blog2.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description'],status="Content_Pitching")
+        if 'image' in request.FILES:
+            image=request.FILES['image']
             blog.image = image
             blog.save()
         return redirect('view')
@@ -211,7 +300,25 @@ def dropData(request,dropid,removedfrom,addedto):
         index = key_list.index(addedto)
 
         return JsonResponse({'msg':'success','role':roles[addedto],'tableIndex':index+1})
-    
+
+
+@csrf_exempt
+def dropData2(request,dropid,removedfrom,addedto):
+    if request.method == "POST":
+        print(dropid)
+        print(removedfrom)
+        print(addedto)
+
+        roles = request.user.get_table_role()
+        print(roles[addedto])
+        blog = Blog2.objects.get(pk=dropid)
+        blog.status= addedto
+        blog.save()
+
+        key_list = list(roles.keys())
+        index = key_list.index(addedto)
+
+        return JsonResponse({'msg':'success','role':roles[addedto],'tableIndex':index+1})    
 
 def logout_view(request):
     logout(request)
