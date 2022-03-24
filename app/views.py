@@ -183,8 +183,13 @@ def viewfunction(request):
 
 def createBlog(request):
     if request.method == 'POST':
-        Blog.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description'],image=request.FILES['image'],status="Content_Pitching")
+        blog = Blog.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description'],status="Content_Pitching")
+        if 'image' in request.FILES:
+            image=request.POST['image']
+            blog.image = image
+            blog.save()
         return redirect('view')
+
     return render(request,'createBlog.html')
 
 

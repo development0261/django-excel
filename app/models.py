@@ -62,7 +62,7 @@ class Blog(models.Model):
     topic = models.CharField(max_length=30)
     author = models.ForeignKey(UserCustom,on_delete=models.CASCADE)
     description = models.TextField(max_length=300)
-    image = models.ImageField()
+    image = models.ImageField(null=True,blank=True)
     date = models.DateField(auto_now_add=True)
     status = models.CharField(choices=tables_choice,max_length=30,default="APWire_Content_Pitching")
 
@@ -70,7 +70,7 @@ class Blog2(models.Model):
     topic = models.CharField(max_length=30)
     author = models.ForeignKey(UserCustom,on_delete=models.CASCADE)
     description = models.TextField(max_length=300)
-    image = models.ImageField()
+    image = models.ImageField(null=True,blank=True)
     date = models.DateField(auto_now_add=True)
     status = models.CharField(choices=tables_choice,max_length=30,default="APWire_Content_Pitching")
    

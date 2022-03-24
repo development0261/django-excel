@@ -129,7 +129,7 @@
                           connectedSortable
                           {% elif user|validateuser:key == "Approver" and forloop.counter <= 6 %}
                           connectedSortable
-                          {% elif user|validateuser:key == "Publisher" and forloop.counter > 4 %}
+                          {% elif user|validateuser:key == "Publisher" and forloop.counter <= 2 or forloop.counter >= 5 %}
                           connectedSortable
                           {% elif user|validateuser:key == "Admin" %}
                       
