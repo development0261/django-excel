@@ -160,7 +160,7 @@
                           <td> <div class="new-row-control">
                             <a class="row-add viewRow" id=" -{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-eye"></i></a>
                             
-                            {% if not forloop.counter == 7 %}
+                            
                             
                             {% if user|validateuser:key == "Writer" and forloop.parentloop.counter < 4 %}
                             <a class="row-add editRow" id="editRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
@@ -170,14 +170,14 @@
                             <a class="row-add editRow" id="editRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
                             {% elif user|validateuser:key == "Publisher" %}
                             {% if forloop.parentloop.counter == 1 or forloop.parentloop.counter > 4 %}
-                            <a class="row-add editRow" id="editRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
+                            <a class="row-add editRow" id="editRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
                             {%else%}
                             {% endif %}
                             {% elif user|validateuser:key == "Admin" %}
                             
                             {% endif %}
 
-                            {%endif%}
+                            
                             
                         {% endfor %}
                         <tr class="sort-disabled" style="background-color: #fff !important;">
@@ -245,7 +245,7 @@
                         </tr>
                       </thead>
                       <tbody id="tableBody_{{key|replaceSpacewithUnderScore }}" class="
-                      {% if not forloop.counter == 7 %}
+                      
                             
                       {% if user|validateuser:key == "Writer" and forloop.counter <= 4 %}
                       connectedSortable2
@@ -263,7 +263,7 @@
                       
                       {% endif %}
 
-                      {%endif%}
+                      
                       
                       
                       
@@ -284,7 +284,7 @@
                           <td>{{v.date}}</td>
                           <td> <div class="new-row-control">
                             <a class="row-add viewRow2" id=" -{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-eye"></i></a>
-                            {% if not forloop.counter == 7 %}
+                            
                             
                             {% if user|validateuser:key == "Writer" and forloop.parentloop.counter < 4 %}
                             <a class="row-add editRow2" id="editRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
@@ -293,15 +293,15 @@
                             {% elif user|validateuser:key == "Approver" and forloop.parentloop.counter < 6 %}
                             <a class="row-add editRow2" id="editRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
                             {% elif user|validateuser:key == "Publisher" %}
-                            {% if forloop.parentloop.counter < 2 or forloop.parentloop.counter > 4 %}
-                            <a class="row-add editRow2" id="editRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
-                            {%else%}
-                            {% endif %}
+                              {% if forloop.parentloop.counter < 2 or forloop.parentloop.counter > 4 %}
+                                <a class="row-add editRow2" id="editRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
+                              {%else%}
+                              {% endif %}
                             {% elif user|validateuser:key == "Admin" %}
                             
                             {% endif %}
 
-                            {%endif%}
+                            
                             
                         {% endfor %}
                         <tr class="sort-disabled" style="background-color: #fff !important;">
@@ -1053,7 +1053,6 @@
                 
 
                 if(response.role == "Writer" && response.tableIndex > 3){
-                  console.log("123.......................................123")
                   $(`#${row_id} td > div > a.editRow`).css('display','none')
 
                   
