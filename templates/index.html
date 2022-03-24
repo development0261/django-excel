@@ -122,9 +122,7 @@
                         </tr>
                       </thead>
                       <tbody id="tableBody_{{key|replaceSpacewithUnderScore }}" class="
-                      {% if  forloop.counter == 7 %}
-                      connectedSortable
-                      {% else %}
+                      
                           {% if user|validateuser:key == "Writer" and forloop.counter <= 4 %}
                           connectedSortable
                           {% elif user|validateuser:key == "Editor" and forloop.counter <= 5 %}
@@ -138,7 +136,7 @@
                             {% endif %}
                           {% elif user|validateuser:key == "Admin" %}
                       
-                      {% endif %}
+                      
 
                       {%endif%}
                       
@@ -170,8 +168,11 @@
                             <a class="row-add editRow" id="editRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
                             {% elif user|validateuser:key == "Approver" and forloop.parentloop.counter < 6 %}
                             <a class="row-add editRow" id="editRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
-                            {% elif user|validateuser:key == "Publisher" and forloop.parentloop.counter > 4 %}
-                            <a class="row-add editRow" id="editRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
+                            {% elif user|validateuser:key == "Publisher" %}
+                            {% if forloop.parentloop.counter == 1 or forloop.parentloop.counter > 4 %}
+                            <a class="row-add editRow" id="editRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
+                            {%else%}
+                            {% endif %}
                             {% elif user|validateuser:key == "Admin" %}
                             
                             {% endif %}
@@ -291,8 +292,11 @@
                             <a class="row-add editRow2" id="editRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
                             {% elif user|validateuser:key == "Approver" and forloop.parentloop.counter < 6 %}
                             <a class="row-add editRow2" id="editRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
-                            {% elif user|validateuser:key == "Publisher" and forloop.parentloop.counter < 2 and forloop.parentloop.counter > 4 %}
+                            {% elif user|validateuser:key == "Publisher" %}
+                            {% if forloop.parentloop.counter < 2 or forloop.parentloop.counter > 4 %}
                             <a class="row-add editRow2" id="editRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
+                            {%else%}
+                            {% endif %}
                             {% elif user|validateuser:key == "Admin" %}
                             
                             {% endif %}
@@ -1043,43 +1047,46 @@
               type: "POST", // data type (can be get, post, put, delete)
               data : {},
               success:function(response){
-                console.log(response)
+                console.log(row_id)
                 var row_td_content = $(`#${row_id} td:last-child`).html()
                 console.log(row_td_content)
                 
 
                 if(response.role == "Writer" && response.tableIndex > 3){
-                  $(`#${row_id} td:last-child`).empty()
+                  console.log("123.......................................123")
+                  $(`#${row_id} td > div > a.editRow`).css('display','none')
+
+                  
                 }
                 else if(response.role == "Editor" && response.tableIndex > 4){
-                  $(`#${row_id} td:last-child`).empty()
+                  $(`#${row_id} td > div > a.editRow`).css('display','none')
                 }
                 else if(response.role == "Approver" && response.tableIndex > 5){
-                  $(`#${row_id} td:last-child`).empty()
+                  $(`#${row_id} td > div > a.editRow`).css('display','none')
                 }
-                else if(response.role == "Publisher" && response.tableIndex > 2 && response.tableIndex < 4){
-                  $(`#${row_id} td:last-child`).empty()
+                else if(response.role == "Publisher" && response.tableIndex >= 2 && response.tableIndex < 4){
+                  $(`#${row_id} td > div > a.editRow`).css('display','none')
                 }
                 else if(response.role == "Admin"){
-                  $(`#${row_id} td:last-child`).empty()
+                  $(`#${row_id} td > div > a.editRow`).css('display','none')
                 } 
                 
                 
                 
 
                 if(response.role == "Writer" && response.tableIndex < 4){
-                  $(`#${row_id} td:last-child`).html(row_td_content)
+                  $(`#${row_id} td > div > a.editRow`).css('display','block')
                 }
                 else if(response.role == "Editor" && response.tableIndex < 5){
-                  $(`#${row_id} td:last-child`).html(row_td_content)
+                  $(`#${row_id} td > div > a.editRow`).css('display','block')
                 }
                 else if(response.role == "Approver" && response.tableIndex < 6){
-                  $(`#${row_id} td:last-child`).html(row_td_content)
+                  $(`#${row_id} td > div > a.editRow`).css('display','block')
                 }
                 else if(response.role == "Publisher")
                 {
-                  if(response.tableIndex <= 2 || response.tableIndex >= 4)
-                    {$(`#${row_id} td:last-child`).html(row_td_content)}
+                  if(response.tableIndex < 2 || response.tableIndex >= 4)
+                    {$(`#${row_id} td > div > a.editRow`).css('display','block')}
                 }  
                 
                 
@@ -1150,37 +1157,37 @@
                 
 
                 if(response.role == "Writer" && response.tableIndex > 3){
-                  $(`#${row_id} td:last-child`).empty()
+                  $(`#${row_id} td > div > a.editRow2`).css('display','none')
                 }
                 else if(response.role == "Editor" && response.tableIndex > 4){
-                  $(`#${row_id} td:last-child`).empty()
+                  $(`#${row_id} td > div > a.editRow2`).css('display','none')
                 }
                 else if(response.role == "Approver" && response.tableIndex > 5){
-                  $(`#${row_id} td:last-child`).empty()
+                  $(`#${row_id} td > div > a.editRow2`).css('display','none')
                 }
-                else if(response.role == "Publisher" && response.tableIndex > 2 && response.tableIndex < 4){
-                  $(`#${row_id} td:last-child`).empty()
+                else if(response.role == "Publisher" && response.tableIndex >= 2 && response.tableIndex < 4){
+                  $(`#${row_id} td > div > a.editRow2`).css('display','none')
                 }
                 else if(response.role == "Admin"){
-                  $(`#${row_id} td:last-child`).empty()
+                  $(`#${row_id} td > div > a.editRow2`).css('display','none')
                 } 
                 
                 
                 
 
                 if(response.role == "Writer" && response.tableIndex < 4){
-                  $(`#${row_id} td:last-child`).html(row_td_content)
+                  $(`#${row_id} td > div > a.editRow2`).css('display','block')
                 }
                 else if(response.role == "Editor" && response.tableIndex < 5){
-                  $(`#${row_id} td:last-child`).html(row_td_content)
+                  $(`#${row_id} td > div > a.editRow2`).css('display','block')
                 }
                 else if(response.role == "Approver" && response.tableIndex < 6){
-                  $(`#${row_id} td:last-child`).html(row_td_content)
+                  $(`#${row_id} td > div > a.editRow2`).css('display','block')
                 }
                 else if(response.role == "Publisher")
                 {
-                  if(response.tableIndex <= 2 || response.tableIndex >= 4)
-                    {$(`#${row_id} td:last-child`).html(row_td_content)}
+                  if(response.tableIndex < 2 || response.tableIndex >= 4)
+                    {$(`#${row_id} td > div > a.editRow2`).css('display','block')}
                 }  
                 
                 
