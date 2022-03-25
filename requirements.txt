@@ -8,5 +8,5 @@ whitenoise
 django-multiselectfield
 pillow
 django-ckeditor
-# djangorestframework
-# djangorestframework-xml
+djangorestframework
+djangorestframework-xml
