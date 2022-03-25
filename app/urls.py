@@ -11,6 +11,9 @@ urlpatterns = [
     path('createBlog',views.createBlog,name='createBlog'),
     path('editBlog/<str:pk>/',views.editBlog,name='editBlog'),
 
+    path('publishBlog/<str:pk>/',views.publishBlog,name='publishBlog'),
+    path('publishBlog2/<str:pk>/',views.publishBlog2,name='publishBlog2'),
+
     path('createBlog2',views.createBlog2,name='createBlog2'),
 
     path('saveTableRow/<str:tableName>/',views.saveTableRow,name="saveTableRow"),

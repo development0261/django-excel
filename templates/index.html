@@ -77,7 +77,15 @@
     color: #212529;
 }
 .row-add i{
-    color: #fff;
+    color: #5928d3;
+}
+
+.test{
+  display:block;
+  height:30px;
+  width:260px;
+  position:absolute;
+  z-index:-1;
 }
   </style>
 </head>
@@ -98,6 +106,16 @@
               <button class="ApNews" id="ApNews">AP - News</button>
             </div>
 
+            {% if messages %}
+   {% for message in messages %}
+   <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+       <strong id="g_msg">Message : {{message}} </strong>
+       <button type="button" onclick="parentNode.remove()" class="close" data-dismiss="alert" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+       </button>
+   </div>
+   {% endfor %}
+   {% endif %} 
             <!-- First Tab-->
             <div class="ns-slider-box-section" id="ApWireContent">
               <div class="table-carousel owl-carousel owl-theme">
@@ -121,8 +139,8 @@
                           <th>Action</th>
                         </tr>
                       </thead>
-                      <tbody id="tableBody_{{key|replaceSpacewithUnderScore }}" class="
-                      
+                      <tbody id="tableBody_{{key|replaceSpacewithUnderScore }}" class=" 
+                          
                           {% if user|validateuser:key == "Writer" and forloop.counter <= 4 %}
                           connectedSortable
                           {% elif user|validateuser:key == "Editor" and forloop.counter <= 5 %}
@@ -140,18 +158,11 @@
 
                       {%endif%}
                       
-                      
-                      
+                      {% if val|length < 1 %}
+                      test
+                      {% endif %}
                       " >
-                       <tr hidden>
-                         <td></td>
-                         <td></td>
-                         <td></td>
-                         <td></td>
-                         <td></td>
-                          </tr>
                         {% for v in val %}
-                        
                         <tr id="{{key|replaceSpacewithUnderScore }}_{{v.pk}}">
                           <th>{{forloop.counter}}</th>
                           <td>{{v.topic}}</td>
@@ -159,8 +170,6 @@
                           <td>{{v.date}}</td>
                           <td> <div class="new-row-control">
                             <a class="row-add viewRow" id=" -{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-eye"></i></a>
-                            
-                            
                             
                             {% if user|validateuser:key == "Writer" and forloop.parentloop.counter < 4 %}
                             <a class="row-add editRow" id="editRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
@@ -176,29 +185,10 @@
                             {% elif user|validateuser:key == "Admin" %}
                             
                             {% endif %}
-
-                            
-                            
+                            {% if user|validateuser:key == "Publisher" and forloop.parentloop.counter == 6 %}
+                            <a class="row-add publishRow" id="publishRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'publishBlog' v.pk %}><i class="fa fa-paper-plane"></i></a>
+                            {%endif%}
                         {% endfor %}
-                        <tr class="sort-disabled" style="background-color: #fff !important;">
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-
-                        </tr>
-                       <!-- <tr>
-                          <th>
-                            <div class="new-row-control">
-                              <button class="row-add addRow" id="addRow_{{key|replaceSpacewithUnderScore }}"><i class="fa fa-check"></i></button>
-                              <button class="row-remove"><i class="fa fa-times"></i></button>
-                            </div>
-                          </th>
-                          <td><input type="text" id="title_{{key|replaceSpacewithUnderScore }}" ></td>
-                          <td><input type="text" id="author_{{key|replaceSpacewithUnderScore }}"></td>
-                          <td><input type="date" id="date_{{key|replaceSpacewithUnderScore }}"></td>
-                        </tr>  -->
                       </tbody>
                     </table>
                   </div>
@@ -234,7 +224,7 @@
                   
                     {% comment %} {{user|validateuser:key}} {% endcomment %}
                   
-                    <table class="table mytable"  id="ApWire_{{key|replaceSpacewithUnderScore }}">
+                    <table class="table mytable"  id="ApNews_{{key|replaceSpacewithUnderScore }}">
                       <thead>
                         <tr>
                           <th>#</th>
@@ -264,16 +254,13 @@
                       {% endif %}
 
                       
-                      
+                      {% if val|length < 1 %}
+                      test
+                      {% endif %}
                       
                       
                       " >
-                       <tr hidden>
-                         <td></td>
-                         <td></td>
-                         <td></td>
-                         <td></td>
-                         <td></td>
+                  
                           </tr>
                         {% for v in val %}
                         
@@ -301,28 +288,16 @@
                             
                             {% endif %}
 
+                            {% if user|validateuser:key == "Publisher" and forloop.parentloop.counter == 6 %}
+                            <a class="row-add publishRow2" id="publishRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'publishBlog2' v.pk %} ><i class="fa fa-paper-plane"></i></a>
+                            
+                            {%endif%}
+
                             
                             
                         {% endfor %}
-                        <tr class="sort-disabled" style="background-color: #fff !important;">
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-
-                        </tr>
-                       <!-- <tr>
-                          <th>
-                            <div class="new-row-control">
-                              <button class="row-add addRow" id="addRow_{{key|replaceSpacewithUnderScore }}"><i class="fa fa-check"></i></button>
-                              <button class="row-remove"><i class="fa fa-times"></i></button>
-                            </div>
-                          </th>
-                          <td><input type="text" id="title_{{key|replaceSpacewithUnderScore }}" ></td>
-                          <td><input type="text" id="author_{{key|replaceSpacewithUnderScore }}"></td>
-                          <td><input type="date" id="date_{{key|replaceSpacewithUnderScore }}"></td>
-                        </tr>  -->
+                     
+                     
                       </tbody>
                     </table>
                   </div>
@@ -360,11 +335,14 @@
                   <div class="modal-content">
                     <div class="modal-header">
                 
-                      
+                      <button type="button" class="close closeModel" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
+                        
+                        {% comment %} <span aria-hidden="true">&times;</span>
+                      </button> {% endcomment %}
                     </div>
-                    <div class="modal-body" id="editmodalbody_{{key|replaceSpacewithUnderScore }}">
+                    <div class="modal-body editModel1" id="editmodalbody_{{key|replaceSpacewithUnderScore }}">
 
             
                     </div>
@@ -381,10 +359,12 @@
                   <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
-                  
-                        
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </button>
+                  
+                        
                       </div>
                       <div class="modal-body" id="editmodalbody2_{{key|replaceSpacewithUnderScore }}">
   
@@ -414,16 +394,17 @@
                       {% csrf_token %}
                         <div class="field-name">
                             <label>Title</label>
-                            <input type="text" placeholder="" name="topic" id="title">
+                            <input type="text" placeholder="" name="topic" id="title" required>
                         </div>
                         <div class="field-name">
                             <label>Description*</label>
-                        <textarea name="description" rows="10" cols="55" id="description"></textarea>
+                        <textarea name="description" rows="10" cols="55" id="description" required></textarea>
+                        
                         </div>
 
                         <div class="field-name">
                             <label>Image</label>
-                            <input type="file" placeholder="" name="image">
+                            <input type="file" placeholder="" name="image" required>
                         </div>
  
                         <button type="submit" class="login-submit" name="Add" value="Add">Save Blog</button>
@@ -455,16 +436,16 @@
                       {% csrf_token %}
                         <div class="field-name">
                             <label>Title</label>
-                            <input type="text" placeholder="" name="topic" id="title">
+                            <input type="text" placeholder="" name="topic" id="title" required>
                         </div>
                         <div class="field-name">
                             <label>Description*</label>
-                        <textarea name="description" rows="10" cols="55" id="description"></textarea>
+                        <textarea name="description2" rows="10" cols="55" id="description" required></textarea>
                         </div>
 
                         <div class="field-name">
                             <label>Image</label>
-                            <input type="file" placeholder="" name="image">
+                            <input type="file" placeholder="" name="image" required>
                         </div>
  
                         <button type="submit" class="login-submit" name="Add" value="Add">Save Blog</button>
@@ -485,7 +466,7 @@
             <div class="modal fade blog-modal" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close"  data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </button>
                         
@@ -562,22 +543,29 @@
   
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="https://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+  <script src="https://cdn.ckeditor.com/4.18.0/standard/ckeditor.js"></script>
 
 
   <script>
-    if (typeof jQuery.ui !== 'undefined'){
-      console.log("Jquery ui not loaded")
-    }  
+    CKEDITOR.config.toolbar = [
+    ['Link','Bold','Italic','Underline']
+ ] ;
+      CKEDITOR.replace( 'description');
+      CKEDITOR.replace( 'description2' );
+      
+
       $(document).on('click','.addRow',function(){
           var id = $(this).attr('id').slice(7,)
           console.log(id)
           var title = $("#title_"+id).val()
           var author = $("#author_"+id).val()
           var date = $("#date_"+id).val()
+          
 
           if(title == "" || author == "" || date == ""){
             alert("Please fill all the values")
           }else{
+            alert("call")
             $.ajax({
                 url : "saveTableRow/"+id+"/", // Url of backend (can be python, php, etc..)
                 type: "POST", // data type (can be get, post, put, delete)
@@ -688,11 +676,11 @@
       
       
 
-       
 
 
         $(document).on('click','.editRow',function(){
           console.log("editrow")
+          
             var keys = $(this).attr('id').split('-')
          
             
@@ -704,6 +692,8 @@
               url: "getRowData/"+id+"/"+tableName+"/",
               success: function(data){ 
                   console.log(data)
+
+                  
                   // $(`#${keys[2]}_${keys[1]}`).children('td').remove()
                   // $(`#${keys[2]}_${keys[1]}`).append(
                   //   `
@@ -720,8 +710,10 @@
                   //       </div>
                   //     </td>
                   //   `
+                
                   $(`#editmodalbody_${tableName}`).empty()
                   $(`#editmodalbody_${tableName}`).append(`
+                  
                   <div class="row justify-content-center">
                           <div class="col-md-8">
                               <div  class="title">
@@ -742,11 +734,17 @@
                                      
                
                                       <button type="button" class="login-submit addEditRow" id="addEditRow-${data.pk}-${tableName}" name="Add" value="Add">Save Blog</button>
-                                      <a class="ml-3 closeModel">Close</a>
+                                      
+                                      <a  style="text-decoration:none;cursor:pointer" class="ml-3 closeModel" data-dismiss="modal" >Close</a>
                                   </form>
                               </div>
                           </div>
-                  `)
+                  `
+                 
+                 )
+                 CKEDITOR.replace(`description_${tableName}_${data.pk}`);
+                 
+                 
                   $(`#editmodal_${tableName}`).modal('show')
               },
               error: function(){
@@ -755,7 +753,7 @@
             });
   
           });
-
+        
           $(document).on('click','.editRow2',function(){
             
             console.log("editrow2")
@@ -808,11 +806,13 @@
                                        
                  
                                         <button type="button" class="login-submit addEditRow2" id="News_addEditRow2-${data.pk}-${tableName}" name="Add" value="Add">Save Blog</button>
-                                        <a class="ml-3 closeModel">Close</a>
+                                        <a  style="text-decoration:none;cursor:pointer" class="ml-3 closeModel2" data-dismiss="modal" >Close</a>
                                     </form>
                                 </div>
                             </div>
                     `)
+                    CKEDITOR.replace(`News_description_${tableName}_${data.pk}`);
+                 
                     $(`#editmodal2_${tableName}`).modal('show')
                 },
                 error: function(){
@@ -910,7 +910,9 @@
 
           
       
-
+      {% comment %} $('#modalId').on('click', 'button.close', function (eventObject) {
+          $('#modalId').modal('hide');
+       }); {% endcomment %}
 
 
       $(document).on('click','.addEditRow',function(){
@@ -929,6 +931,7 @@
           data:{'topic':title,'description':description},
           success: function(data){ 
               console.log(data)
+              
             
               $(`#${keys[2]}_${keys[1]}`).children('td').remove()
               $(`#${keys[2]}_${keys[1]}`).append(
@@ -940,7 +943,8 @@
                   
                   <td> <div class="new-row-control">
                     <a class="row-add viewRow" id="viewRow-${id}-${tableName}"  ><i class="fa fa-eye"></i></a>
-                    <button class="row-add editRow" id="editRow-${id}-${tableName}"><i class="fa fa-edit"></i></button>
+                    <a class="row-add editRow" id="editRow-${id}-${tableName}"><i class="fa fa-edit"></i></a>
+                   
                     
                   </div></td>
                 `
@@ -983,7 +987,7 @@
                 
                 <td> <div class="new-row-control">
                   <a class="row-add viewRow2" id="viewRow2-${id}-${tableName}"  ><i class="fa fa-eye"></i></a>
-                  <button class="row-add editRow2" id="editRow2-${id}-${tableName}"><i class="fa fa-edit"></i></button>
+                  <a class="row-add editRow2" id="editRow2-${id}-${tableName}"><i class="fa fa-edit"></i></a>
                   
                 </div></td>
               `
@@ -1005,7 +1009,29 @@
         items: ">*:not(.sort-disabled)",
         cursor: "move",
         zIndex: 99999,
-        // items: ">*:not(.sort-disabled)",
+        stop: function (e, t) {
+          console.log(e)
+          var myRows = $(`#${e.toElement.children[0].id} tbody tr`).length
+          console.log(e.toElement.children[0].id)
+  
+          if (myRows == 0) {
+            $(`#${e.toElement.children[0].id} tbody`).addClass('test');
+          } 
+          if($(t.item).closest('tbody').find('tr').length >0){
+                 $(t.item).closest('tbody').removeClass('test');
+          }
+      },
+    
+      helper: function (e, tr) {
+          var $originals = tr.children();
+          var $helper = tr.clone();
+          $helper.children().each(function (index) {
+              // Set helper cell sizes to match the original sizes
+              $(this).width($originals.eq(index).width());
+          });
+          $helper.css("background-color", "rgb(223, 240, 249)");
+          return $helper;
+      },
         receive: function(event, ui) {
           /* here you can access the dragged row via ui.item
              ui.item has been removed from the other table, and added to "this" table
@@ -1051,6 +1077,14 @@
                 var row_td_content = $(`#${row_id} td:last-child`).html()
                 console.log(row_td_content)
                 
+                if(response.tableIndex != 6){
+                  $(`#${row_id} td > div > a.publishRow`).css('display','none')
+
+                  
+                }
+                else{
+                  $(`#${row_id} td > div > a.publishRow`).css('display','block')
+                }
 
                 if(response.role == "Writer" && response.tableIndex > 3){
                   $(`#${row_id} td > div > a.editRow`).css('display','none')
@@ -1108,6 +1142,28 @@
         items: ">*:not(.sort-disabled)",
         cursor: "move",
         zIndex: 99999,
+        stop: function (e, t) {
+          var myRows = $(`#${e.toElement.children[0].id} tbody tr`).length
+          console.log(e.toElement.children[0].id)
+  
+          if (myRows == 0) {
+            $(`#${e.toElement.children[0].id} tbody`).addClass('test');
+          } 
+          if($(t.item).closest('tbody').find('tr').length >0){
+                 $(t.item).closest('tbody').removeClass('test');
+          }
+      },
+    
+      helper: function (e, tr) {
+          var $originals = tr.children();
+          var $helper = tr.clone();
+          $helper.children().each(function (index) {
+              // Set helper cell sizes to match the original sizes
+              $(this).width($originals.eq(index).width());
+          });
+          $helper.css("background-color", "rgb(223, 240, 249)");
+          return $helper;
+      },
         // items: ">*:not(.sort-disabled)",
         receive: function(event, ui) {
           /* here you can access the dragged row via ui.item
@@ -1154,7 +1210,14 @@
                 var row_td_content = $(`#${row_id} td:last-child`).html()
                 var temp_content = $(`#${row_id} td > div > a.editRow2`)
                 console.log(row_td_content)
-                
+                if(response.tableIndex != 6){
+                  $(`#${row_id} td > div > a.publishRow2`).css('display','none')
+
+                  
+                }
+                else{
+                  $(`#${row_id} td > div > a.publishRow2`).css('display','block')
+                }
                 if(response.role == "Writer" && response.tableIndex == 3){
                   $(`#${row_id} td > div > a.editRow2`).css('display','block')
                 }
@@ -1223,6 +1286,10 @@
     $(`#modal_News_Content_Pitching`).modal('show')
     
   })
+
+
+
+ 
 
   $(document).on('click','#ApWire',function(){
     $("#ApWireContent").addClass('d-block')

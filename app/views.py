@@ -1,6 +1,9 @@
 from multiprocessing import AuthenticationError
+from urllib import request
 from django.shortcuts import render,redirect
 from django.http import HttpResponse, JsonResponse
+
+from app.serializers import BlogSerializer
 from .models import *
 from django.contrib.auth import login,logout,authenticate
 from .forms import userform
@@ -38,6 +41,8 @@ def userlogin(request):
 # def logfail(req):
 #     return render(req,'logfail.html')
 
+
+
 def register(request):
     registered=False
     
@@ -56,11 +61,7 @@ def register(request):
             else:
                 return redirect('register')
         else:
-            return redirect('register')
-
-
-
-    return render(request,'register.html',{'registered':registered})
+            return render(request,'register.html',{'registered':registered})
 
 from django.views.decorators.csrf import csrf_exempt
 
@@ -256,6 +257,147 @@ def viewfunction2(request):
     else:
         return redirect('loginview')
 
+from django.core import serializers
+from django.core.files import File
+import xml.etree.ElementTree as et
+from datetime import datetime
+
+def publishBlog(request,pk):
+    blogobj = Blog.objects.get(pk=pk)
+    blogobj.status = "App_Published"
+    blogobj.publishedon = datetime.today().date()
+    blogobj.save()
+    
+    # data = serializers.serialize("xml", Blog.objects.filter(pk=pk))    
+    # f = open('log.xml', 'w')
+    # myfile = File(f)
+    # myfile.write(data)
+    # myfile.close()
+    # root = et.Element("feed")
+
+    # root.appendChild(xml)
+    
+    # entry = root.createElement('feed')
+    # et.Element('xmlns:apnm', 'http://ap.org/schemas/03/2005/apnm')
+    # et.Element('xmlns:apxh', 'http://w3.org/1999/xhtml')
+    # et.Element('xmlns:ap', 'http://ap.org/schemas/03/2005/aptypes')
+    # et.Element('xmlns', 'http://www.w3.org/2005/Atom')
+    # et.Element('xmlns:apcm', 'http://ap.org/schemas/03/2005/apcm')
+    # et.Element('xml:lang', 'en-us')
+
+    # m1 = et.Element(blogobj.topic)
+
+
+    
+    # xml_str = root.toprettyxml(indent ="\t") 
+    
+    # save_path_file = "log.xml"
+    
+    
+
+    # with open(save_path_file, "w") as f:
+    #     f.write(xml_str) 
+
+    data = 'xmlns:apnm="http://ap.org/schemas/03/2005/apnm" xmlns:apxh="http://w3.org/1999/xhtml" xmlns:ap="http://ap.org/schemas/03/2005/aptypes" xmlns="http://www.w3.org/2005/Atom" xmlns:apcm="http://ap.org/schemas/03/2005/apcm" xml:lang="en-us"'
+
+    root = et.Element('feed')
+    root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
+    root.set("xmlns:apxh","http://w3.org/1999/xhtml")
+    root.set("xmlns:ap","http://ap.org/schemas/03/2005/aptypes")
+    root.set("xmlns","http://www.w3.org/2005/Atom")
+    root.set("xmlns:apcm","http://www.w3.org/2005/Atom")
+    root.set("xml:lang","en-us")
+
+    m1 = et.Element('author')
+    root.append (m1)
+    a1= et.SubElement(m1,"name")
+    a1.text = "ShaktiCoin"
+    a2= et.SubElement(m1,"uri")
+    a2.text = "https://draftblog.shakticoin.com//"
+    a3 = root.SubElement('id')
+    a3.text = "shakticoin123"
+    a4 = root.SubElement('title')
+    a4.text = "ShaktiCoin"
+    
+    # para = et.SubElement()
+    # et.SubElement(para, "link", id="2", type="external", url="http://www.google.com").text="Google.com"
+
+    a6 = root.SubElement('rights')
+    a6.text = "Copyright 2022 ShaktiCoin"
+    a7 = root.SubElement('updated')
+    a7.text = "2022-03-19T01:58:31Z"
+
+    m2 = et.Element('entry')
+    root.append (m1)
+
+    
+      
+    b1 = et.SubElement(m2, "id")
+    b1.text = str(blogobj.id)
+    b2 = et.SubElement(m2, "topic")
+    b2.text = str(blogobj.topic)
+    b3 = et.SubElement(m2, "author")
+    b3.text = str(blogobj.author)
+    b3 = et.SubElement(m2, "description")
+    b3.text = str(blogobj.description)
+    b4 = et.SubElement(m2, "image")
+    b4.text = str(blogobj.image)
+    b5 = et.SubElement(m2, "date")
+    b5.text = str(blogobj.date)
+    b5 = et.SubElement(m2, "status")
+    b5.text = str(blogobj.status)
+    b5 = et.SubElement(m2, "publishedon")
+    b5.text = str(blogobj.publishedon)
+
+    # blogall = Blog.objects.filter(status="App_Published")
+    # for i in blogall:
+    #     m2 = et.Element('entry')
+    #     root.append (m2)
+    #     b1 = et.SubElement(m2, "id")
+    #     b1.text = str(i.id)
+    #     b2 = et.SubElement(m2, "topic")
+    #     b2.text = str(i.topic)
+    #     b3 = et.SubElement(m2, "author")
+    #     b3.text = str(i.author)
+    #     b3 = et.SubElement(m2, "description")
+    #     b3.text = str(i.description)
+    #     b4 = et.SubElement(m2, "image")
+    #     b4.text = str(i.image)
+    #     b5 = et.SubElement(m2, "date")
+    #     b5.text = str(i.date)
+    #     b5 = et.SubElement(m2, "status")
+    #     b5.text = str(i.status)
+    #     b5 = et.SubElement(m2, "publishedon")
+    #     b5.text = str(i.publishedon)
+
+    
+      
+    tree = et.ElementTree(root)
+      
+    with open ('log.xml', "wb") as files :
+        tree.write(files)
+  
+    # Driver Code
+    if __name__ == "__main__": 
+        GenerateXML("log.xml")
+    messages.success(request,"Your blog {} for AP Wire is Published".format(blogobj.topic))
+    return redirect('view')
+
+def publishBlog2(request,pk):
+    blogobj = Blog2.objects.get(pk=pk)
+    blogobj.status = "App_Published"
+    blogobj.publishedon = datetime.today().date()
+    blogobj.save()
+
+    messages.success(request,"Your blog {} for AP Wire is Published".format(blogobj.topic))
+    return redirect('view')
+# class toxml(APIView):
+    
+#     def get(self, request):
+#         obj = Blog.objects.get()
+#         serialize = BlogSerializer(obj,many=True)
+#         return Response(serialize.data)
+
 
 def createBlog(request):
     print("Createblog")
@@ -272,7 +414,7 @@ def createBlog(request):
 def createBlog2(request):
     print("Createblog2")
     if request.method == 'POST':
-        blog = Blog2.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description'],status="Content_Pitching")
+        blog = Blog2.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description2'],status="Content_Pitching")
         if 'image' in request.FILES:
             image=request.FILES['image']
             blog.image = image

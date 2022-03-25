@@ -58,21 +58,26 @@ class UserCustom(AbstractUser):
 #         MinValueValidator(limit_value=1)
 #     ],null=True,blank=True)
 
+from ckeditor.fields import RichTextField
+
+
 class Blog(models.Model):
     topic = models.CharField(max_length=30)
     author = models.ForeignKey(UserCustom,on_delete=models.CASCADE)
-    description = models.TextField(max_length=300)
+    description = RichTextField(max_length=300)
     image = models.ImageField(null=True,blank=True)
     date = models.DateField(auto_now_add=True)
     status = models.CharField(choices=tables_choice,max_length=30,default="APWire_Content_Pitching")
+    publishedon = models.DateField()
 
 class Blog2(models.Model):
     topic = models.CharField(max_length=30)
     author = models.ForeignKey(UserCustom,on_delete=models.CASCADE)
-    description = models.TextField(max_length=300)
+    description = RichTextField(max_length=300)
     image = models.ImageField(null=True,blank=True)
     date = models.DateField(auto_now_add=True)
-    status = models.CharField(choices=tables_choice,max_length=30,default="APWire_Content_Pitching")
+    status = models.CharField(choices=tables_choice,max_length=30,default="APNews_Content_Pitching")
+    publishedon = models.DateField()
    
 
 # class apwire_ContentPitching(models.Model):

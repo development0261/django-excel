@@ -14,7 +14,7 @@ a:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 30px;
+    margin-bottom: 100px;
 }
 
 .nav-slider-tabs button {
@@ -160,7 +160,7 @@ a:hover {
 .table-carousel .owl-nav button {
     margin: 0 !important;
     position: absolute;
-    top: 50%;
+    bottom: 0;
     transform: translateY(-50%);
     width: 50px;
     height: 50px;
@@ -171,6 +171,15 @@ a:hover {
     display: flex !important;
     align-items: center;
     justify-content: center;
+}
+.new-row-control a.row-add{
+    background-color: transparent;
+}
+.new-row-control a.row-add:hover i{
+    color: #fff;
+}
+.new-row-control a.row-add:hover{
+    background-color: #5928d3;
 }
 .table-carousel .owl-nav button:focus {
     outline: none;
