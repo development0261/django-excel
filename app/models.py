@@ -59,25 +59,30 @@ class UserCustom(AbstractUser):
 #     ],null=True,blank=True)
 
 from ckeditor.fields import RichTextField
+import uuid
 
 
 class Blog(models.Model):
     topic = models.CharField(max_length=30)
     author = models.ForeignKey(UserCustom,on_delete=models.CASCADE)
-    description = RichTextField(max_length=300)
+    description = RichTextField()
     image = models.ImageField(null=True,blank=True)
     date = models.DateField(auto_now_add=True)
     status = models.CharField(choices=tables_choice,max_length=30,default="APWire_Content_Pitching")
-    publishedon = models.DateField()
+    publishedon = models.DateField(null=True, blank=True)
+    unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    updated = models.DateField(auto_now=True)
 
 class Blog2(models.Model):
     topic = models.CharField(max_length=30)
     author = models.ForeignKey(UserCustom,on_delete=models.CASCADE)
-    description = RichTextField(max_length=300)
+    description = RichTextField()
     image = models.ImageField(null=True,blank=True)
     date = models.DateField(auto_now_add=True)
     status = models.CharField(choices=tables_choice,max_length=30,default="APNews_Content_Pitching")
-    publishedon = models.DateField()
+    publishedon = models.DateField(null=True, blank=True)
+    unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    updated = models.DateField(auto_now=True)
    
 
 # class apwire_ContentPitching(models.Model):

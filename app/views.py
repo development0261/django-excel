@@ -1,3 +1,4 @@
+from ast import While
 from multiprocessing import AuthenticationError
 from urllib import request
 from django.shortcuts import render,redirect
@@ -45,7 +46,6 @@ def userlogin(request):
 
 def register(request):
     registered=False
-    
 
     if request.method == 'POST':
         
@@ -60,8 +60,8 @@ def register(request):
                 return redirect('view')
             else:
                 return redirect('register')
-        else:
-            return render(request,'register.html',{'registered':registered})
+    else:
+        return render(request,'register.html',{'registered':registered})
 
 from django.views.decorators.csrf import csrf_exempt
 
@@ -140,8 +140,11 @@ def getRowData2(request,id,tableName):
 def editBlog(request,pk):
     if request.method == 'POST':
         print(pk)
-        blog = Blog.objects.filter(pk=pk).update(id=pk,topic=request.POST['topic'],author=request.user,description=request.POST['description'])
-        # blog = Blog.objects.update(id=pk,topic=request.POST['topic'],author=request.user,description=request.POST['description'])
+        print(request.POST['description'])
+        blog = Blog.objects.filter(pk=pk).update(topic=request.POST['topic'],author=request.user,description=request.POST['description'])
+       
+        blog.save()
+        print("called")
         if 'image' in request.FILES:
             image=request.POST['image']
             blog.image = image
@@ -153,9 +156,13 @@ def editBlog(request,pk):
 def editData(request,id,tableName):
     topic = request.POST['topic']
     description = request.POST['description']
+    print(topic)
+    print(description)
  
     
     tableObj = Blog.objects.get(pk = id)
+    
+    print(id)
     
     tableObj.description = description
     tableObj.topic = topic
@@ -261,44 +268,246 @@ from django.core import serializers
 from django.core.files import File
 import xml.etree.ElementTree as et
 from datetime import datetime
+from wsgiref.util import FileWrapper
 
 def publishBlog(request,pk):
     blogobj = Blog.objects.get(pk=pk)
     blogobj.status = "App_Published"
     blogobj.publishedon = datetime.today().date()
     blogobj.save()
-    
-    # data = serializers.serialize("xml", Blog.objects.filter(pk=pk))    
-    # f = open('log.xml', 'w')
-    # myfile = File(f)
-    # myfile.write(data)
-    # myfile.close()
-    # root = et.Element("feed")
 
-    # root.appendChild(xml)
-    
-    # entry = root.createElement('feed')
-    # et.Element('xmlns:apnm', 'http://ap.org/schemas/03/2005/apnm')
-    # et.Element('xmlns:apxh', 'http://w3.org/1999/xhtml')
-    # et.Element('xmlns:ap', 'http://ap.org/schemas/03/2005/aptypes')
-    # et.Element('xmlns', 'http://www.w3.org/2005/Atom')
-    # et.Element('xmlns:apcm', 'http://ap.org/schemas/03/2005/apcm')
-    # et.Element('xml:lang', 'en-us')
+    messages.success(request,"Your blog {} for AP Wire is Published".format(blogobj.topic))
 
-    # m1 = et.Element(blogobj.topic)
+    return redirect('view')
 
+def publishBlog2(request,pk):
+    blogobj = Blog2.objects.get(pk=pk)
+    blogobj.status = "App_Published"
+    blogobj.publishedon = datetime.today().date()
+    blogobj.save()
+
+    messages.success(request,"Your blog {} for AP Wire is Published".format(blogobj.topic))
+
+    return redirect('view')
+
+def downloadxml(request,pk):
+    blogobj = Blog.objects.get(pk=pk)
+    root = et.Element('feed')
+    root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
+    root.set("xmlns:apxh","http://w3.org/1999/xhtml")
+    root.set("xmlns:ap","http://ap.org/schemas/03/2005/aptypes")
+    root.set("xmlns","http://www.w3.org/2005/Atom")
+    root.set("xmlns:apcm","http://www.w3.org/2005/Atom")
+    root.set("xml:lang","en-us")
+
+    m1 = et.Element('author')
+    root.append (m1)
+    a1= et.SubElement(m1,"name")
+    a1.text = "ShaktiCoin"
+    a2= et.SubElement(m1,"uri")
+    a2.text = "https://draftblog.shakticoin.com//"
+    a3 = et.SubElement(root,"id")
+    a3.text = "shakticoin123"
+    a4 = et.SubElement(root,"title")
+    a4.text = "ShaktiCoin"
+    a5 = et.SubElement(root,'link')
+    a5.set("href","https://draftblog.shakticoin.com/post-sitemap.xml")
+    a5.set("rel","self")
+    a6 = et.SubElement(root,'rights')
+    a6.text = "Copyright 2022 ShaktiCoin"
+    a7 = et.SubElement(root,'updated')
+    a7.text = "2022-03-19T01:58:31Z"
+
+    m2 = et.Element('entry')
+    root.append (m2)
 
     
-    # xml_str = root.toprettyxml(indent ="\t") 
-    
-    # save_path_file = "log.xml"
-    
+    uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-2"
+
+    b1 = et.SubElement(m2, "id")
+    b1.text = str(uid)
+    b5 = et.SubElement(m2, "published")
+    b5.text = str(blogobj.publishedon)
+    b6 = et.SubElement(m2, "updated")
+    b6.text = str(blogobj.updated)
+    b2 = et.SubElement(m2, "title")
+    b2.text = str(blogobj.topic)
+
+    n1 = et.Element('content')
+    n1.set("type","xhtml")
+    m2.append (n1)
+
+    o1 = et.Element('apxh:div')
+    n1.append (o1)
+ 
+    x = blogobj.description.split("\n")
+    print(x)
+    y = []
+    z=[]
+    count = 0
+    for i in x:
+        count += 1
+        if count % 2 != 0:
+            y.append(i)
+    for i in y:
+        print(i)
+        i = i.replace("<p>","")
+        i = i.replace("</p>","")
+        i = i.replace("<em>","")
+        i = i.replace("</em>","")
+        i = i.replace("<strong>","")
+        i = i.replace("</strong>","")   
+        i = i.replace("&nbsp;","")
+        z.append(i)
+        ele = et.SubElement(o1, "apxh:p")
+        ele.text = str(i)
+    print(z)
     
 
-    # with open(save_path_file, "w") as f:
-    #     f.write(xml_str) 
+    
+    
+    tree = et.ElementTree(root)
 
-    data = 'xmlns:apnm="http://ap.org/schemas/03/2005/apnm" xmlns:apxh="http://w3.org/1999/xhtml" xmlns:ap="http://ap.org/schemas/03/2005/aptypes" xmlns="http://www.w3.org/2005/Atom" xmlns:apcm="http://ap.org/schemas/03/2005/apcm" xml:lang="en-us"'
+    tree2 = et.ElementTree(root)
+    
+    from django.conf import settings
+
+    MEDIA_ROOT = settings.MEDIA_ROOT
+  
+
+    tree.write('{}/xml/output_xml_Blog_AP_Wire_{}.xml'.format(MEDIA_ROOT,blogobj.pk), encoding="utf-8")
+    
+    # Pathout is the path to the output.xml
+    
+    xmlFile = open('{}/xml/output_xml_Blog_AP_Wire_{}.xml'.format(MEDIA_ROOT,blogobj.pk), 'r')
+    print(xmlFile)
+    myfile = xmlFile.read()
+    response = HttpResponse(myfile, content_type='application/xml')
+    response['Content-Disposition'] = "attachment; filename=output_xml_Blog_AP_Wire_{}_{}.xml".format(blogobj.pk,blogobj.topic)
+
+    return response
+
+
+def downloadxmlfile2(request,pk):
+    blogobj = Blog.objects.get(pk=pk)
+    root = et.Element('feed')
+    root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
+    root.set("xmlns:apxh","http://w3.org/1999/xhtml")
+    root.set("xmlns:ap","http://ap.org/schemas/03/2005/aptypes")
+    root.set("xmlns","http://www.w3.org/2005/Atom")
+    root.set("xmlns:apcm","http://www.w3.org/2005/Atom")
+    root.set("xml:lang","en-us")
+
+    q1 = et.SubElement(root,"title")
+    q1.text = "American Heart Association News"
+
+    m1 = et.Element('link')
+    m1.set("rel","self")
+    m1.set("href","https://www.heart.org/-/media/RSS-Feeds/apfeed.xml")
+    root.append (m1)
+
+    m1 = et.Element('author')
+    root.append (m1)
+    a1= et.SubElement(m1,"name")
+    a1.text = "American Heart Association News"
+    a2= et.SubElement(m1,"uri")
+    a2.text = "https://www.heart.org"
+    a4 = et.SubElement(root,"title")
+    a4.text = "American Heart Association News"
+    a7 = et.SubElement(root,'updated')
+    a7.text = "2022-03-25T14:02:18.6328006Z"
+    a6 = et.SubElement(root,'rights')
+    a6.text = "Copyright 2022 American Heart Association News"
+    
+
+
+    m2 = et.Element('entry')
+    m2.set("xml:lang","en-us")
+    root.append (m2)
+
+    
+    uid = "urn:publicid:www.heart.org:"+str(blogobj.unique_id)+"-2"
+
+    b1 = et.SubElement(m2, "id")
+    b1.text = str(uid)
+    b5 = et.SubElement(m2, "published")
+    b5.text = str(blogobj.publishedon)
+    b6 = et.SubElement(m2, "updated")
+    b6.text = str(blogobj.updated)
+    b2 = et.SubElement(m2, "title")
+    b2.text = str(blogobj.topic)
+    b3 = et.SubElement(m2,'rights')
+    b3.text = "Copyright 2022 American Heart Association News"
+    a5 = et.SubElement(m2,'link')
+    a5.set("rel","alternate")
+    a5.set("href","https://www.heart.org/en/news/2022/03/25/5-barriers-to-eating-a-heart-healthy-diet-that-have-nothing-to-do-with-willpower")
+    a10 = et.SubElement(m2,'category')
+    a10.set("label","English - All US orgs")
+    a10.set("term","English - All US orgs")
+    a10.set("scheme","http://cv.ap.org/keyword")
+
+    a11 = et.SubElement(m2,'link')
+    a11.set("rel","alternate")
+    a11.set("href","urn:publicid:www.heart.org:2B6EF1D3FB2C4D8A8D158233FE8C5AD6-2")
+
+
+
+    n1 = et.Element('content')
+    n1.set("type","xhtml")
+    m2.append (n1)
+
+    o1 = et.Element('apxh:div')
+    n1.append (o1)
+ 
+    x = blogobj.description.split("\n")
+    print(x)
+    y = []
+    z=[]
+    count = 0
+    for i in x:
+        count += 1
+        if count % 2 != 0:
+            y.append(i)
+    for i in y:
+        print(i)
+        i = i.replace("<p>","")
+        i = i.replace("</p>","")
+        i = i.replace("<em>","")
+        i = i.replace("</em>","")
+        i = i.replace("<strong>","")
+        i = i.replace("</strong>","")   
+        i = i.replace("&nbsp;","")
+        z.append(i)
+        ele = et.SubElement(o1, "apxh:p")
+        ele.text = str(i)
+    print(z)
+    
+
+    
+    
+    tree = et.ElementTree(root)
+
+    tree2 = et.ElementTree(root)
+    
+    from django.conf import settings
+
+    MEDIA_ROOT = settings.MEDIA_ROOT
+  
+
+    tree.write('{}/xml/output_xml_Blog_AP_Wire_{}.xml'.format(MEDIA_ROOT,blogobj.pk), encoding="utf-8")
+    
+    # Pathout is the path to the output.xml
+    
+    xmlFile = open('{}/xml/output_xml_Blog_AP_Wire_{}.xml'.format(MEDIA_ROOT,blogobj.pk), 'r')
+    print(xmlFile)
+    myfile = xmlFile.read()
+    response = HttpResponse(myfile, content_type='application/xml')
+    response['Content-Disposition'] = "attachment; filename=output_xml_Blog_AP_Wire_{}_{}.xml".format(blogobj.pk,blogobj.topic)
+
+    return response
+
+def downloadxml2(request,pk):
+    blogobj = Blog2.objects.get(pk=pk)
 
     root = et.Element('feed')
     root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
@@ -314,90 +523,616 @@ def publishBlog(request,pk):
     a1.text = "ShaktiCoin"
     a2= et.SubElement(m1,"uri")
     a2.text = "https://draftblog.shakticoin.com//"
-    a3 = root.SubElement('id')
+    a3 = et.SubElement(root,"id")
     a3.text = "shakticoin123"
-    a4 = root.SubElement('title')
+    a4 = et.SubElement(root,"title")
     a4.text = "ShaktiCoin"
     
-    # para = et.SubElement()
-    # et.SubElement(para, "link", id="2", type="external", url="http://www.google.com").text="Google.com"
 
-    a6 = root.SubElement('rights')
+    a6 = et.SubElement(root,'rights')
     a6.text = "Copyright 2022 ShaktiCoin"
-    a7 = root.SubElement('updated')
+    a7 = et.SubElement(root,'updated')
     a7.text = "2022-03-19T01:58:31Z"
 
     m2 = et.Element('entry')
+    root.append (m2)
+
+    
+    uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-2"
+
+    b1 = et.SubElement(m2, "id")
+    b1.text = str(uid)
+    b5 = et.SubElement(m2, "published")
+    b5.text = str(blogobj.publishedon)
+    b6 = et.SubElement(m2, "updated")
+    b6.text = str(blogobj.updated)
+    b2 = et.SubElement(m2, "title")
+    b2.text = str(blogobj.topic)
+
+    n1 = et.Element('content')
+    n1.set("type","xhtml")
+    m2.append (n1)
+
+    o1 = et.Element('apxh:div')
+    n1.append (o1)
+ 
+    x = blogobj.description.split("\n")
+    print(x)
+    y = []
+    z=[]
+    count = 0
+    for i in x:
+        count += 1
+        if count % 2 != 0:
+            y.append(i)
+    for i in y:
+        print(i)
+        i = i.replace("<p>","")
+        i = i.replace("</p>","")
+        i = i.replace("<em>","")
+        i = i.replace("</em>","")
+        i = i.replace("<strong>","")
+        i = i.replace("</strong>","")   
+        i = i.replace("&nbsp;","")
+        z.append(i)
+        ele = et.SubElement(o1, "apxh:p")
+        ele.text = str(i)
+    print(z)
+    
+
+
+    tree = et.ElementTree(root)
+      
+    from django.conf import settings
+
+    MEDIA_ROOT = settings.MEDIA_ROOT
+
+
+    tree.write('{}/xml/output_xml_Blog_AP_News_{}.xml'.format(MEDIA_ROOT,blogobj.pk), encoding="utf-8")
+    
+    # Pathout is the path to the output.xml
+    
+    xmlFile = open('{}/xml/output_xml_Blog_AP_News_{}.xml'.format(MEDIA_ROOT,blogobj.pk), 'r')
+    print(xmlFile)
+    myfile = xmlFile.read()
+    response = HttpResponse(myfile, content_type='application/xml')
+    response['Content-Disposition'] = "attachment; filename=output_xml_Blog_AP_Wire_{}_{}.xml".format(blogobj.pk,blogobj.topic)
+    
+    
+    return response
+
+def downloadxml2file2(request,pk):
+    blogobj = Blog2.objects.get(pk=pk)
+
+    root = et.Element('feed')
+    root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
+    root.set("xmlns:apxh","http://w3.org/1999/xhtml")
+    root.set("xmlns:ap","http://ap.org/schemas/03/2005/aptypes")
+    root.set("xmlns","http://www.w3.org/2005/Atom")
+    root.set("xmlns:apcm","http://www.w3.org/2005/Atom")
+    root.set("xml:lang","en-us")
+
+    q1 = et.SubElement(root,"title")
+    q1.text = "American Heart Association News"
+
+    m1 = et.Element('link')
+    m1.set("rel","self")
+    m1.set("href","https://www.heart.org/-/media/RSS-Feeds/apfeed.xml")
     root.append (m1)
+
+    m1 = et.Element('author')
+    root.append (m1)
+    a1= et.SubElement(m1,"name")
+    a1.text = "American Heart Association News"
+    a2= et.SubElement(m1,"uri")
+    a2.text = "https://www.heart.org"
+    a4 = et.SubElement(root,"title")
+    a4.text = "American Heart Association News"
+    a7 = et.SubElement(root,'updated')
+    a7.text = "2022-03-25T14:02:18.6328006Z"
+    a6 = et.SubElement(root,'rights')
+    a6.text = "Copyright 2022 American Heart Association News"
+    
+
+
+    m2 = et.Element('entry')
+    m2.set("xml:lang","en-us")
+    root.append (m2)
+
+    
+    uid = "urn:publicid:www.heart.org:"+str(blogobj.unique_id)+"-2"
+
+    b1 = et.SubElement(m2, "id")
+    b1.text = str(uid)
+    b5 = et.SubElement(m2, "published")
+    b5.text = str(blogobj.publishedon)
+    b6 = et.SubElement(m2, "updated")
+    b6.text = str(blogobj.updated)
+    b2 = et.SubElement(m2, "title")
+    b2.text = str(blogobj.topic)
+    b3 = et.SubElement(m2,'rights')
+    b3.text = "Copyright 2022 American Heart Association News"
+    a5 = et.SubElement(m2,'link')
+    a5.set("rel","alternate")
+    a5.set("href","https://www.heart.org/en/news/2022/03/25/5-barriers-to-eating-a-heart-healthy-diet-that-have-nothing-to-do-with-willpower")
+    a10 = et.SubElement(m2,'category')
+    a10.set("label","English - All US orgs")
+    a10.set("term","English - All US orgs")
+    a10.set("scheme","http://cv.ap.org/keyword")
+
+    a11 = et.SubElement(m2,'link')
+    a11.set("rel","alternate")
+    a11.set("href","urn:publicid:www.heart.org:2B6EF1D3FB2C4D8A8D158233FE8C5AD6-2")
+
+    m2 = et.Element('entry')
+    root.append (m2)
+
+    
+    uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-2"
+
+    b1 = et.SubElement(m2, "id")
+    b1.text = str(uid)
+    b5 = et.SubElement(m2, "published")
+    b5.text = str(blogobj.publishedon)
+    b6 = et.SubElement(m2, "updated")
+    b6.text = str(blogobj.updated)
+    b2 = et.SubElement(m2, "title")
+    b2.text = str(blogobj.topic)
+
+    n1 = et.Element('content')
+    n1.set("type","xhtml")
+    m2.append (n1)
+
+    o1 = et.Element('apxh:div')
+    n1.append (o1)
+ 
+    x = blogobj.description.split("\n")
+    print(x)
+    y = []
+    z=[]
+    count = 0
+    for i in x:
+        count += 1
+        if count % 2 != 0:
+            y.append(i)
+    for i in y:
+        print(i)
+        i = i.replace("<p>","")
+        i = i.replace("</p>","")
+        i = i.replace("<em>","")
+        i = i.replace("</em>","")
+        i = i.replace("<strong>","")
+        i = i.replace("</strong>","")   
+        i = i.replace("&nbsp;","")
+        z.append(i)
+        ele = et.SubElement(o1, "apxh:p")
+        ele.text = str(i)
+    print(z)
+    
+
+
+    tree = et.ElementTree(root)
+      
+    from django.conf import settings
+
+    MEDIA_ROOT = settings.MEDIA_ROOT
+
+
+    tree.write('{}/xml/output_xml_Blog_AP_News_{}.xml'.format(MEDIA_ROOT,blogobj.pk), encoding="utf-8")
+    
+    # Pathout is the path to the output.xml
+    
+    xmlFile = open('{}/xml/output_xml_Blog_AP_News_{}.xml'.format(MEDIA_ROOT,blogobj.pk), 'r')
+    print(xmlFile)
+    myfile = xmlFile.read()
+    response = HttpResponse(myfile, content_type='application/xml')
+    response['Content-Disposition'] = "attachment; filename=output_xml_Blog_AP_Wire_{}_{}.xml".format(blogobj.pk,blogobj.topic)
+    
+    
+    return response
+
+def downloadxmlall(request):
+    root = et.Element('feed')
+    root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
+    root.set("xmlns:apxh","http://w3.org/1999/xhtml")
+    root.set("xmlns:ap","http://ap.org/schemas/03/2005/aptypes")
+    root.set("xmlns","http://www.w3.org/2005/Atom")
+    root.set("xmlns:apcm","http://www.w3.org/2005/Atom")
+    root.set("xml:lang","en-us")
+
+    m1 = et.Element('author')
+    root.append (m1)
+    a1= et.SubElement(m1,"name")
+    a1.text = "ShaktiCoin"
+    a2= et.SubElement(m1,"uri")
+    a2.text = "https://draftblog.shakticoin.com//"
+    a3 = et.SubElement(root,"id")
+    a3.text = "shakticoin123"
+    a4 = et.SubElement(root,"title")
+    a4.text = "ShaktiCoin"
+    # para = ET.SubElement(..., "p", link_id=1)
+    # ET.SubElement(para, "link", id=2, type="external", url="http://www.google.com").text="Google.com"
+
+    a6 = et.SubElement(root,'rights')
+    a6.text = "Copyright 2022 ShaktiCoin"
+    a7 = et.SubElement(root,'updated')
+    a7.text = "2022-03-19T01:58:31Z"
+
+    m2 = et.Element('entry')
+    root.append (m2)
+
+    blogall = Blog.objects.filter(status="App_Published")
+    for blogobj in blogall:
+        m2 = et.Element('entry')
+        root.append (m2)
+        uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-2"
+
+        b1 = et.SubElement(m2, "id")
+        b1.text = str(uid)
+        b5 = et.SubElement(m2, "published")
+        b5.text = str(blogobj.publishedon)
+        b6 = et.SubElement(m2, "updated")
+        b6.text = str(blogobj.updated)
+        b2 = et.SubElement(m2, "title")
+        b2.text = str(blogobj.topic)
+
+        n1 = et.Element('content')
+        n1.set("type","xhtml")
+        m2.append (n1)
+
+        o1 = et.Element('apxh:div')
+        n1.append (o1)
+    
+        x = blogobj.description.split("\n")
+        print(x)
+        y = []
+        z=[]
+        count = 0
+        for i in x:
+            count += 1
+            if count % 2 != 0:
+                y.append(i)
+        for i in y:
+            print(i)
+            i = i.replace("<p>","")
+            i = i.replace("</p>","")
+            i = i.replace("<em>","")
+            i = i.replace("</em>","")
+            i = i.replace("<strong>","")
+            i = i.replace("</strong>","")   
+            i = i.replace("&nbsp;","")
+            z.append(i)
+            ele = et.SubElement(o1, "apxh:p")
+            ele.text = str(i)
+        print(z)
 
     
       
-    b1 = et.SubElement(m2, "id")
-    b1.text = str(blogobj.id)
-    b2 = et.SubElement(m2, "topic")
-    b2.text = str(blogobj.topic)
-    b3 = et.SubElement(m2, "author")
-    b3.text = str(blogobj.author)
-    b3 = et.SubElement(m2, "description")
-    b3.text = str(blogobj.description)
-    b4 = et.SubElement(m2, "image")
-    b4.text = str(blogobj.image)
-    b5 = et.SubElement(m2, "date")
-    b5.text = str(blogobj.date)
-    b5 = et.SubElement(m2, "status")
-    b5.text = str(blogobj.status)
-    b5 = et.SubElement(m2, "publishedon")
-    b5.text = str(blogobj.publishedon)
+    tree = et.ElementTree(root)
 
-    # blogall = Blog.objects.filter(status="App_Published")
-    # for i in blogall:
-    #     m2 = et.Element('entry')
-    #     root.append (m2)
-    #     b1 = et.SubElement(m2, "id")
-    #     b1.text = str(i.id)
-    #     b2 = et.SubElement(m2, "topic")
-    #     b2.text = str(i.topic)
-    #     b3 = et.SubElement(m2, "author")
-    #     b3.text = str(i.author)
-    #     b3 = et.SubElement(m2, "description")
-    #     b3.text = str(i.description)
-    #     b4 = et.SubElement(m2, "image")
-    #     b4.text = str(i.image)
-    #     b5 = et.SubElement(m2, "date")
-    #     b5.text = str(i.date)
-    #     b5 = et.SubElement(m2, "status")
-    #     b5.text = str(i.status)
-    #     b5 = et.SubElement(m2, "publishedon")
-    #     b5.text = str(i.publishedon)
+    from django.conf import settings
+
+    MEDIA_ROOT = settings.MEDIA_ROOT
+
+
+    tree.write('{}/xml/output_xml_Blog_AP_Wire.xml'.format(MEDIA_ROOT), encoding="utf-8")
+    
+    # Pathout is the path to the output.xml
+    
+    xmlFile = open('{}/xml/output_xml_Blog_AP_Wire.xml'.format(MEDIA_ROOT), 'r')
+    print(xmlFile)
+    myfile = xmlFile.read()
+    response = HttpResponse(myfile, content_type='application/xml')
+
+    response['Content-Disposition'] = "attachment; filename=output_xml_Blogs_AP_Wire.xml"
+    return response
+
+
+def downloadxmlallfile2(request):
+    root = et.Element('feed')
+    root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
+    root.set("xmlns:apxh","http://w3.org/1999/xhtml")
+    root.set("xmlns:ap","http://ap.org/schemas/03/2005/aptypes")
+    root.set("xmlns","http://www.w3.org/2005/Atom")
+    root.set("xmlns:apcm","http://www.w3.org/2005/Atom")
+    root.set("xml:lang","en-us")
+
+    q1 = et.SubElement(root,"title")
+    q1.text = "American Heart Association News"
+
+    m1 = et.Element('link')
+    m1.set("rel","self")
+    m1.set("href","https://www.heart.org/-/media/RSS-Feeds/apfeed.xml")
+    root.append (m1)
+
+    m1 = et.Element('author')
+    root.append (m1)
+    a1= et.SubElement(m1,"name")
+    a1.text = "American Heart Association News"
+    a2= et.SubElement(m1,"uri")
+    a2.text = "https://www.heart.org"
+    a4 = et.SubElement(root,"title")
+    a4.text = "American Heart Association News"
+    a7 = et.SubElement(root,'updated')
+    a7.text = "2022-03-25T14:02:18.6328006Z"
+    a6 = et.SubElement(root,'rights')
+    a6.text = "Copyright 2022 American Heart Association News"
+
+    m2 = et.Element('entry')
+    m2.set("xml:lang","en-us")
+    root.append (m2)
+
+    blogall = Blog.objects.filter(status="App_Published")
+    for blogobj in blogall:
+        m2 = et.Element('entry')
+        m2.set("xml:lang","en-us")
+        root.append (m2)
+        uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-2"
+
+        b1 = et.SubElement(m2, "id")
+        b1.text = str(uid)
+        b5 = et.SubElement(m2, "published")
+        b5.text = str(blogobj.publishedon)
+        b6 = et.SubElement(m2, "updated")
+        b6.text = str(blogobj.updated)
+        b2 = et.SubElement(m2, "title")
+        b2.text = str(blogobj.topic)
+
+        n1 = et.Element('content')
+        n1.set("type","xhtml")
+        m2.append (n1)
+
+        o1 = et.Element('apxh:div')
+        n1.append (o1)
+    
+        x = blogobj.description.split("\n")
+        print(x)
+        y = []
+        z=[]
+        count = 0
+        for i in x:
+            count += 1
+            if count % 2 != 0:
+                y.append(i)
+        for i in y:
+            print(i)
+            i = i.replace("<p>","")
+            i = i.replace("</p>","")
+            i = i.replace("<em>","")
+            i = i.replace("</em>","")
+            i = i.replace("<strong>","")
+            i = i.replace("</strong>","")   
+            i = i.replace("&nbsp;","")
+            z.append(i)
+            ele = et.SubElement(o1, "apxh:p")
+            ele.text = str(i)
+        print(z)
+
+    
+      
+    tree = et.ElementTree(root)
+
+    from django.conf import settings
+
+    MEDIA_ROOT = settings.MEDIA_ROOT
+
+
+    tree.write('{}/xml/output_xml_Blog_AP_Wire.xml'.format(MEDIA_ROOT), encoding="utf-8")
+    
+    # Pathout is the path to the output.xml
+    
+    xmlFile = open('{}/xml/output_xml_Blog_AP_Wire.xml'.format(MEDIA_ROOT), 'r')
+    print(xmlFile)
+    myfile = xmlFile.read()
+    response = HttpResponse(myfile, content_type='application/xml')
+
+    response['Content-Disposition'] = "attachment; filename=output_xml_Blogs_AP_Wire.xml"
+    return response
+
+
+def downloadxmlall2(request):
+    root = et.Element('feed')
+    root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
+    root.set("xmlns:apxh","http://w3.org/1999/xhtml")
+    root.set("xmlns:ap","http://ap.org/schemas/03/2005/aptypes")
+    root.set("xmlns","http://www.w3.org/2005/Atom")
+    root.set("xmlns:apcm","http://www.w3.org/2005/Atom")
+    root.set("xml:lang","en-us")
+
+    m1 = et.Element('author')
+    root.append (m1)
+    a1= et.SubElement(m1,"name")
+    a1.text = "ShaktiCoin"
+    a2= et.SubElement(m1,"uri")
+    a2.text = "https://draftblog.shakticoin.com//"
+    a3 = et.SubElement(root,"id")
+    a3.text = "shakticoin123"
+    a4 = et.SubElement(root,"title")
+    a4.text = "ShaktiCoin"
+    
+
+    a6 = et.SubElement(root,'rights')
+    a6.text = "Copyright 2022 ShaktiCoin"
+    a7 = et.SubElement(root,'updated')
+    a7.text = "2022-03-19T01:58:31Z"
+
+    m2 = et.Element('entry')
+    root.append (m2)
+
+    
+
+
+    blogall = Blog2.objects.filter(status="App_Published")
+    for blogobj in blogall:
+        m2 = et.Element('entry')
+        root.append (m2)
+        uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-2"
+
+        b1 = et.SubElement(m2, "id")
+        b1.text = str(uid)
+        b5 = et.SubElement(m2, "published")
+        b5.text = str(blogobj.publishedon)
+        b6 = et.SubElement(m2, "updated")
+        b6.text = str(blogobj.updated)
+        b2 = et.SubElement(m2, "title")
+        b2.text = str(blogobj.topic)
+
+        n1 = et.Element('content')
+        n1.set("type","xhtml")
+        m2.append (n1)
+
+        o1 = et.Element('apxh:div')
+        n1.append (o1)
+    
+        x = blogobj.description.split("\n")
+        print(x)
+        y = []
+        z=[]
+        count = 0
+        for i in x:
+            count += 1
+            if count % 2 != 0:
+                y.append(i)
+        for i in y:
+            print(i)
+            i = i.replace("<p>","")
+            i = i.replace("</p>","")
+            i = i.replace("<em>","")
+            i = i.replace("</em>","")
+            i = i.replace("<strong>","")
+            i = i.replace("</strong>","")   
+            i = i.replace("&nbsp;","")
+            z.append(i)
+            ele = et.SubElement(o1, "apxh:p")
+            ele.text = str(i)
+        print(z)
 
     
       
     tree = et.ElementTree(root)
       
-    with open ('log.xml', "wb") as files :
-        tree.write(files)
-  
-    # Driver Code
-    if __name__ == "__main__": 
-        GenerateXML("log.xml")
-    messages.success(request,"Your blog {} for AP Wire is Published".format(blogobj.topic))
-    return redirect('view')
-
-def publishBlog2(request,pk):
-    blogobj = Blog2.objects.get(pk=pk)
-    blogobj.status = "App_Published"
-    blogobj.publishedon = datetime.today().date()
-    blogobj.save()
-
-    messages.success(request,"Your blog {} for AP Wire is Published".format(blogobj.topic))
-    return redirect('view')
-# class toxml(APIView):
     
-#     def get(self, request):
-#         obj = Blog.objects.get()
-#         serialize = BlogSerializer(obj,many=True)
-#         return Response(serialize.data)
+    from django.conf import settings
 
+    MEDIA_ROOT = settings.MEDIA_ROOT
+
+
+    tree.write('{}/xml/output_xml_Blog_AP_News.xml'.format(MEDIA_ROOT), encoding="utf-8")
+    
+    # Pathout is the path to the output.xml
+    
+    xmlFile = open('{}/xml/output_xml_Blog_AP_News.xml'.format(MEDIA_ROOT), 'r')
+    print(xmlFile)
+    myfile = xmlFile.read()
+    response = HttpResponse(myfile, content_type='application/xml')
+
+    response['Content-Disposition'] = "attachment; filename=output_xml_Blogs_AP_Wire.xml"
+    return response
+
+def downloadxmlall2file2(request):
+    root = et.Element('feed')
+    root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
+    root.set("xmlns:apxh","http://w3.org/1999/xhtml")
+    root.set("xmlns:ap","http://ap.org/schemas/03/2005/aptypes")
+    root.set("xmlns","http://www.w3.org/2005/Atom")
+    root.set("xmlns:apcm","http://www.w3.org/2005/Atom")
+    root.set("xml:lang","en-us")
+
+    q1 = et.SubElement(root,"title")
+    q1.text = "American Heart Association News"
+
+    m1 = et.Element('link')
+    m1.set("rel","self")
+    m1.set("href","https://www.heart.org/-/media/RSS-Feeds/apfeed.xml")
+    root.append (m1)
+
+    m1 = et.Element('author')
+    root.append (m1)
+    a1= et.SubElement(m1,"name")
+    a1.text = "American Heart Association News"
+    a2= et.SubElement(m1,"uri")
+    a2.text = "https://www.heart.org"
+    a4 = et.SubElement(root,"title")
+    a4.text = "American Heart Association News"
+    a7 = et.SubElement(root,'updated')
+    a7.text = "2022-03-25T14:02:18.6328006Z"
+    a6 = et.SubElement(root,'rights')
+    a6.text = "Copyright 2022 American Heart Association News"
+    
+
+
+   
+
+    
+
+
+    blogall = Blog2.objects.filter(status="App_Published")
+    for blogobj in blogall:
+        m2 = et.Element('entry')
+        m2.set("xml:lang","en-us")
+        root.append (m2)
+        uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-2"
+
+        b1 = et.SubElement(m2, "id")
+        b1.text = str(uid)
+        b5 = et.SubElement(m2, "published")
+        b5.text = str(blogobj.publishedon)
+        b6 = et.SubElement(m2, "updated")
+        b6.text = str(blogobj.updated)
+        b2 = et.SubElement(m2, "title")
+        b2.text = str(blogobj.topic)
+
+        n1 = et.Element('content')
+        n1.set("type","xhtml")
+        m2.append (n1)
+
+        o1 = et.Element('apxh:div')
+        n1.append (o1)
+    
+        x = blogobj.description.split("\n")
+        print(x)
+        y = []
+        z=[]
+        count = 0
+        for i in x:
+            count += 1
+            if count % 2 != 0:
+                y.append(i)
+        for i in y:
+            print(i)
+            i = i.replace("<p>","")
+            i = i.replace("</p>","")
+            i = i.replace("<em>","")
+            i = i.replace("</em>","")
+            i = i.replace("<strong>","")
+            i = i.replace("</strong>","")   
+            i = i.replace("&nbsp;","")
+            z.append(i)
+            ele = et.SubElement(o1, "apxh:p")
+            ele.text = str(i)
+        print(z)
+
+    
+      
+    tree = et.ElementTree(root)
+      
+    
+    from django.conf import settings
+
+    MEDIA_ROOT = settings.MEDIA_ROOT
+
+
+    tree.write('{}/xml/output_xml_Blog_AP_News.xml'.format(MEDIA_ROOT), encoding="utf-8")
+    
+    # Pathout is the path to the output.xml
+    
+    xmlFile = open('{}/xml/output_xml_Blog_AP_News.xml'.format(MEDIA_ROOT), 'r')
+    print(xmlFile)
+    myfile = xmlFile.read()
+    response = HttpResponse(myfile, content_type='application/xml')
+
+    response['Content-Disposition'] = "attachment; filename=output_xml_Blogs_AP_Wire.xml"
+    return response
 
 def createBlog(request):
     print("Createblog")
@@ -419,7 +1154,7 @@ def createBlog2(request):
             image=request.FILES['image']
             blog.image = image
             blog.save()
-        return redirect('view')
+        return redirect('/?secondTab=True')
 
     return render(request,'createBlog.html')
 

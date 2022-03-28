@@ -260,7 +260,18 @@ a:hover {
     font-weight: 400;
 }
 .remember a:hover{text-decoration: underline;}
+.table-print-wrp {
+    display: flex;
+    justify-content: flex-end;
+    gap: 11px;
+}
 
+.table-print-wrp > div > a {
+    color: #212529;
+}
+.table-print-wrp > div > a:hover{
+    text-decoration: none;
+}
 
 
 
@@ -268,4 +279,31 @@ a:hover {
 /* Model*/
 .modal-header {
     border-bottom: none;
+}
+
+
+
+
+/* Responcive */
+@media screen and (max-width: 1024px){
+    .table-carousel .owl-nav button.owl-prev {
+        left: 10px;
+        bottom: -80px;
+    }
+    .table-carousel .owl-nav button.owl-next {
+        right: 0px;
+        bottom: -80px;
+    }
+}
+@media (max-width: 1199px) { 
+
+ }
+@media (max-width: 991px) {  }
+@media (max-width: 767px) {  }
+@media (max-width: 575px) {  
+    .nav-slider-tabs{
+        flex-direction: column;
+    gap: 30px;
+    margin-top: 50px;
+    }
 }

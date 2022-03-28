@@ -14,6 +14,18 @@ urlpatterns = [
     path('publishBlog/<str:pk>/',views.publishBlog,name='publishBlog'),
     path('publishBlog2/<str:pk>/',views.publishBlog2,name='publishBlog2'),
 
+    path('downloadxmlall/',views.downloadxmlall,name='downloadxmlall'),
+    path('downloadxmlall2/',views.downloadxmlall2,name='downloadxmlall2'),
+    path('downloadxmlallfile2/',views.downloadxmlallfile2,name='downloadxmlallfile2'),
+    path('downloadxmlall2file2/',views.downloadxmlall2file2,name='downloadxmlall2file2'),
+
+    path('downloadxml/<str:pk>/',views.downloadxml,name='downloadxml'),
+    path('downloadxml2/<str:pk>/',views.downloadxml2,name='downloadxml2'),
+    path('downloadxmlfile2/<str:pk>/',views.downloadxmlfile2,name='downloadxmlfile2'),
+    path('downloadxml2file2/<str:pk>/',views.downloadxml2file2,name='downloadxml2file2'),
+    path('downloadxmlallfile2/<str:pk>/',views.downloadxmlallfile2,name='downloadxmlallfile2'),
+    path('downloadxml2allfile2/<str:pk>/',views.downloadxmlall2file2,name='downloadxml2allfile2'),
+
     path('createBlog2',views.createBlog2,name='createBlog2'),
 
     path('saveTableRow/<str:tableName>/',views.saveTableRow,name="saveTableRow"),
