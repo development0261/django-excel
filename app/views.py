@@ -319,6 +319,7 @@ def downloadxml(request,pk):
     a7.text = "2022-03-19T01:58:31Z"
 
     m2 = et.Element('entry')
+    m2.set("xml:lang","en-us")
     root.append (m2)
 
     
@@ -535,6 +536,7 @@ def downloadxml2(request,pk):
     a7.text = "2022-03-19T01:58:31Z"
 
     m2 = et.Element('entry')
+    m2.set("xml:lang","en-us")
     root.append (m2)
 
     
@@ -665,6 +667,7 @@ def downloadxml2file2(request,pk):
     a11.set("href","urn:publicid:www.heart.org:2B6EF1D3FB2C4D8A8D158233FE8C5AD6-2")
 
     m2 = et.Element('entry')
+    m2.set("xml:lang","en-us")
     root.append (m2)
 
     
@@ -764,6 +767,7 @@ def downloadxmlall(request):
     blogall = Blog.objects.filter(status="App_Published")
     for blogobj in blogall:
         m2 = et.Element('entry')
+        m2.set("xml:lang","en-us")
         root.append (m2)
         uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-2"
 
@@ -965,6 +969,7 @@ def downloadxmlall2(request):
     blogall = Blog2.objects.filter(status="App_Published")
     for blogobj in blogall:
         m2 = et.Element('entry')
+        m2.set("xml:lang","en-us")
         root.append (m2)
         uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-2"
 

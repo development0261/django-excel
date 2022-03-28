@@ -206,12 +206,13 @@
                   {%endif%}
 
                   {% if forloop.counter == 7  %}
+                  
                   <div class="table-print-wrp">
                     <div class="print-all-table">
-                      <a style="cursor: pointer;" class="Wiredownloadxml" id="Wiredownload_{{key|replaceSpacewithUnderScore }}" href= {% url 'downloadxmlall' %}>+ Generate xml</a>
+                      <a style="cursor: pointer;" class="Wiredownloadxml" id="Wiredownload_{{key|replaceSpacewithUnderScore }}" href= {% url 'downloadxmlall' %}><i class="fa fa-plus"></i> Generate xml</a>
                     </div>
                     <div class="print-all-table-file2">
-                      <a style="cursor: pointer;" class="Wiredownloadxmlfile2" id="Wiredownloadfile2_{{key|replaceSpacewithUnderScore }}" href = {% url 'downloadxmlallfile2' %} > Generate xml</a>
+                      <a style="cursor: pointer;" class="Wiredownloadxmlfile2" id="Wiredownloadfile2_{{key|replaceSpacewithUnderScore }}" href = {% url 'downloadxmlallfile2' %} ><i class="fa fa-plus"></i> Generate xml</a>
                     </div>
                 </div>
 
@@ -331,13 +332,14 @@
                   {%endif%}
 
                   {% if forloop.counter == 7  %}
+                  <div class="table-print-wrp">
                   <div class="print-all-table">
-                    <a style="cursor: pointer;" class="NewsOpenAddModelxml" id="NewsOpenAddModel_{{key|replaceSpacewithUnderScore }}" href = {% url 'downloadxmlall2' %} > Generate xml</a>
+                    <a style="cursor: pointer;" class="NewsOpenAddModelxml" id="NewsOpenAddModel_{{key|replaceSpacewithUnderScore }}" href = {% url 'downloadxmlall2' %} ><i class="fa fa-plus"></i> Generate xml</a>
                   </div>
                   <div class="print-all-table-file2">
-                    <a style="cursor: pointer;" class="NewsOpenAddModelxmlfile2" id="NewsOpenAddModelfile2_{{key|replaceSpacewithUnderScore }}" href = {% url 'downloadxmlall2file2' %} > Generate xml</a>
+                    <a style="cursor: pointer;" class="NewsOpenAddModelxmlfile2" id="NewsOpenAddModelfile2_{{key|replaceSpacewithUnderScore }}" href = {% url 'downloadxmlall2file2' %} ><i class="fa fa-plus"></i> Generate xml</a>
                   </div>
-
+                </div>
              
                                 
                             
