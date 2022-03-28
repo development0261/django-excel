@@ -191,7 +191,7 @@
 
                             {% if forloop.parentloop.counter == 7 %}
                             <a class="row-add downloadxml" id="downloadxml-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxml' v.pk %}><i class="fa fa-file-excel-o"></i></a>
-                            <a class="row-add downloadxmlfile2" id="downloadxmlfile2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxmlfile2' v.pk %}><i class="fa fa-file-excel-o"></i></a>
+                            {% comment %} <a class="row-add downloadxmlfile2" id="downloadxmlfile2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxmlfile2' v.pk %}><i class="fa fa-file-excel-o"></i></a> {% endcomment %}
 
                             {%endif%}
 
@@ -211,9 +211,9 @@
                     <div class="print-all-table">
                       <a style="cursor: pointer;" class="Wiredownloadxml" id="Wiredownload_{{key|replaceSpacewithUnderScore }}" href= {% url 'downloadxmlall' %}><i class="fa fa-plus"></i> Generate xml</a>
                     </div>
-                    <div class="print-all-table-file2">
+                    {% comment %} <div class="print-all-table-file2">
                       <a style="cursor: pointer;" class="Wiredownloadxmlfile2" id="Wiredownloadfile2_{{key|replaceSpacewithUnderScore }}" href = {% url 'downloadxmlallfile2' %} ><i class="fa fa-plus"></i> Generate xml</a>
-                    </div>
+                    </div> {% endcomment %}
                 </div>
 
 
@@ -254,7 +254,7 @@
                           <th>Action</th>
                         </tr>
                       </thead>
-                      <tbody id="tableBody_{{key|replaceSpacewithUnderScore }}" class="
+                      <tbody id="News_tableBody_{{key|replaceSpacewithUnderScore }}" class="
                       
                             
                       {% if user|validateuser:key == "Writer" and forloop.counter <= 4 %}
@@ -313,7 +313,7 @@
                             {%endif%}
 
                             {% if forloop.parentloop.counter == 7 %}
-                            <a class="row-add downloadxml2" id="downloadxml2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxml2' v.pk %}><i class="fa fa-file-excel-o"></i></a>
+                            {% comment %} <a class="row-add downloadxml2" id="downloadxml2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxml2' v.pk %}><i class="fa fa-file-excel-o"></i></a> {% endcomment %}
                             <a class="row-add downloadxml2file2" id="downloadxml2file2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxml2file2' v.pk %}><i class="fa fa-file-excel-o"></i></a>
                             {%endif%}
 
@@ -333,9 +333,9 @@
 
                   {% if forloop.counter == 7  %}
                   <div class="table-print-wrp">
-                  <div class="print-all-table">
+                  {% comment %} <div class="print-all-table">
                     <a style="cursor: pointer;" class="NewsOpenAddModelxml" id="NewsOpenAddModel_{{key|replaceSpacewithUnderScore }}" href = {% url 'downloadxmlall2' %} ><i class="fa fa-plus"></i> Generate xml</a>
-                  </div>
+                  </div> {% endcomment %}
                   <div class="print-all-table-file2">
                     <a style="cursor: pointer;" class="NewsOpenAddModelxmlfile2" id="NewsOpenAddModelfile2_{{key|replaceSpacewithUnderScore }}" href = {% url 'downloadxmlall2file2' %} ><i class="fa fa-plus"></i> Generate xml</a>
                   </div>
@@ -1061,12 +1061,11 @@
         zIndex: 99999,
         stop: function (e, t) {
           console.log(e)
-          var myRows = $(`#${e.toElement.children[0].id} tbody tr`).length
-          console.log(e.toElement.children[0].id)
+          console.log(t)
+          console.log($(this))
+          
+          
   
-          if (myRows == 0) {
-            $(`#${e.toElement.children[0].id} tbody`).addClass('test');
-          } 
           if($(t.item).closest('tbody').find('tr').length >0){
                  $(t.item).closest('tbody').removeClass('test');
           }
@@ -1117,7 +1116,9 @@
        
             console.log(addedto)
             console.log(removedfrom)
-
+            if($(`#tableBody_${removedfrom} tr`).length == 0){
+                $(`#tableBody_${removedfrom}`).addClass('test')
+            }
             $.ajax({
               url : "draganddrop/"+dropid+"/"+removedfrom+"/"+addedto+"/", // Url of backend (can be python, php, etc..)
               type: "POST", // data type (can be get, post, put, delete)
@@ -1196,12 +1197,7 @@
         cursor: "move",
         zIndex: 99999,
         stop: function (e, t) {
-          var myRows = $(`#${e.toElement.children[0].id} tbody tr`).length
-          console.log(e.toElement.children[0].id)
-  
-          if (myRows == 0) {
-            $(`#${e.toElement.children[0].id} tbody`).addClass('test');
-          } 
+          
           if($(t.item).closest('tbody').find('tr').length >0){
                  $(t.item).closest('tbody').removeClass('test');
           }
@@ -1253,7 +1249,9 @@
        
             console.log(addedto)
             console.log(removedfrom)
-
+            if($(`#News_tableBody_${removedfrom} tr`).length == 0){
+              $(`#News_tableBody_${removedfrom}`).addClass('test')
+          }
             $.ajax({
               url : "draganddrop2/"+dropid+"/"+removedfrom+"/"+addedto+"/", // Url of backend (can be python, php, etc..)
               type: "POST", // data type (can be get, post, put, delete)
