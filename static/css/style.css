@@ -306,4 +306,19 @@ a:hover {
     gap: 30px;
     margin-top: 50px;
     }
+    .table-carousel .owl-item.active:first-child, .table-carousel .owl-item + .owl-item.active {
+        width: calc(100vw - 30px) !important;
+        flex: 0 0 calc(100vw - 30px);
+    }
+    
+    .table-carousel .owl-stage {
+        display: flex;
+    }
+    
+    .table-carousel .owl-item.active + .owl-item.active {
+        width: calc(100vw - 30px) !important;
+        flex: 0 0 calc(100vw - 30px);
+        margin-top: 340px;
+        margin-left: calc(-100vw - 0px) !important;
+    }
 }
