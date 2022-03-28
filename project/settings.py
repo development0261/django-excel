@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'app',
     'multiselectfield',
     'ckeditor',
-    'rest_framework',
+ 
 ]
 
 REST_FRAMEWORK = {

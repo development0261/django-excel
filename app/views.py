@@ -4,7 +4,7 @@ from urllib import request
 from django.shortcuts import render,redirect
 from django.http import HttpResponse, JsonResponse
 
-from app.serializers import BlogSerializer
+# from app.serializers import BlogSerializer
 from .models import *
 from django.contrib.auth import login,logout,authenticate
 from .forms import userform
