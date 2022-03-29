@@ -10,3 +10,4 @@ pillow
 django-ckeditor
 djangorestframework
 djangorestframework-xml
+reportlab

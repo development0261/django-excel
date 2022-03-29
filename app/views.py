@@ -136,7 +136,6 @@ def getRowData2(request,id,tableName):
         imageobj =tableObj.image.url
     return JsonResponse({'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj})
 
-
 def editBlog(request,pk):
     if request.method == 'POST':
         print(pk)
@@ -270,15 +269,7 @@ import xml.etree.ElementTree as et
 from datetime import datetime
 from wsgiref.util import FileWrapper
 
-def publishBlog(request,pk):
-    blogobj = Blog.objects.get(pk=pk)
-    blogobj.status = "App_Published"
-    blogobj.publishedon = datetime.today().date()
-    blogobj.save()
 
-    messages.success(request,"Your blog {} for AP Wire is Published".format(blogobj.topic))
-
-    return redirect('view')
 
 def publishBlog2(request,pk):
     blogobj = Blog2.objects.get(pk=pk)
@@ -288,9 +279,37 @@ def publishBlog2(request,pk):
 
     messages.success(request,"Your blog {} for AP Wire is Published".format(blogobj.topic))
 
+    filepath = downloadxml(request,pk,stringPath=True)
+    return redirect('/?filepath={}'.format(filepath))
+
+import io
+from django.http import FileResponse
+from reportlab.pdfgen import canvas
+
+def downloadpdf(request,pk):
+    # Create a file-like buffer to receive PDF data.
+    buffer = io.BytesIO()
+
+    # Create the PDF object, using the buffer as its "file."
+    p = canvas.Canvas(buffer)
+
+    # Draw things on the PDF. Here's where the PDF generation happens.
+    # See the ReportLab documentation for the full list of functionality.
+    p.drawString(100, 100, "Hello world.")
+
+    # Close the PDF object cleanly, and we're done.
+    p.showPage()
+    p.save()
+
+    # FileResponse sets the Content-Disposition header so that browsers
+    # present the option to save the file.
+    buffer.seek(0)
+    return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
+
+def downloadpdf2(request,pk):
     return redirect('view')
 
-def downloadxml(request,pk):
+def downloadxml(request,pk,stringPath= None):
     blogobj = Blog.objects.get(pk=pk)
     root = et.Element('feed')
     root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
@@ -385,9 +404,21 @@ def downloadxml(request,pk):
     myfile = xmlFile.read()
     response = HttpResponse(myfile, content_type='application/xml')
     response['Content-Disposition'] = "attachment; filename=output_xml_Blog_AP_Wire_{}_{}.xml".format(blogobj.pk,blogobj.topic)
+    if stringPath:
+        return '/media/xml/output_xml_Blog_AP_Wire_{}.xml'.format(blogobj.pk)
+    else:
+        return response
 
-    return response
+def publishBlog(request,pk):
+    blogobj = Blog.objects.get(pk=pk)
+    blogobj.status = "App_Published"
+    blogobj.publishedon = datetime.today().date()
+    blogobj.save()
+    
+    messages.success(request,"Your blog {} for AP Wire is Published".format(blogobj.topic))
 
+    filepath = downloadxml(request,pk,stringPath=True)
+    return redirect('/?filepath={}'.format(filepath))
 
 def downloadxmlfile2(request,pk):
     blogobj = Blog.objects.get(pk=pk)
@@ -507,7 +538,7 @@ def downloadxmlfile2(request,pk):
 
     return response
 
-def downloadxml2(request,pk):
+def downloadxml2(request,pk,stringPath= None):
     blogobj = Blog2.objects.get(pk=pk)
 
     root = et.Element('feed')
@@ -600,8 +631,10 @@ def downloadxml2(request,pk):
     response = HttpResponse(myfile, content_type='application/xml')
     response['Content-Disposition'] = "attachment; filename=output_xml_Blog_AP_Wire_{}_{}.xml".format(blogobj.pk,blogobj.topic)
     
-    
-    return response
+    if stringPath:
+        return '/media/xml/output_xml_Blog_AP_Wire_{}.xml'.format(blogobj.pk)
+    else:
+        return response
 
 def downloadxml2file2(request,pk):
     blogobj = Blog2.objects.get(pk=pk)

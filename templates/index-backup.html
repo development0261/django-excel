@@ -1,0 +1,1403 @@
+<!doctype html>
+<html lang="en">
+<head>
+  {% load static %}
+  {% load customtags %}
+
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" /> 
+  
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+
+  <title>Nav</title>
+  <style>
+
+.blog-modal .close {
+    position: absolute;
+    top: -30px;
+    right: 0;
+    color: #fff;
+    text-shadow: none;
+    opacity: 1;
+}
+
+.blog-modal .modal-dialog {
+    max-width: 840px;
+}
+
+.blog-modal {
+    padding: 0 !important;
+}
+.blog-modal .modal-body {
+    padding: 30px 30px;
+}
+
+.post-image img {
+    max-width: 100%;
+    height: 400px;
+    object-fit: cover;
+    width: 100%;
+}
+
+.modal-contant .post-title {
+    font-size: 30px;
+    font-weight: 600;
+    color: #5928D3;
+    margin: 30px 0 20px 0;
+}
+
+.auth-date {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.auth-date h6 {
+    margin: 0;
+    color: #5928D3;
+}
+
+.auth-date h6 a {
+    color: #212529;
+}
+.row-add i{
+    color: #5928d3;
+}
+
+.test{
+  display:block;
+  height:30px;
+  width:260px;
+  position:absolute;
+  z-index:-1;
+}
+  </style>
+</head>
+
+<body>
+  {% if user.is_authenticated %}
+  <section class="nav-slider-section">
+    <div class="container">
+      <div style="display:flex;justify-content:flex-end">
+        
+        <a class="btn btn-danger" href="{% url 'logout' %}"> Logout</a>
+      </div>
+      <div class="row"> 
+        <div class="col-12">
+          <div class="nav-slider-section-inner">
+            <div class="nav-slider-tabs">
+              <button class="{% if not request.GET.secondTab %} nav-active {% endif %} ApWire" id="ApWire">AP - Wire</button>
+              <button class="{% if request.GET.secondTab %} nav-active {% endif %} ApNews" id="ApNews">AP - News</button>
+            </div>
+
+            {% if messages %}
+   {% for message in messages %}
+   <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+       <strong id="g_msg">Message : {{message}} </strong>
+       <button type="button" onclick="parentNode.remove()" class="close" data-dismiss="alert" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+       </button>
+   </div>
+   {% endfor %}
+   {% endif %} 
+            <!-- First Tab-->
+            <div class="ns-slider-box-section" id="ApWireContent">
+              <div class="table-carousel owl-carousel owl-theme">
+               
+               {% for key,val in context_dict.items %}
+               {% comment %} {{UserCustom.accessint}} {% endcomment %}
+                {% if forloop.counter <= user.accessint %}
+                <div class="ns-slider-box slide" data-slide-index="{{forloop.counter0}}">   
+                  <h5>{{forloop.counter}}. {{ key}}</h5>
+                  <div class="ns-slider-box-table sortablecolumn">
+                  
+                    {% comment %} {{user|validateuser:key}} {% endcomment %}
+                  
+                    <table class="table mytable"  id="ApWire_{{key|replaceSpacewithUnderScore }}">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Title</th>
+                          <th>Author</th>
+                          <th>Date</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody id="tableBody_{{key|replaceSpacewithUnderScore }}" class=" 
+                          
+                          {% if user|validateuser:key == "Writer" and forloop.counter <= 4 %}
+                          connectedSortable
+                          {% elif user|validateuser:key == "Editor" and forloop.counter <= 5 %}
+                          connectedSortable
+                          {% elif user|validateuser:key == "Approver" and forloop.counter <= 6 %}
+                          connectedSortable
+                          {% elif user|validateuser:key == "Publisher" %}
+                            {% if forloop.counter <= 2 or forloop.counter >= 5 %}
+                              connectedSortable
+                            {% else %}
+                            {% endif %}
+                          {% elif user|validateuser:key == "Admin" %}
+                      
+                      
+
+                      {%endif%}
+                      
+                      {% if val|length < 1 %}
+                      test
+                      {% endif %}
+                      " >
+                        {% for v in val %}
+                        <tr id="{{key|replaceSpacewithUnderScore }}_{{v.pk}}">
+                          <th>{{forloop.counter}}</th>
+                          <td>{{v.topic}}</td>
+                          <td>{{v.author}}</td>
+                          <td>{{v.date}}</td>
+                          <td> <div class="new-row-control">
+                            <a class="row-add viewRow" id=" -{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-eye"></i></a>
+                            
+                            {% if user|validateuser:key == "Writer" and forloop.parentloop.counter < 4 %}
+                            <a class="row-add editRow" id="editRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
+                            {% elif user|validateuser:key == "Editor" and forloop.parentloop.counter < 5 %}
+                            <a class="row-add editRow" id="editRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
+                            {% elif user|validateuser:key == "Approver" and forloop.parentloop.counter < 6 %}
+                            <a class="row-add editRow" id="editRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
+                            {% elif user|validateuser:key == "Publisher" %}
+                            {% if forloop.parentloop.counter == 1 or forloop.parentloop.counter > 4 %}
+                            <a class="row-add editRow" id="editRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
+                            {%else%}
+                            {% endif %}
+                            {% elif user|validateuser:key == "Admin" %}
+                            
+                            {% endif %}
+                            {% if user|validateuser:key == "Publisher" and forloop.parentloop.counter == 6 %}
+                            <a class="row-add publishRow" id="publishRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'publishBlog' v.pk %}><i class="fa fa-paper-plane"></i></a>
+                            {%endif%}
+
+                            {% if forloop.parentloop.counter == 7 %}
+                            <a class="row-add downloadxml" id="downloadxml-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxml' v.pk %}><i class="fa fa-file-excel-o"></i></a>
+                            
+                            {% comment %} <a class="row-add downloadxmlfile2" id="downloadxmlfile2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxmlfile2' v.pk %}><i class="fa fa-file-excel-o"></i></a> {% endcomment %}
+
+                            {%endif%}
+
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                  {% if forloop.counter == 1  %}
+                  <div class="add-row-table">
+                    <a style="cursor: pointer;" class="OpenAddModel" id="OpenAddModel_{{key|replaceSpacewithUnderScore }}">+ Add Row</a>
+                  </div>
+                  {%endif%}
+
+                  {% if forloop.counter == 7  %}
+                  
+                  <div class="table-print-wrp">
+                    <div class="print-all-table">
+                      <a style="cursor: pointer;" class="Wiredownloadxml" id="Wiredownload_{{key|replaceSpacewithUnderScore }}" href= {% url 'downloadxmlall' %}><i class="fa fa-plus"></i> Generate xml</a>
+                    </div>
+                    {% comment %} <div class="print-all-table-file2">
+                      <a style="cursor: pointer;" class="Wiredownloadxmlfile2" id="Wiredownloadfile2_{{key|replaceSpacewithUnderScore }}" href = {% url 'downloadxmlallfile2' %} ><i class="fa fa-plus"></i> Generate xml</a>
+                    </div> {% endcomment %}
+                </div>
+
+
+             
+                                
+                            
+                        
+                     
+
+                  {%endif%}
+                </div>
+                {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+            <!-- First Tab-->
+
+
+            <div class="ns-slider-box-section d-none" id="ApNewsContent">
+              <div class="table-carousel owl-carousel owl-theme">
+               
+               {% for key,val in context_dict1.items %}
+               {% comment %} {{UserCustom.accessint}} {% endcomment %}
+                {% if forloop.counter <= user.accessint %}
+                <div class="ns-slider-box">   
+                  <h5>{{forloop.counter}}. {{key}}</h5>
+                  <div class="ns-slider-box-table sortablecolumn">
+                  
+                    {% comment %} {{user|validateuser:key}} {% endcomment %}
+                  
+                    <table class="table mytable"  id="ApNews_{{key|replaceSpacewithUnderScore }}">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Title</th>
+                          <th>Author</th>
+                          <th>Date</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody id="News_tableBody_{{key|replaceSpacewithUnderScore }}" class="
+                      
+                            
+                      {% if user|validateuser:key == "Writer" and forloop.counter <= 4 %}
+                      connectedSortable2
+                      {% elif user|validateuser:key == "Editor" and forloop.counter <= 5 %}
+                      connectedSortable2
+                      {% elif user|validateuser:key == "Approver" and forloop.counter <= 6 %}
+                      connectedSortable2
+                      {% elif user|validateuser:key == "Publisher"%}
+                        {% if  forloop.counter <= 2 or forloop.counter > 4 %}
+                        connectedSortable2
+                        {% else %}
+                        
+                        {% endif %}
+                      {% elif user|validateuser:key == "Admin" %}
+                      
+                      {% endif %}
+
+                      
+                      {% if val|length < 1 %}
+                      test
+                      {% endif %}
+                      
+                      
+                      " >
+                  
+                          </tr>
+                        {% for v in val %}
+                        
+                        <tr id="{{key|replaceSpacewithUnderScore }}_{{v.pk}}">
+                          <th>{{forloop.counter}}</th>
+                          <td>{{v.topic}}</td>
+                          <td>{{v.author}}</td>
+                          <td>{{v.date}}</td>
+                          <td> <div class="new-row-control">
+                            <a class="row-add viewRow2" id=" -{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-eye"></i></a>
+                            
+                            
+                            {% if user|validateuser:key == "Writer" and forloop.parentloop.counter < 4 %}
+                            <a class="row-add editRow2" id="editRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
+                            {% elif user|validateuser:key == "Editor" and forloop.parentloop.counter < 5 %}
+                            <a class="row-add editRow2" id="editRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
+                            {% elif user|validateuser:key == "Approver" and forloop.parentloop.counter < 6 %}
+                            <a class="row-add editRow2" id="editRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
+                            {% elif user|validateuser:key == "Publisher" %}
+                              {% if forloop.parentloop.counter < 2 or forloop.parentloop.counter > 4 %}
+                                <a class="row-add editRow2" id="editRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
+                              {%else%}
+                              {% endif %}
+                            {% elif user|validateuser:key == "Admin" %}
+                            
+                            {% endif %}
+
+                            {% if user|validateuser:key == "Publisher" and forloop.parentloop.counter == 6 %}
+                            <a class="row-add publishRow2" id="publishRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'publishBlog2' v.pk %} ><i class="fa fa-paper-plane"></i></a>
+                            {%endif%}
+
+                            {% if forloop.parentloop.counter == 7 %}
+                            {% comment %} <a class="row-add downloadxml2" id="downloadxml2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxml2' v.pk %}><i class="fa fa-file-excel-o"></i></a> {% endcomment %}
+                            <a class="row-add downloadxml2file2" id="downloadxml2file2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxml2file2' v.pk %}><i class="fa fa-file-excel-o"></i></a>
+                            {%endif%}
+
+                            
+                            
+                        {% endfor %}
+                     
+                     
+                      </tbody>
+                    </table>
+                  </div>
+                  {% if forloop.counter == 1  %}
+                  <div class="add-row-table">
+                    <a style="cursor: pointer;" class="NewsOpenAddModel" id="NewsOpenAddModel_{{key|replaceSpacewithUnderScore }}">+ Add Row</a>
+                  </div>
+                  {%endif%}
+
+                  {% if forloop.counter == 7  %}
+                  <div class="table-print-wrp">
+                  {% comment %} <div class="print-all-table">
+                    <a style="cursor: pointer;" class="NewsOpenAddModelxml" id="NewsOpenAddModel_{{key|replaceSpacewithUnderScore }}" href = {% url 'downloadxmlall2' %} ><i class="fa fa-plus"></i> Generate xml</a>
+                  </div> {% endcomment %}
+                  <div class="print-all-table-file2">
+                    <a style="cursor: pointer;" class="NewsOpenAddModelxmlfile2" id="NewsOpenAddModelfile2_{{key|replaceSpacewithUnderScore }}" href = {% url 'downloadxmlall2file2' %} ><i class="fa fa-plus"></i> Generate xml</a>
+                  </div>
+                </div>
+             
+                                
+                            
+                        
+                     
+
+                  {%endif%}
+                </div>
+                {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  {% endif %}
+
+  {% for key,val in context_dict.items %}
+
+              <div class="modal fade bd-example-modal-lg"  tabindex="-1" role="dialog" id="editmodal_{{key|replaceSpacewithUnderScore }}">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                
+                      <button type="button" class="close closeModel" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                        
+                        {% comment %} <span aria-hidden="true">&times;</span>
+                      </button> {% endcomment %}
+                    </div>
+                    <div class="modal-body editModel1" id="editmodalbody_{{key|replaceSpacewithUnderScore }}">
+
+            
+                    </div>
+            
+                </div>
+                  
+                  </div>
+                </div>
+                {% endfor %}
+
+    {% for key,val in context_dict1.items %}
+
+                <div class="modal fade bd-example-modal-lg"  tabindex="-1" role="dialog" id="editmodal2_{{key|replaceSpacewithUnderScore }}">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                  
+                        
+                      </div>
+                      <div class="modal-body" id="editmodalbody2_{{key|replaceSpacewithUnderScore }}">
+  
+              
+                      </div>
+              
+                  </div>
+                    
+                    </div>
+                  </div>
+                  {% endfor %}
+
+  
+
+  <div class="modal fade bd-example-modal-lg"  tabindex="-1" role="dialog" id="modal_Content_Pitching">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+      
+        <div class="modal-body">
+          <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div  class="title">
+                    <h2>Add Blog</h2>
+                </div>
+                <div class="login-form">
+                    <form method="POST" enctype="multipart/form-data" action="{% url 'createBlog' %}">
+                      {% csrf_token %}
+                        <div class="field-name">
+                            <label>Title</label>
+                            <input type="text" placeholder="" name="topic" id="title" required>
+                        </div>
+                        <div class="field-name">
+                            <label>Description*</label>
+                        <textarea name="description" rows="10" cols="55" id="description" required></textarea>
+                        
+                        </div>
+
+                        <div class="field-name">
+                            <label>Image</label>
+                            <input type="file" placeholder="" name="image" required>
+                        </div>
+ 
+                        <button type="submit" class="login-submit" name="Add" value="Add">Save Blog</button>
+                        <a class="ml-3" style="text-decoration:none" href="{% url 'view' %}" name="login" value="Log in">Go Back</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        </div>
+      
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade bd-example-modal-lg"  tabindex="-1" role="dialog" id="modal_News_Content_Pitching">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+      
+        <div class="modal-body">
+          <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div  class="title">
+                    <h2>Add Blog</h2>
+                </div>
+                <div class="login-form">
+                    <form method="POST" enctype="multipart/form-data" action="{% url 'createBlog2' %}">
+                      {% csrf_token %}
+                        <div class="field-name">
+                            <label>Title</label>
+                            <input type="text" placeholder="" name="topic" id="title" required>
+                        </div>
+                        <div class="field-name">
+                            <label>Description*</label>
+                        <textarea name="description2" rows="10" cols="55" id="description" required></textarea>
+                        </div>
+
+                        <div class="field-name">
+                            <label>Image</label>
+                            <input type="file" placeholder="" name="image" required>
+                        </div>
+ 
+                        <button type="submit" class="login-submit" name="Add" value="Add">Save Blog</button>
+                        <a class="ml-3" style="text-decoration:none" href="{% url 'view' %}" name="login" value="Log in">Go Back</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        </div>
+      
+      </div>
+    </div>
+  </div>
+  
+
+           
+            <div class="modal fade blog-modal" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <button type="button" class="close"  data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                        
+                      
+
+
+                        <div class="modal-body" >
+                          <div class="modal-contant" id="viewmodalBody">
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade blog-modal" id="viewModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      
+                    
+
+
+                      <div class="modal-body" >
+                        <div class="modal-contant" id="viewmodalBody2">
+                        </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+  
+
+  <!-- <div class="modal fade blog-modal" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body">
+                <div class="modal-contant">
+                    <div class="post-image">
+                        <img src="https://thumbs.dreamstime.com/b/blog-information-website-concept-workplace-background-text-view-above-127465079.jpg">
+                    </div>
+                    <h2 class="post-title">What is Lorem Ipsum?</h2>
+                    <div class="auth-date">
+                        <h6>Author:- <a href="#">Lorem Ipsum</a></h6>
+                        <h6>Date:- <a href="#">23/02/2021</a></h6>
+                    </div>
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+   <script src="https://owlcarousel2.github.io/OwlCarousel2/assets/owlcarousel/owl.carousel.js"></script> 
+  {% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script> {% endcomment %}
+  
+  {% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"></script> {% endcomment %}
+  
+  <script src="{% static 'js/custom.js'%}"></script>
+  {% comment %} <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script> {% endcomment %}
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+  <script src="https://cdn.ckeditor.com/4.18.0/standard/ckeditor.js"></script>
+
+
+  <script>
+    CKEDITOR.config.toolbar = [
+    ['Link','Unlink','Bold','Italic','Underline']
+ ] ;
+      CKEDITOR.replace( 'description');
+      CKEDITOR.replace( 'description2' );
+      function downloadURI(uri, name) 
+{
+   var link = document.createElement("a");
+   // If you don't know the name or want to use
+   // the webserver default set name = ''
+   link.setAttribute('download', name);
+   link.href = uri;
+   document.body.appendChild(link);
+   link.click();
+   link.remove();
+} 
+      $(document).ready(function(){
+        {% if request.GET.secondTab %}
+        
+          $("#ApNews").trigger('click')
+        {% endif %}
+        
+
+        {% if request.GET.filepath %}
+        var filepath = "{{request.GET.filepath}}"p
+        downloadURI(filepath,"BlogXML")
+        {% endif %}
+    
+      })
+     
+
+      $(document).on('click','.addRow',function(){
+          var id = $(this).attr('id').slice(7,)
+          console.log(id)
+          var title = $("#title_"+id).val()
+          var author = $("#author_"+id).val()
+          var date = $("#date_"+id).val()
+          
+
+          if(title == "" || author == "" || date == ""){
+            alert("Please fill all the values")
+          }else{
+            alert("call")
+            $.ajax({
+                url : "saveTableRow/"+id+"/", // Url of backend (can be python, php, etc..)
+                type: "POST", // data type (can be get, post, put, delete)
+                data : {'title':title,'author':author,'date':date}, // data in json format
+          
+                success: function(response, textStatus, jqXHR) {
+                  console.log(response);
+
+                  $(`#tableBody_${id} tr:last`).remove();
+                  var totalRows = $(`#tableBody_${id} tr`).length;
+                  $(`#tableBody_${id}`).append(
+                    `
+                        <tr id="${id}_${response.pk}">
+                          <th>${totalRows+1}</th>
+                          <td>${response.title}</td>
+                          <td>${response.author}</td>
+                          <td>${response.date}</td>
+                          <td> <div class="new-row-control">
+                            <button class="row-add editRow" id="editRow-${response.pk}-${id}"><i class="fa fa-edit"></i></button>
+                            
+                            <button class="row-remove"><i class="fa fa-arrows"></i></button>
+                          </div></td>
+                        </tr>
+                    `
+
+                  )
+                  $(`#tableBody_${id}`).append(
+                    `
+                    <tr>
+                          <th>
+                            <div class="new-row-control">
+                              <button class="row-add addRow" id="addRow_${id}"><i class="fa fa-check"></i></button>
+                              <button class="row-remove"><i class="fa fa-times"></i></button>
+                            </div>
+                          </th>
+                          <td><input type="text" id="title_${id}" ></td>
+                          <td><input type="text" id="author_${id}"></td>
+                          <td><input type="date" id="date_${id}"></td>
+                        </tr>
+                    `
+                  )
+                  
+                },
+            
+             });
+          }
+          
+      })
+
+      $(document).on('click','.addRow2',function(){
+        var id = $(this).attr('id').slice(7,)
+        console.log(id)
+        var title = $("#title_"+id).val()
+        var author = $("#author_"+id).val()
+        var date = $("#date_"+id).val()
+
+        if(title == "" || author == "" || date == ""){
+          alert("Please fill all the values")
+        }else{
+          $.ajax({
+              url : "saveTableRow2/"+id+"/", // Url of backend (can be python, php, etc..)
+              type: "POST", // data type (can be get, post, put, delete)
+              data : {'title':title,'author':author,'date':date}, // data in json format
+        
+              success: function(response, textStatus, jqXHR) {
+                console.log(response);
+
+                $(`#tableBody_${id} tr:last`).remove();
+                var totalRows = $(`#tableBody_${id} tr`).length;
+                $(`#tableBody_${id}`).append(
+                  `
+                      <tr id="${id}_${response.pk}">
+                        <th>${totalRows+1}</th>
+                        <td>${response.title}</td>
+                        <td>${response.author}</td>
+                        <td>${response.date}</td>
+                        <td> <div class="new-row-control">
+                          <button class="row-add editRow2" id="editRow2-${response.pk}-${id}"><i class="fa fa-edit"></i></button>
+                          <button class="row-remove"><i class="fa fa-arrows"></i></button>
+                        </div></td>
+                      </tr>
+                  `
+
+                )
+                $(`#tableBody_${id}`).append(
+                  `
+                  <tr>
+                        <th>
+                          <div class="new-row-control">
+                            <button class="row-add addRow2" id="addRow2_${id}"><i class="fa fa-check"></i></button>
+                            <button class="row-remove"><i class="fa fa-times"></i></button>
+                          </div>
+                        </th>
+                        <td><input type="text" id="title_${id}" ></td>
+                        <td><input type="text" id="author_${id}"></td>
+                        <td><input type="date" id="date_${id}"></td>
+                      </tr>
+                  `
+                )
+                
+              },
+          
+           });
+        }
+        
+    })
+
+      {% comment %} id="editRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" {% endcomment %}
+      
+      
+
+
+
+        $(document).on('click','.editRow',function(){
+          console.log("editrow")
+          
+            var keys = $(this).attr('id').split('-')
+         
+            
+            var id = keys[1]
+            
+            var tableName = keys[2]
+          
+            $.ajax({
+              url: "getRowData/"+id+"/"+tableName+"/",
+              success: function(data){ 
+                  console.log(data)
+
+                  
+                  // $(`#${keys[2]}_${keys[1]}`).children('td').remove()
+                  // $(`#${keys[2]}_${keys[1]}`).append(
+                  //   `
+                  
+                      
+                      
+                  //     <td><input type="text" value="${data.title}" id="title_${tableName}_${id}" ></td>
+                  //     <td><input type="text" value="${data.author}" id="author_${tableName}_${id}"></td>
+                  //     <td><input type="date" value="${data.date}" id="date_${tableName}_${id}"></td>
+                  //     <td>
+                  //       <div class="new-row-control">
+                  //         <button class="row-add addEditRow" id="addEditRow-${id}-${tableName}"><i class="fa fa-check"></i></button>
+                          
+                  //       </div>
+                  //     </td>
+                  //   `
+                
+                  $(`#editmodalbody_${tableName}`).empty()
+                  $(`#editmodalbody_${tableName}`).append(`
+                  
+                  <div class="row justify-content-center">
+                          <div class="col-md-8">
+                              <div  class="title">
+                                  <h2>Edit Blog</h2>
+                              </div>
+                              <div class="login-form">
+                                  <form method="POST">
+                                    {% csrf_token %}
+                                      <div class="field-name">
+                                          <label>Title</label>
+                                          <input type="text" placeholder="" value="${data.topic}" name="topic" id="title_${tableName}_${data.pk}">
+                                      </div>
+                                      <div class="field-name">
+                                          <label>Description*</label>
+                                      <textarea name="description" rows="10" cols="55" id="description_${tableName}_${data.pk}">${data.content}</textarea>
+                                      </div>
+              
+                                     
+               
+                                      <button type="button" class="login-submit addEditRow" id="addEditRow-${data.pk}-${tableName}" name="Add" value="Add">Save Blog</button>
+                                      
+                                      <a  style="text-decoration:none;cursor:pointer" class="ml-3 closeModel" data-dismiss="modal" >Close</a>
+                                  </form>
+                              </div>
+                          </div>
+                  `
+                 
+                 )
+                 CKEDITOR.replace(`description_${tableName}_${data.pk}`);
+                 
+                 
+                  $(`#editmodal_${tableName}`).modal('show')
+              },
+              error: function(){
+                alert("There was an error");
+              }
+            });
+  
+          });
+        
+          $(document).on('click','.editRow2',function(){
+            
+            console.log("editrow2")
+              var keys = $(this).attr('id').split('-')
+           
+              
+              var id = keys[1]
+              
+              var tableName = keys[2]
+            
+              $.ajax({
+                url: "getRowData2/"+id+"/"+tableName+"/",
+                success: function(data){ 
+                    console.log(data)
+                    // $(`#${keys[2]}_${keys[1]}`).children('td').remove()
+                    // $(`#${keys[2]}_${keys[1]}`).append(
+                    //   `
+                    
+                        
+                        
+                    //     <td><input type="text" value="${data.title}" id="title_${tableName}_${id}" ></td>
+                    //     <td><input type="text" value="${data.author}" id="author_${tableName}_${id}"></td>
+                    //     <td><input type="date" value="${data.date}" id="date_${tableName}_${id}"></td>
+                    //     <td>
+                    //       <div class="new-row-control">
+                    //         <button class="row-add addEditRow" id="addEditRow-${id}-${tableName}"><i class="fa fa-check"></i></button>
+                            
+                    //       </div>
+                    //     </td>
+                    //   `
+                    $(`#editmodalbody2_${tableName}`).empty()
+                    $(`#editmodalbody2_${tableName}`).append(`
+                    <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <div  class="title">
+                                    <h2>Edit Blog</h2>
+                                </div>
+                                <div class="login-form">
+                                    <form method="POST">
+                                      {% csrf_token %}
+                                        <div class="field-name">
+                                            <label>Title</label>
+                                            <input type="text" placeholder="" value="${data.topic}" name="topic" id="News_title_${tableName}_${data.pk}">
+                                        </div>
+                                        <div class="field-name">
+                                            <label>Description*</label>
+                                        <textarea name="description" rows="10" cols="55" id="News_description_${tableName}_${data.pk}">${data.content}</textarea>
+                                        </div>
+                
+                                       
+                 
+                                        <button type="button" class="login-submit addEditRow2" id="News_addEditRow2-${data.pk}-${tableName}" name="Add" value="Add">Save Blog</button>
+                                        <a  style="text-decoration:none;cursor:pointer" class="ml-3 closeModel2" data-dismiss="modal" >Close</a>
+                                    </form>
+                                </div>
+                            </div>
+                    `)
+                    CKEDITOR.replace(`News_description_${tableName}_${data.pk}`);
+                 
+                    $(`#editmodal2_${tableName}`).modal('show')
+                },
+                error: function(){
+                  alert("There was an error");
+                }
+              });
+    
+            });
+
+        $(document).on('click','.viewRow',function(){
+          console.log("viewrow")
+          var keys = $(this).attr('id').split('-')
+       
+          
+          var id = keys[1]
+          
+          var tableName = keys[2]
+     
+          $.ajax({
+            url: "viewgetRowData/"+id+"/"+tableName+"/",
+            success: function(data){ 
+                console.log(data)
+                $(`#viewmodalBody`).empty()
+                $(`#viewmodalBody`).append(`
+                                            ${
+                                              data.image ? ` <div class="post-image">
+                                                <img src="https://django-excel.herokuapp.com${data.image}">
+                                            </div>`:``
+                                            }
+                                           
+                                            <h2 class="post-title" id="title_${tableName}_${data.pk}">${data.topic}</h2>
+                                            <div class="auth-date">
+                                                <h6 id="author_${tableName}_${data.pk}">Author:- <a href="#">${data.author}</a></h6>
+                                                <h6 id="date_${tableName}_${data.pk}">Date:- <a href="#">${data.date}</a></h6>
+                                            </div>
+                                            <p id="date_${tableName}_${data.pk}">${data.content}</p>
+                                            
+                                   
+                `)
+                $(`#viewModal`).modal('show')
+            },
+            error: function(){
+              alert("There was an error");
+            }
+          });
+
+         
+
+
+        })
+
+
+        $(document).on('click','.viewRow2',function(){
+          console.log("viewrow2")
+          var keys = $(this).attr('id').split('-')
+       
+          
+          var id = keys[1]
+          
+          var tableName = keys[2]
+     
+          $.ajax({
+            url: "viewgetRowData2/"+id+"/"+tableName+"/",
+            success: function(data){ 
+                console.log(data)
+                $(`#viewmodalBody2`).empty()
+                $(`#viewmodalBody2`).append(`
+                
+                ${
+                  data.image ? ` <div class="post-image">
+                    <img src="https://django-excel.herokuapp.com${data.image}">
+                </div>`:``
+                }
+                                            <h2 class="post-title" id="title_${tableName}_${data.pk}">${data.topic}</h2>
+                                            <div class="auth-date">
+                                                <h6 id="author_${tableName}_${data.pk}">Author:- <a href="#">${data.author}</a></h6>
+                                                <h6 id="date_${tableName}_${data.pk}">Date:- <a href="#">${data.date}</a></h6>
+                                            </div>
+                                            <p id="date_${tableName}_${data.pk}">${data.content}</p>
+                                            
+                                   
+                `)
+                $(`#viewModal2`).modal('show')
+            },
+            error: function(){
+              alert("There was an error");
+            }
+          });
+
+         
+
+
+        })
+     
+      
+      
+
+      {% comment %} $('#modalId').on('click', 'button.close', function (eventObject) {
+          $('#modalId').modal('hide');
+       }); {% endcomment %}
+
+
+      $(document).on('click','.addEditRow',function(){
+        
+        var keys = $(this).attr('id').split('-')
+        var id = keys[1]
+        var tableName = keys[2] 
+        console.log(id)
+        console.log(keys)
+        var title = $("#title_"+tableName+"_"+id).val()
+        var description = CKEDITOR.instances[`description_${tableName}_${id}`].getData( )
+        console.log("TEst")
+        console.log(CKEDITOR.instances[`description_${tableName}_${id}`].getData())
+        $.ajax({
+          url: "editData/"+id+"/"+tableName+"/",
+          type:'POST',
+          data:{'topic':title,'description':description},
+          success: function(data){ 
+              console.log(data)
+              
+            
+              $(`#${keys[2]}_${keys[1]}`).children('td').remove()
+              $(`#${keys[2]}_${keys[1]}`).append(
+                `
+
+                  <td>${data.topic}</td>
+                  <td>${data.author}</td>
+                  <td>${data.date}</td>
+                  
+                  <td> <div class="new-row-control">
+                    <a class="row-add viewRow" id="viewRow-${id}-${tableName}"  ><i class="fa fa-eye"></i></a>
+                    <a class="row-add editRow" id="editRow-${id}-${tableName}"><i class="fa fa-edit"></i></a>
+
+          
+                    
+                  </div></td>
+                `
+              ) 
+              $(`#editmodal_${tableName}`).modal('hide')
+          },
+          error: function(){
+            alert("There was an error");
+          }
+        });
+     })
+
+
+     $(document).on('click','.addEditRow2',function(){
+        
+      var keys = $(this).attr('id').split('-')
+      var id = keys[1]
+      var tableName = keys[2] 
+
+      
+      console.log(id)
+      console.log(keys)
+      var title = $("#News_title_"+tableName+"_"+id).val()
+      
+      var description = CKEDITOR.instances[`News_description_${tableName}_${id}`].getData()
+      console.log(description)
+      $.ajax({
+        url: "editData2/"+id+"/"+tableName+"/",
+        type:'POST',
+        data:{'topic':title,'description':description},
+        success: function(data){ 
+            console.log(data)
+          
+            $(`#${keys[2]}_${keys[1]}`).children('td').remove()
+            $(`#${keys[2]}_${keys[1]}`).append(
+              `
+
+                <td>${data.topic}</td>
+                <td>${data.author}</td>
+                <td>${data.date}</td>
+                
+                <td> <div class="new-row-control">
+                  <a class="row-add viewRow2" id="viewRow2-${id}-${tableName}"  ><i class="fa fa-eye"></i></a>
+                  <a class="row-add editRow2" id="editRow2-${id}-${tableName}"><i class="fa fa-edit"></i></a>
+                  
+                </div></td>
+              `
+            ) 
+            $(`#editmodal2_${tableName}`).modal('hide')
+        },
+        error: function(){
+          alert("There was an error");
+        }
+      });
+   })
+    
+
+
+    $(document).ready(function() {
+      $("tbody.connectedSortable").sortable({
+        connectWith: ".connectedSortable",
+        helper: "clone",
+        items: ">*:not(.sort-disabled)",
+        cursor: "move",
+        zIndex: 99999,
+        stop: function (e, t) {
+          console.log(e)
+          console.log(t)
+          console.log($(this))
+          
+          
+  
+          if($(t.item).closest('tbody').find('tr').length >0){
+                 $(t.item).closest('tbody').removeClass('test');
+          }
+      },
+    
+      helper: function (e, tr) {
+          var $originals = tr.children();
+          var $helper = tr.clone();
+          $helper.children().each(function (index) {
+              // Set helper cell sizes to match the original sizes
+              $(this).width($originals.eq(index).width());
+          });
+          $helper.css("background-color", "rgb(223, 240, 249)");
+          return $helper;
+      },
+        receive: function(event, ui) {
+          /* here you can access the dragged row via ui.item
+             ui.item has been removed from the other table, and added to "this" table
+          */
+          console.log($(this))
+          var row_id = ui.item[0].id
+           var addedTo = $(this).closest("table.mytable")
+            
+            
+            dataa=ui.item[0]
+      
+            dropidArray = ui.item[0].id.split("_")
+            dropid = dropidArray[dropidArray.length - 1]
+            addedto = addedTo.attr('id').slice(7,)
+            var idCounter = 0
+            {% comment %} $("table.mytable").each(function(){
+              console.log($(this).attr('id'))
+              console.log(addedTo.attr('id'))
+                if($(this).attr('id') == addedTo.attr('id')){
+                    return false;
+                }
+                idCounter = idCounter + 1 
+            })
+            
+            console.log("idcounter:"+idCounter) {% endcomment %}
+            
+
+
+            dropidArray.pop()
+            console.log(dropidArray)
+            removedfrom = dropidArray.join('_')
+            
+       
+            console.log(addedto)
+            console.log(removedfrom)
+            if($(`#tableBody_${removedfrom} tr`).length == 0){
+                $(`#tableBody_${removedfrom}`).addClass('test')
+            }
+            $.ajax({
+              url : "draganddrop/"+dropid+"/"+removedfrom+"/"+addedto+"/", // Url of backend (can be python, php, etc..)
+              type: "POST", // data type (can be get, post, put, delete)
+              data : {},
+              success:function(response){
+                console.log(row_id)
+                var row_td_content = $(`#${row_id} td:last-child`).html()
+                console.log(row_td_content)
+                
+                if(response.tableIndex != 6){
+                  $(`#${row_id} td > div > a.publishRow`).css('display','none')
+                }
+                else{
+                  $(`#${row_id} td > div > a.publishRow`).css('display','block')
+                }
+
+                if(response.tableIndex <= 6){
+                  $(`#${row_id} td > div > a.downloadxml`).css('display','none')
+                }
+                else if(response.tableIndex == 7){
+                  $(`#${row_id} td > div > a.downloadxml`).css('display','block')
+                }
+
+                
+
+
+                if(response.role == "Writer" && response.tableIndex > 3){
+                  $(`#${row_id} td > div > a.editRow`).css('display','none')
+
+                  
+                }
+                else if(response.role == "Editor" && response.tableIndex > 4){
+                  $(`#${row_id} td > div > a.editRow`).css('display','none')
+                }
+                else if(response.role == "Approver" && response.tableIndex > 5){
+                  $(`#${row_id} td > div > a.editRow`).css('display','none')
+                }
+                else if(response.role == "Publisher" && response.tableIndex >= 2 && response.tableIndex < 4){
+                  $(`#${row_id} td > div > a.editRow`).css('display','none')
+                }
+                else if(response.role == "Admin"){
+                  $(`#${row_id} td > div > a.editRow`).css('display','none')
+                } 
+                
+                
+                
+
+                if(response.role == "Writer" && response.tableIndex < 4){
+                  $(`#${row_id} td > div > a.editRow`).css('display','block')
+                }
+                else if(response.role == "Editor" && response.tableIndex < 5){
+                  $(`#${row_id} td > div > a.editRow`).css('display','block')
+                }
+                else if(response.role == "Approver" && response.tableIndex < 6){
+                  $(`#${row_id} td > div > a.editRow`).css('display','block')
+                }
+                else if(response.role == "Publisher")
+                {
+                  if(response.tableIndex < 2 || response.tableIndex >= 4)
+                    {$(`#${row_id} td > div > a.editRow`).css('display','block')}
+                }  
+                
+                if(response.tableIndex == 7){
+                  $(`#${row_id} td > div > a.editRow`).css('display','none')
+                }
+                
+                
+              }
+            }) 
+            
+        }
+      }
+      );
+
+      
+    });
+
+    $(document).ready(function() {
+      $("tbody.connectedSortable2").sortable({
+        connectWith: ".connectedSortable2",
+        helper: "clone",
+        items: ">*:not(.sort-disabled)",
+        cursor: "move",
+        zIndex: 99999,
+        stop: function (e, t) {
+          
+          if($(t.item).closest('tbody').find('tr').length >0){
+                 $(t.item).closest('tbody').removeClass('test');
+          }
+      },
+    
+      helper: function (e, tr) {
+          var $originals = tr.children();
+          var $helper = tr.clone();
+          $helper.children().each(function (index) {
+              // Set helper cell sizes to match the original sizes
+              $(this).width($originals.eq(index).width());
+          });
+          $helper.css("background-color", "rgb(223, 240, 249)");
+          return $helper;
+      },
+        // items: ">*:not(.sort-disabled)",
+        receive: function(event, ui) {
+          /* here you can access the dragged row via ui.item
+             ui.item has been removed from the other table, and added to "this" table
+          */
+          console.log($(this))
+          var row_id = ui.item[0].id
+           var addedTo = $(this).closest("table.mytable")
+            
+            
+            dataa=ui.item[0]
+      
+            dropidArray = ui.item[0].id.split("_")
+            dropid = dropidArray[dropidArray.length - 1]
+            addedto = addedTo.attr('id').slice(7,)
+            var idCounter = 0
+            {% comment %} $("table.mytable").each(function(){
+              console.log($(this).attr('id'))
+              console.log(addedTo.attr('id'))
+                if($(this).attr('id') == addedTo.attr('id')){
+                    return false;
+                }
+                idCounter = idCounter + 1 
+            })
+            
+            console.log("idcounter:"+idCounter) {% endcomment %}
+            
+
+
+            dropidArray.pop()
+            console.log(dropidArray)
+            removedfrom = dropidArray.join('_')
+            
+       
+            console.log(addedto)
+            console.log(removedfrom)
+            if($(`#News_tableBody_${removedfrom} tr`).length == 0){
+              $(`#News_tableBody_${removedfrom}`).addClass('test')
+          }
+            $.ajax({
+              url : "draganddrop2/"+dropid+"/"+removedfrom+"/"+addedto+"/", // Url of backend (can be python, php, etc..)
+              type: "POST", // data type (can be get, post, put, delete)
+              data : {},
+              success:function(response){
+                console.log(response)
+                var row_td_content = $(`#${row_id} td:last-child`).html()
+                var temp_content = $(`#${row_id} td > div > a.editRow2`)
+                console.log(row_td_content)
+                if(response.tableIndex != 6){
+                  $(`#${row_id} td > div > a.publishRow2`).css('display','none')
+
+                  
+                }
+                else{
+                  $(`#${row_id} td > div > a.publishRow2`).css('display','block')
+                }
+                if(response.role == "Writer" && response.tableIndex == 3){
+                  $(`#${row_id} td > div > a.editRow2`).css('display','block')
+                }
+
+                if(response.role == "Writer" && response.tableIndex > 3){
+                  $(`#${row_id} td > div > a.editRow2`).css('display','none')
+                }
+                else if(response.role == "Editor" && response.tableIndex > 4){
+                  $(`#${row_id} td > div > a.editRow2`).css('display','none')
+                }
+                else if(response.role == "Approver" && response.tableIndex > 5){
+                  $(`#${row_id} td > div > a.editRow2`).css('display','none')
+                }
+                else if(response.role == "Publisher" && response.tableIndex >= 2 && response.tableIndex < 4){
+                  $(`#${row_id} td > div > a.editRow2`).css('display','none')
+                }
+                else if(response.role == "Admin"){
+                  $(`#${row_id} td > div > a.editRow2`).css('display','none')
+                } 
+                
+                
+                
+
+                if(response.role == "Writer" && response.tableIndex < 4){
+                  $(`#${row_id} td > div > a.editRow2`).css('display','block')
+                }
+                else if(response.role == "Editor" && response.tableIndex < 5){
+                  $(`#${row_id} td > div > a.editRow2`).css('display','block')
+                }
+                else if(response.role == "Approver" && response.tableIndex < 6){
+                  $(`#${row_id} td > div > a.editRow2`).css('display','block')
+                }
+                else if(response.role == "Publisher")
+                {
+                  if(response.tableIndex < 2 || response.tableIndex >= 4)
+                    {$(`#${row_id} td > div > a.editRow2`).css('display','block')}
+                }  
+                
+                if(response.tableIndex == 7){
+                  $(`#${row_id} td > div > a.editRow2`).css('display','none')
+                }
+                
+                
+              }
+            }) 
+            
+        }
+      }
+      );
+
+      
+    });
+
+
+
+  </script>
+  
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script>
+    $(document).on('click','.OpenAddModel',function(){
+      var id = $(this).attr('id').slice(13,)
+      $(`#modal_${id}`).modal('show')
+    })
+
+  $(document).on('click','.NewsOpenAddModel',function(){
+    var id = $(this).attr('id').slice(17,)
+    
+    $(`#modal_News_Content_Pitching`).modal('show')
+    
+  })
+
+
+
+ 
+
+  $(document).on('click','#ApWire',function(){
+    $("#ApWireContent").addClass('d-block')
+    $("#ApWireContent").removeClass('d-none')
+
+
+    $("#ApNewsContent").removeClass('d-block')
+    $("#ApNewsContent").addClass('d-none')
+
+
+  })
+
+  $(document).on('click','#ApNews',function(){
+    $("#ApWireContent").addClass('d-none')
+    $("#ApWireContent").removeClass('d-block')
+
+
+    $("#ApNewsContent").removeClass('d-none')
+    $("#ApNewsContent").addClass('d-block')
+
+
+  })
+
+
+
+ 
+
+
+  </script>
+
+
+</body>
+
+</html>

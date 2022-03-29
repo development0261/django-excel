@@ -47,6 +47,16 @@ INSTALLED_APPS = [
  
 ]
 
+# CKEDITOR_CONFIGS = {
+#     "default": {
+#         "removePlugins": "stylesheetparser",
+#     }
+# }
+
+# CKEDITOR_UPLOAD_PATH = ""
+# CKEDITOR_FILENAME_GENERATOR = 'utils.get_filename'
+# CKEDITOR_ALLOW_NONIMAGE_FILES = False
+
 REST_FRAMEWORK = {
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework_xml.parsers.XMLParser',
