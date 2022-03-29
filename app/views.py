@@ -285,29 +285,150 @@ def publishBlog2(request,pk):
 import io
 from django.http import FileResponse
 from reportlab.pdfgen import canvas
+from reportlab.platypus import Image
+from PIL import Image
+from django.conf import settings
+MEDIA_ROOT = settings.MEDIA_ROOT
 
 def downloadpdf(request,pk):
     # Create a file-like buffer to receive PDF data.
     buffer = io.BytesIO()
 
     # Create the PDF object, using the buffer as its "file."
-    p = canvas.Canvas(buffer)
 
-    # Draw things on the PDF. Here's where the PDF generation happens.
-    # See the ReportLab documentation for the full list of functionality.
-    p.drawString(100, 100, "Hello world.")
+    blogobj = Blog.objects.get(pk=pk)
 
-    # Close the PDF object cleanly, and we're done.
-    p.showPage()
-    p.save()
+    c = canvas.Canvas(buffer)
+    
+    c.setFont('Helvetica-Bold',30)
+    c.drawString(20,800,str(blogobj.topic))
 
-    # FileResponse sets the Content-Disposition header so that browsers
-    # present the option to save the file.
+    
+    
+    image_data = MEDIA_ROOT+"/"+blogobj.image.name
+    print(image_data)
+
+    from reportlab.lib import utils
+    from reportlab.lib.units import cm
+    from reportlab.pdfgen.canvas import Canvas
+    from reportlab.platypus import Image, Frame
+
+
+    def get_image_aspect(path, width=1*cm):
+        img = utils.ImageReader(path)
+        iw, ih = img.getSize()
+        aspect = ih / float(iw)
+        print(width)
+        print(width*aspect)
+        return Image(path, width=width, height=(width * aspect))
+    
+    c.drawImage(image_data,10,450,width=20*cm,
+                     height=11*cm)
+
+    c.setFont('Helvetica', 12)
+    xa=30
+    ya=380
+    print(blogobj.description)
+    x = blogobj.description.split("\n")
+    y = []
+    z=[]
+    count = 0
+    for i in x:
+        count += 1
+        if count % 2 != 0:
+            y.append(i)
+    for i in y:
+        print(i)
+        i = i.replace("<p>","")
+        i = i.replace("</p>","")
+        i = i.replace("<em>","")
+        i = i.replace("</em>","")
+        i = i.replace("<strong>","")
+        i = i.replace("</strong>","")   
+        i = i.replace("&nbsp;","")
+        c.drawString(xa,ya,str(i))
+        ya=ya+20
+        z.append(i)
+    c.save()
     buffer.seek(0)
     return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
 
 def downloadpdf2(request,pk):
-    return redirect('view')
+    # Create a file-like buffer to receive PDF data.
+    buffer = io.BytesIO()
+
+    # Create the PDF object, using the buffer as its "file."
+
+    blogobj = Blog2.objects.get(pk=pk)
+
+    c = canvas.Canvas(buffer)
+    
+    c.setFont('Helvetica-Bold',30)
+    c.drawString(20,800,str(blogobj.topic))
+
+    
+    
+    image_data = MEDIA_ROOT+"/"+blogobj.image.name
+    print(image_data)
+
+    from reportlab.lib import utils
+    from reportlab.lib.units import cm
+    from reportlab.pdfgen.canvas import Canvas
+    from reportlab.platypus import Image, Frame
+
+
+    def get_image_aspect(path, width=1*cm):
+        img = utils.ImageReader(path)
+        iw, ih = img.getSize()
+        aspect = ih / float(iw)
+        print(width)
+        print(width*aspect)
+        return Image(path, width=width, height=(width * aspect))
+    
+    c.drawImage(image_data,10,450,width=20*cm,
+                     height=11*cm)
+
+    c.setFont('Helvetica', 12)
+    xa=30
+    ya=380
+    print(blogobj.description)
+    x = blogobj.description.split("\n")
+    y = []
+    z=[]
+    count = 0
+    for i in x:
+        count += 1
+        if count % 2 != 0:
+            y.append(i)
+    for i in y:
+        i = i.replace("<p>","")
+        i = i.replace("</p>","")
+        i = i.replace("<em>","")
+        i = i.replace("</em>","")
+        i = i.replace("<strong>","")
+        i = i.replace("</strong>","")   
+        i = i.replace("&nbsp;","")
+        print(i)
+        print("new")
+        # if len(i)>100:
+        #     n=100
+            
+        #     [i[j:j+n] for j in range(0, len(i), n)]
+        words = i.split()
+        grouped_words = [' '.join(words[i: i + 15]) for i in range(0, len(words), 3)]
+
+        for item in grouped_words:
+            c.drawString(xa,ya,str(item))
+            ya = ya - 20
+        ya=ya+20
+        z.append(i)
+    c.save()
+    buffer.seek(0)
+    return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
+
+
+
+from bs4 import BeautifulSoup as bs
 
 def downloadxml(request,pk,stringPath= None):
     blogobj = Blog.objects.get(pk=pk)
@@ -379,6 +500,13 @@ def downloadxml(request,pk,stringPath= None):
         i = i.replace("</strong>","")   
         i = i.replace("&nbsp;","")
         z.append(i)
+        # soup = bs(str(i))
+        # soup.findAll(href='#', title='myurl')
+        import re
+        m = re.search('(<a .*>)', i)
+        if m:
+            print("flag here")
+            print(m.group(1))
         ele = et.SubElement(o1, "apxh:p")
         ele.text = str(i)
     print(z)

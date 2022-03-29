@@ -314,7 +314,7 @@
                             {% elif user|validateuser:key == "Admin" %}
                             
                             {% endif %}
-                            {% endfor %}
+                            {% endif %}
 
                             {% if user|validateuser:key == "Publisher" and forloop.parentloop.counter == 6 %}
                             <a class="row-add publishRow2" id="publishRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'publishBlog2' v.pk %} ><i class="fa fa-paper-plane"></i></a>
@@ -1174,7 +1174,8 @@
                 }
                 
                 
-                
+               
+               
                 
 
                 // publisher control block
@@ -1212,6 +1213,7 @@
                   $(`#${row_id} td > div`).append(
                     `
                     <a class="row-add downloadxml" id="downloadxml-App_Published" href="/downloadxml/${pk}/"><i class="fa fa-file-excel-o"></i></a>
+                    <a class="row-add downloadpdf" id="downloadpdf-App_Published" href="/downloadpdf/${pk}/"><i class="fa fa-file-powerpoint-o"></i></a>
                     `
                   )
                 }
@@ -1222,6 +1224,7 @@
 
                 if(response.tableIndex <= 6){
                   $(`#${row_id} td > div > a.downloadxml`).remove()
+                  $(`#${row_id} td > div > a.downloadpdf`).remove()
                 }
                
 
@@ -1326,36 +1329,78 @@
               data : {},
               success:function(response){
                 console.log(response)
+                var primaryKeyArray = row_id.split("_")
+                var pk = primaryKeyArray[primaryKeyArray.length - 1]
                 var row_td_content = $(`#${row_id} td:last-child`).html()
-                var temp_content = $(`#${row_id} td > div > a.editRow2`)
+
                 console.log(row_td_content)
+                
+                if ( response.role == "Publisher"){$(`#${row_id} td > div > a.editRow2`).remove()}
+                
                 if(response.tableIndex != 6){
                   $(`#${row_id} td > div > a.publishRow2`).remove()
+                }
+                
+                
+                
+                
 
-                  
+                // publisher control block
+                if(response.tableIndex == 6 && response.role == "Publisher" ){
+                  $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add editRow2" id="editRow2-${pk}-Ready_For_Release" ><i class="fa fa-edit"></i></a>
+                    <a class="row-add publishRow2" id="publishRow2-${pk}-Ready_For_Release" href="/publishBlog/${pk}/"><i class="fa fa-paper-plane"></i></a>
+                    `
+                  )
                 }
-                else{
-                  $(`#${row_id} td > div > a.publishRow2`).css('display','block')
-                }
-                if(response.role == "Writer" && response.tableIndex == 3){
-                  $(`#${row_id} td > div > a.editRow2`).css('display','block')
+                else if(response.tableIndex <= 5 && response.role == "Publisher" ){
+                  $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add editRow2" id="editRow2-${pk}-Ready_For_Release" ><i class="fa fa-edit"></i></a>
+                    `
+                  )
                 }
 
-                if(response.role == "Writer" && response.tableIndex > 3){
-                  $(`#${row_id} td > div > a.editRow2`).css('display','hide')
+                // editor control block
+                if(response.tableIndex <= 3 && response.role == "Editor" ){
+                  $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add editRow2" id="editRow2-${pk}-Ready_For_Release"  ><i class="fa fa-edit"></i></a>
+                    `
+                  )
                 }
-                else if(response.role == "Editor" && response.tableIndex > 4){
-                  $(`#${row_id} td > div > a.editRow2`).css('display','hide')
+               
+
+                
+
+              
+
+                if(response.tableIndex == 7){
+                  $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add downloadxml2file2" id="downloadxml2file2-App_Published" href="/downloadxml2file2/${pk}/"><i class="fa fa-file-excel-o"></i></a>
+                    <a class="row-add downloadpdf2" id="downloadpdf2-App_Published" href="/downloadpdf2/${pk}/"><i class="fa fa-file-powerpoint-o"></i></a>
+                    `
+                  )
                 }
-                else if(response.role == "Approver" && response.tableIndex > 5){
-                  $(`#${row_id} td > div > a.editRow2`).css('display','hide')
+                
+
+                
+              
+
+                if(response.tableIndex <= 6){
+                  $(`#${row_id} td > div > a.downloadxml2file2`).remove()
+                  $(`#${row_id} td > div > a.downloadpdf2`).remove()
                 }
-                else if(response.role == "Publisher" && response.tableIndex >= 2 && response.tableIndex < 4){
+               
+
+                
+
+
+                if (response.tableIndex == "Writer" && response.tableIndex <=3 ){
                   $(`#${row_id} td > div > a.editRow2`).remove()
                 }
-                else if(response.role == "Admin"){
-                  $(`#${row_id} td > div > a.editRow2`).css('display','hide')
-                } 
                 
                 
                 
@@ -1368,15 +1413,6 @@
                 }
                 else if(response.role == "Approver" && response.tableIndex < 6){
                   $(`#${row_id} td > div > a.editRow2`).css('display','block')
-                }
-                else if(response.role == "Publisher")
-                {
-                  if(response.tableIndex < 2 || response.tableIndex >= 4)
-                    {$(`#${row_id} td > div > a.editRow2`).css('display','block')}  
-                }  
-                
-                if(response.tableIndex == 7){
-                  $(`#${row_id} td > div > a.editRow2`).remove()
                 }
 
                
