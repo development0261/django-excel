@@ -123,7 +123,7 @@ DATABASES = {
     'NAME': os.environ.get('DB_NAME','bzfgfjvg'),
     'USER': os.environ.get('DB_USER','bzfgfjvg'),
     'PASSWORD': os.environ.get('DB_PASS','9chqJT87ipug2ykOTAQ9e6pADtAYVj_n'),
-  }
+   }
 }
 
 # DATABASES = {
