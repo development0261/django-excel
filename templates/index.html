@@ -202,6 +202,10 @@
 
                             {%endif%}
 
+                            {% if forloop.parentloop.counter <= 2 %}
+                            <a class="row-add deleteRow" id="deleteRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'deleteBlog' v.pk %}><i class="fa fa-trash"></i></a>
+                            {%endif%}
+
                         {% endfor %}
                       </tbody>
                     </table>
@@ -212,7 +216,7 @@
                   </div>
                   {%endif%}
 
-                  {% if forloop.counter == 7  %}
+                  {% if forloop.counter == 6  %}
                   
                   <div class="table-print-wrp">
                     <div class="print-all-table">
@@ -326,6 +330,11 @@
                             <a class="row-add downloadpdf2" id="downloadpdf2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadpdf2' v.pk %}><i class="fa fa-file-powerpoint-o"></i></a>
                             {%endif%}
 
+                            {% if forloop.parentloop.counter <= 2 %}
+                            <a class="row-add deleteRow2" id="deleteRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'deleteBlog2' v.pk %}><i class="fa fa-trash"></i></a>
+                            {%endif%}
+
+
                             
                             
                         {% endfor %}
@@ -340,7 +349,7 @@
                   </div>
                   {%endif%}
 
-                  {% if forloop.counter == 7  %}
+                  {% if forloop.counter == 6  %}
                   <div class="table-print-wrp">
                   {% comment %} <div class="print-all-table">
                     <a style="cursor: pointer;" class="NewsOpenAddModelxml" id="NewsOpenAddModel_{{key|replaceSpacewithUnderScore }}" href = {% url 'downloadxmlall2' %} ><i class="fa fa-plus"></i> Generate xml</a>
@@ -1248,6 +1257,12 @@
                   $(`#${row_id} td > div > a.editRow`).css('display','block')
                 }
                 
+                if(response.tableIndex > 2){
+                  $(`#${row_id} td > div > a.deleteRow`).css('display','none')
+                }
+                else{
+                  $(`#${row_id} td > div > a.deleteRow`).css('display','block')
+                }
                 
                 
               }
@@ -1415,7 +1430,12 @@
                   $(`#${row_id} td > div > a.editRow2`).css('display','block')
                 }
 
-               
+                if(response.tableIndex > 2){
+                  $(`#${row_id} td > div > a.deleteRow2`).css('display','none')
+                }
+                else{
+                  $(`#${row_id} td > div > a.deleteRow2`).css('display','block')
+                }
                 
                 
               }

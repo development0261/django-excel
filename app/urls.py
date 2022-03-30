@@ -22,6 +22,9 @@ urlpatterns = [
     path('downloadxml/<str:pk>/',views.downloadxml,name='downloadxml'),
     path('downloadxml2/<str:pk>/',views.downloadxml2,name='downloadxml2'),
 
+    path('deleteBlog/<str:pk>/',views.deleteBlog,name='deleteBlog'),
+    path('deleteBlog2/<str:pk>/',views.deleteBlog2,name='deleteBlog2'),
+
     path('downloadpdf/<str:pk>/',views.downloadpdf,name='downloadpdf'),
     path('downloadpdf2/<str:pk>/',views.downloadpdf2,name='downloadpdf2'),
 

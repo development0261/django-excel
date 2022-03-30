@@ -196,6 +196,10 @@
 
                             {%endif%}
 
+                            {% if forloop.parentloop.counter <= 2 %}
+                            <a class="row-add deleteRow" id="deleteRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'deleteBlog' v.pk %}><i class="fa fa-trash"></i></a>
+                            {%endif%}
+
                         {% endfor %}
                       </tbody>
                     </table>
@@ -317,6 +321,12 @@
                             {% comment %} <a class="row-add downloadxml2" id="downloadxml2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxml2' v.pk %}><i class="fa fa-file-excel-o"></i></a> {% endcomment %}
                             <a class="row-add downloadxml2file2" id="downloadxml2file2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxml2file2' v.pk %}><i class="fa fa-file-excel-o"></i></a>
                             {%endif%}
+
+                            {% if forloop.parentloop.counter <= 2 %}
+                            <a class="row-add deleteRow2" id="deleteRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'deleteBlog2' v.pk %}><i class="fa fa-trash"></i></a>
+                            {%endif%}
+
+                            
 
                             
                             

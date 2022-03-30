@@ -429,6 +429,7 @@ def downloadpdf2(request,pk):
 
 
 from bs4 import BeautifulSoup as bs
+import re
 
 def downloadxml(request,pk,stringPath= None):
     blogobj = Blog.objects.get(pk=pk)
@@ -480,9 +481,8 @@ def downloadxml(request,pk,stringPath= None):
 
     o1 = et.Element('apxh:div')
     n1.append (o1)
- 
+    
     x = blogobj.description.split("\n")
-    print(x)
     y = []
     z=[]
     count = 0
@@ -490,26 +490,41 @@ def downloadxml(request,pk,stringPath= None):
         count += 1
         if count % 2 != 0:
             y.append(i)
-    for i in y:
-        print(i)
-        i = i.replace("<p>","")
-        i = i.replace("</p>","")
-        i = i.replace("<em>","")
-        i = i.replace("</em>","")
-        i = i.replace("<strong>","")
-        i = i.replace("</strong>","")   
+    for i in y:  
         i = i.replace("&nbsp;","")
+        i = i.replace("&#39;","")
         z.append(i)
-        # soup = bs(str(i))
-        # soup.findAll(href='#', title='myurl')
-        import re
-        m = re.search('(<a .*>)', i)
-        if m:
-            print("flag here")
-            print(m.group(1))
+        soup = bs(i,'html.parser')
+        results = soup.find_all('a')
+        print(results)
+        i = re.sub('<[^<]*?/?>', ' ', i)
         ele = et.SubElement(o1, "apxh:p")
         ele.text = str(i)
-    print(z)
+        for obj in results:
+            ele1 = et.SubElement(ele,"apxh:a")
+            ele1.set("href",str(obj['href']))
+            ele1.set("target","_blank")
+            ele1.set("rel","nofollow noopener")
+            ele1.text=str(obj.text)
+        # for x in listtext:
+        #     ele1 = et.SubElement(ele,"apxh:a")
+        
+    # print(z)
+        
+
+        
+        
+        # soup = bs(str(i))
+        # soup.findAll(href='https://stackoverflow.com/')
+
+        # import re
+        # m = re.search('(<a .*>)', i)
+        # if m:
+        #     print("flag hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+        #     print(m.group(1))
+        # ele = et.SubElement(o1, "apxh:p")
+        # ele.text = str(i)
+    
     
 
     
@@ -528,7 +543,6 @@ def downloadxml(request,pk,stringPath= None):
     # Pathout is the path to the output.xml
     
     xmlFile = open('{}/xml/output_xml_Blog_AP_Wire_{}.xml'.format(MEDIA_ROOT,blogobj.pk), 'r')
-    print(xmlFile)
     myfile = xmlFile.read()
     response = HttpResponse(myfile, content_type='application/xml')
     response['Content-Disposition'] = "attachment; filename=output_xml_Blog_AP_Wire_{}_{}.xml".format(blogobj.pk,blogobj.topic)
@@ -629,7 +643,7 @@ def downloadxmlfile2(request,pk):
         if count % 2 != 0:
             y.append(i)
     for i in y:
-        print(i)
+        
         i = i.replace("<p>","")
         i = i.replace("</p>","")
         i = i.replace("<em>","")
@@ -638,9 +652,10 @@ def downloadxmlfile2(request,pk):
         i = i.replace("</strong>","")   
         i = i.replace("&nbsp;","")
         z.append(i)
+        
         ele = et.SubElement(o1, "apxh:p")
         ele.text = str(i)
-    print(z)
+    
     
 
     
@@ -718,7 +733,6 @@ def downloadxml2(request,pk,stringPath= None):
     n1.append (o1)
  
     x = blogobj.description.split("\n")
-    print(x)
     y = []
     z=[]
     count = 0
@@ -726,18 +740,22 @@ def downloadxml2(request,pk,stringPath= None):
         count += 1
         if count % 2 != 0:
             y.append(i)
-    for i in y:
-        print(i)
-        i = i.replace("<p>","")
-        i = i.replace("</p>","")
-        i = i.replace("<em>","")
-        i = i.replace("</em>","")
-        i = i.replace("<strong>","")
-        i = i.replace("</strong>","")   
+    for i in y:  
         i = i.replace("&nbsp;","")
+        i = i.replace("&#39;","")
         z.append(i)
+        soup = bs(i,'html.parser')
+        results = soup.find_all('a')
+        print(results)
+        i = re.sub('<[^<]*?/?>', ' ', i)
         ele = et.SubElement(o1, "apxh:p")
         ele.text = str(i)
+        for obj in results:
+            ele1 = et.SubElement(ele,"apxh:a")
+            ele1.set("href",str(obj['href']))
+            ele1.set("target","_blank")
+            ele1.set("rel","nofollow noopener")
+            ele1.text=str(obj.text)
     print(z)
     
 
@@ -851,7 +869,6 @@ def downloadxml2file2(request,pk):
     n1.append (o1)
  
     x = blogobj.description.split("\n")
-    print(x)
     y = []
     z=[]
     count = 0
@@ -859,18 +876,22 @@ def downloadxml2file2(request,pk):
         count += 1
         if count % 2 != 0:
             y.append(i)
-    for i in y:
-        print(i)
-        i = i.replace("<p>","")
-        i = i.replace("</p>","")
-        i = i.replace("<em>","")
-        i = i.replace("</em>","")
-        i = i.replace("<strong>","")
-        i = i.replace("</strong>","")   
+    for i in y:  
         i = i.replace("&nbsp;","")
+        i = i.replace("&#39;","")
         z.append(i)
+        soup = bs(i,'html.parser')
+        results = soup.find_all('a')
+        print(results)
+        i = re.sub('<[^<]*?/?>', ' ', i)
         ele = et.SubElement(o1, "apxh:p")
         ele.text = str(i)
+        for obj in results:
+            ele1 = et.SubElement(ele,"apxh:a")
+            ele1.set("href",str(obj['href']))
+            ele1.set("target","_blank")
+            ele1.set("rel","nofollow noopener")
+            ele1.text=str(obj.text)
     print(z)
     
 
@@ -925,7 +946,7 @@ def downloadxmlall(request):
     m2 = et.Element('entry')
     root.append (m2)
 
-    blogall = Blog.objects.filter(status="App_Published")
+    blogall = Blog.objects.filter(status="Ready_For_Release")
     for blogobj in blogall:
         m2 = et.Element('entry')
         m2.set("xml:lang","en-us")
@@ -957,18 +978,22 @@ def downloadxmlall(request):
             count += 1
             if count % 2 != 0:
                 y.append(i)
-        for i in y:
-            print(i)
-            i = i.replace("<p>","")
-            i = i.replace("</p>","")
-            i = i.replace("<em>","")
-            i = i.replace("</em>","")
-            i = i.replace("<strong>","")
-            i = i.replace("</strong>","")   
+        for i in y:  
             i = i.replace("&nbsp;","")
+            i = i.replace("&#39;","")
             z.append(i)
+            soup = bs(i,'html.parser')
+            results = soup.find_all('a')
+            print(results)
+            i = re.sub('<[^<]*?/?>', ' ', i)
             ele = et.SubElement(o1, "apxh:p")
             ele.text = str(i)
+            for obj in results:
+                ele1 = et.SubElement(ele,"apxh:a")
+                ele1.set("href",str(obj['href']))
+                ele1.set("target","_blank")
+                ele1.set("rel","nofollow noopener")
+                ele1.text=str(obj.text)
         print(z)
 
     
@@ -1059,18 +1084,22 @@ def downloadxmlallfile2(request):
             count += 1
             if count % 2 != 0:
                 y.append(i)
-        for i in y:
-            print(i)
-            i = i.replace("<p>","")
-            i = i.replace("</p>","")
-            i = i.replace("<em>","")
-            i = i.replace("</em>","")
-            i = i.replace("<strong>","")
-            i = i.replace("</strong>","")   
+        for i in y:  
             i = i.replace("&nbsp;","")
+            i = i.replace("&#39;","")
             z.append(i)
+            soup = bs(i,'html.parser')
+            results = soup.find_all('a')
+            print(results)
+            i = re.sub('<[^<]*?/?>', ' ', i)
             ele = et.SubElement(o1, "apxh:p")
             ele.text = str(i)
+            for obj in results:
+                ele1 = et.SubElement(ele,"apxh:a")
+                ele1.set("href",str(obj['href']))
+                ele1.set("target","_blank")
+                ele1.set("rel","nofollow noopener")
+                ele1.text=str(obj.text)
         print(z)
 
     
@@ -1127,7 +1156,7 @@ def downloadxmlall2(request):
     
 
 
-    blogall = Blog2.objects.filter(status="App_Published")
+    blogall = Blog2.objects.filter(status="Ready_For_Release")
     for blogobj in blogall:
         m2 = et.Element('entry')
         m2.set("xml:lang","en-us")
@@ -1232,7 +1261,7 @@ def downloadxmlall2file2(request):
     
 
 
-    blogall = Blog2.objects.filter(status="App_Published")
+    blogall = Blog2.objects.filter(status="Ready_For_Release")
     for blogobj in blogall:
         m2 = et.Element('entry')
         m2.set("xml:lang","en-us")
@@ -1264,18 +1293,22 @@ def downloadxmlall2file2(request):
             count += 1
             if count % 2 != 0:
                 y.append(i)
-        for i in y:
-            print(i)
-            i = i.replace("<p>","")
-            i = i.replace("</p>","")
-            i = i.replace("<em>","")
-            i = i.replace("</em>","")
-            i = i.replace("<strong>","")
-            i = i.replace("</strong>","")   
+        for i in y:  
             i = i.replace("&nbsp;","")
+            i = i.replace("&#39;","")
             z.append(i)
+            soup = bs(i,'html.parser')
+            results = soup.find_all('a')
+            print(results)
+            i = re.sub('<[^<]*?/?>', ' ', i)
             ele = et.SubElement(o1, "apxh:p")
             ele.text = str(i)
+            for obj in results:
+                ele1 = et.SubElement(ele,"apxh:a")
+                ele1.set("href",str(obj['href']))
+                ele1.set("target","_blank")
+                ele1.set("rel","nofollow noopener")
+                ele1.text=str(obj.text)
         print(z)
 
     
@@ -1362,6 +1395,20 @@ def dropData2(request,dropid,removedfrom,addedto):
         index = key_list.index(addedto)
 
         return JsonResponse({'msg':'success','role':roles[addedto],'tableIndex':index+1})    
+
+def deleteBlog(request,pk):
+    blogobj = Blog.objects.filter(pk=pk)
+    name=Blog.objects.get(pk=pk).topic
+    blogobj.delete()
+    messages.info(request,"Blog {} has been deleted".format(name))
+    return redirect('view')
+
+def deleteBlog2(request,pk):
+    blogobj = Blog2.objects.filter(pk=pk)
+    name=Blog2.objects.get(pk=pk).topic
+    blogobj.delete()
+    messages.info(request,"Blog {} has been deleted".format(name))
+    return redirect('view')
 
 def logout_view(request):
     logout(request)

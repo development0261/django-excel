@@ -32,7 +32,7 @@ class UserCustom(AbstractUser):
     FDNApproval = models.CharField(choices=ROLE, max_length=20,default="Writer")
     ReadyForRelease = models.CharField(choices=ROLE, max_length=20,default="Writer")
     APPublished = models.CharField(choices=ROLE, max_length=20,default="Writer")
-    accessint = models.IntegerField(validators=[
+    accessint = models.IntegerField(default=7,validators=[
         MaxValueValidator(limit_value=7),
         MinValueValidator(limit_value=1)
     ],null=True,blank=True)
