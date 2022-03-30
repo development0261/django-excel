@@ -315,7 +315,8 @@ def printpdf(desc,imagepath,topic):
     from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
     from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
     from reportlab.lib.units import inch
-    doc = SimpleDocTemplate("form_letter.pdf",pagesize=letter,
+    topic=str(topic)
+    doc = SimpleDocTemplate(f"{topic}.pdf",pagesize=letter,
                             rightMargin=72,leftMargin=72,
                             topMargin=72,bottomMargin=18)
     Story=[]
@@ -335,7 +336,7 @@ def printpdf(desc,imagepath,topic):
         Story.append(Paragraph(ptext, styles["Justify"]))
         Story.append(Spacer(1, 12))
     doc.build(Story)
-    response = FileResponse(open('form_letter.pdf', 'rb'),as_attachment=True)
+    response = FileResponse(open(f"{topic}.pdf", 'rb'),as_attachment=True)
     return response
 
 
@@ -359,7 +360,7 @@ def downloadpdf(request,pk):
         i = re.sub('<[^<]*?/?>', ' ', i)
         z.append(i)
 
-    pdf = printpdf(z,image_data,str(blogobj.topic))
+    pdf = printpdf(z,image_data,str(blogobj.topic)) 
     return pdf
 
 def downloadpdf2(request,pk):
