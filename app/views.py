@@ -316,7 +316,7 @@ def printpdf(desc,imagepath,topic):
     from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
     from reportlab.lib.units import inch
     topic=str(topic)
-    doc = SimpleDocTemplate(f"{topic}.pdf",pagesize=letter,
+    doc = SimpleDocTemplate(f"{MEDIA_ROOT}/pdf/{topic}.pdf",pagesize=letter,
                             rightMargin=72,leftMargin=72,
                             topMargin=72,bottomMargin=18)
     Story=[]
@@ -336,7 +336,7 @@ def printpdf(desc,imagepath,topic):
         Story.append(Paragraph(ptext, styles["Justify"]))
         Story.append(Spacer(1, 12))
     doc.build(Story)
-    response = FileResponse(open(f"{topic}.pdf", 'rb'),as_attachment=True)
+    response = FileResponse(open(f"{MEDIA_ROOT}/pdf/{topic}.pdf", 'rb'),as_attachment=True)
     return response
 
 
