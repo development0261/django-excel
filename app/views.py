@@ -13,6 +13,38 @@ from django.contrib.auth import get_user_model
 from django.contrib import messages
 User = get_user_model()
 
+from bs4 import BeautifulSoup as bs
+import re
+from django.views.decorators.csrf import csrf_exempt
+
+
+from django.core import serializers
+from django.core.files import File
+import xml.etree.ElementTree as et
+from datetime import datetime
+from wsgiref.util import FileWrapper
+
+from reportlab.lib import utils
+from reportlab.lib.units import cm
+from reportlab.pdfgen.canvas import Canvas
+from reportlab.platypus import Image, Frame
+
+import io
+from django.http import FileResponse
+from reportlab.pdfgen import canvas
+from reportlab.platypus import Image
+from PIL import Image
+from django.conf import settings
+MEDIA_ROOT = settings.MEDIA_ROOT
+
+
+from reportlab.lib import utils
+from reportlab.lib.units import cm
+from reportlab.pdfgen.canvas import Canvas
+from reportlab.platypus import Image, Frame
+
+def newline():
+    pass
 
 def userlogin(request):
     if request.method == 'POST':
@@ -63,7 +95,6 @@ def register(request):
     else:
         return render(request,'register.html',{'registered':registered})
 
-from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def saveTableRow(request,tableName):
@@ -263,11 +294,6 @@ def viewfunction2(request):
     else:
         return redirect('loginview')
 
-from django.core import serializers
-from django.core.files import File
-import xml.etree.ElementTree as et
-from datetime import datetime
-from wsgiref.util import FileWrapper
 
 
 
@@ -282,53 +308,42 @@ def publishBlog2(request,pk):
     filepath = downloadxml(request,pk,stringPath=True)
     return redirect('/?filepath={}'.format(filepath))
 
-import io
-from django.http import FileResponse
-from reportlab.pdfgen import canvas
-from reportlab.platypus import Image
-from PIL import Image
-from django.conf import settings
-MEDIA_ROOT = settings.MEDIA_ROOT
+def printpdf(desc,imagepath,topic):
+    import time
+    from reportlab.lib.enums import TA_JUSTIFY
+    from reportlab.lib.pagesizes import letter
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.units import inch
+    doc = SimpleDocTemplate("form_letter.pdf",pagesize=letter,
+                            rightMargin=72,leftMargin=72,
+                            topMargin=72,bottomMargin=18)
+    Story=[]
+
+    im = Image(imagepath, 6*inch, 4*inch)
+    Story.append(im)
+    styles=getSampleStyleSheet()
+    styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
+    Story.append(Spacer(1, 12))
+    # Create return address
+    ptext = topic
+    Story.append(Paragraph(ptext, styles["Title"]))       
+    Story.append(Spacer(1, 12))
+    Story.append(Spacer(1, 12))
+    for i in desc:
+        ptext = i
+        Story.append(Paragraph(ptext, styles["Justify"]))
+        Story.append(Spacer(1, 12))
+    doc.build(Story)
+    response = FileResponse(open('form_letter.pdf', 'rb'),as_attachment=True)
+    return response
+
 
 def downloadpdf(request,pk):
-    # Create a file-like buffer to receive PDF data.
-    buffer = io.BytesIO()
-
-    # Create the PDF object, using the buffer as its "file."
-
     blogobj = Blog.objects.get(pk=pk)
-
-    c = canvas.Canvas(buffer)
-    
-    c.setFont('Helvetica-Bold',30)
-    c.drawString(20,800,str(blogobj.topic))
-
-    
-    
     image_data = MEDIA_ROOT+"/"+blogobj.image.name
     print(image_data)
-
-    from reportlab.lib import utils
-    from reportlab.lib.units import cm
-    from reportlab.pdfgen.canvas import Canvas
-    from reportlab.platypus import Image, Frame
-
-
-    def get_image_aspect(path, width=1*cm):
-        img = utils.ImageReader(path)
-        iw, ih = img.getSize()
-        aspect = ih / float(iw)
-        print(width)
-        print(width*aspect)
-        return Image(path, width=width, height=(width * aspect))
     
-    c.drawImage(image_data,10,450,width=20*cm,
-                     height=11*cm)
-
-    c.setFont('Helvetica', 12)
-    xa=30
-    ya=380
-    print(blogobj.description)
     x = blogobj.description.split("\n")
     y = []
     z=[]
@@ -338,60 +353,20 @@ def downloadpdf(request,pk):
         if count % 2 != 0:
             y.append(i)
     for i in y:
-        print(i)
-        i = i.replace("<p>","")
-        i = i.replace("</p>","")
-        i = i.replace("<em>","")
-        i = i.replace("</em>","")
-        i = i.replace("<strong>","")
-        i = i.replace("</strong>","")   
         i = i.replace("&nbsp;","")
-        c.drawString(xa,ya,str(i))
-        ya=ya+20
+        i = i.replace("&#39;","\'")
+        
+        i = re.sub('<[^<]*?/?>', ' ', i)
         z.append(i)
-    c.save()
-    buffer.seek(0)
-    return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
+
+    pdf = printpdf(z,image_data,str(blogobj.topic))
+    return pdf
 
 def downloadpdf2(request,pk):
-    # Create a file-like buffer to receive PDF data.
-    buffer = io.BytesIO()
-
-    # Create the PDF object, using the buffer as its "file."
-
     blogobj = Blog2.objects.get(pk=pk)
-
-    c = canvas.Canvas(buffer)
-    
-    c.setFont('Helvetica-Bold',30)
-    c.drawString(20,800,str(blogobj.topic))
-
-    
-    
     image_data = MEDIA_ROOT+"/"+blogobj.image.name
     print(image_data)
-
-    from reportlab.lib import utils
-    from reportlab.lib.units import cm
-    from reportlab.pdfgen.canvas import Canvas
-    from reportlab.platypus import Image, Frame
-
-
-    def get_image_aspect(path, width=1*cm):
-        img = utils.ImageReader(path)
-        iw, ih = img.getSize()
-        aspect = ih / float(iw)
-        print(width)
-        print(width*aspect)
-        return Image(path, width=width, height=(width * aspect))
     
-    c.drawImage(image_data,10,450,width=20*cm,
-                     height=11*cm)
-
-    c.setFont('Helvetica', 12)
-    xa=30
-    ya=380
-    print(blogobj.description)
     x = blogobj.description.split("\n")
     y = []
     z=[]
@@ -401,35 +376,16 @@ def downloadpdf2(request,pk):
         if count % 2 != 0:
             y.append(i)
     for i in y:
-        i = i.replace("<p>","")
-        i = i.replace("</p>","")
-        i = i.replace("<em>","")
-        i = i.replace("</em>","")
-        i = i.replace("<strong>","")
-        i = i.replace("</strong>","")   
         i = i.replace("&nbsp;","")
-        print(i)
-        print("new")
-        # if len(i)>100:
-        #     n=100
-            
-        #     [i[j:j+n] for j in range(0, len(i), n)]
-        words = i.split()
-        grouped_words = [' '.join(words[i: i + 15]) for i in range(0, len(words), 3)]
-
-        for item in grouped_words:
-            c.drawString(xa,ya,str(item))
-            ya = ya - 20
-        ya=ya+20
+        i = i.replace("&#39;","\'")
+        
+        i = re.sub('<[^<]*?/?>', ' ', i)
         z.append(i)
-    c.save()
-    buffer.seek(0)
-    return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
+
+    pdf = printpdf(z,image_data,str(blogobj.topic))
+    return pdf
 
 
-
-from bs4 import BeautifulSoup as bs
-import re
 
 def downloadxml(request,pk,stringPath= None):
     blogobj = Blog.objects.get(pk=pk)
@@ -533,9 +489,6 @@ def downloadxml(request,pk,stringPath= None):
 
     tree2 = et.ElementTree(root)
     
-    from django.conf import settings
-
-    MEDIA_ROOT = settings.MEDIA_ROOT
   
 
     tree.write('{}/xml/output_xml_Blog_AP_Wire_{}.xml'.format(MEDIA_ROOT,blogobj.pk), encoding="utf-8")
@@ -664,9 +617,7 @@ def downloadxmlfile2(request,pk):
 
     tree2 = et.ElementTree(root)
     
-    from django.conf import settings
 
-    MEDIA_ROOT = settings.MEDIA_ROOT
   
 
     tree.write('{}/xml/output_xml_Blog_AP_Wire_{}.xml'.format(MEDIA_ROOT,blogobj.pk), encoding="utf-8")
@@ -762,9 +713,7 @@ def downloadxml2(request,pk,stringPath= None):
 
     tree = et.ElementTree(root)
       
-    from django.conf import settings
-
-    MEDIA_ROOT = settings.MEDIA_ROOT
+  
 
 
     tree.write('{}/xml/output_xml_Blog_AP_News_{}.xml'.format(MEDIA_ROOT,blogobj.pk), encoding="utf-8")
@@ -898,9 +847,7 @@ def downloadxml2file2(request,pk):
 
     tree = et.ElementTree(root)
       
-    from django.conf import settings
 
-    MEDIA_ROOT = settings.MEDIA_ROOT
 
 
     tree.write('{}/xml/output_xml_Blog_AP_News_{}.xml'.format(MEDIA_ROOT,blogobj.pk), encoding="utf-8")
@@ -915,6 +862,7 @@ def downloadxml2file2(request,pk):
     
     
     return response
+
 
 def downloadxmlall(request):
     root = et.Element('feed')
@@ -1000,9 +948,7 @@ def downloadxmlall(request):
       
     tree = et.ElementTree(root)
 
-    from django.conf import settings
 
-    MEDIA_ROOT = settings.MEDIA_ROOT
 
 
     tree.write('{}/xml/output_xml_Blog_AP_Wire.xml'.format(MEDIA_ROOT), encoding="utf-8")
@@ -1106,9 +1052,7 @@ def downloadxmlallfile2(request):
       
     tree = et.ElementTree(root)
 
-    from django.conf import settings
 
-    MEDIA_ROOT = settings.MEDIA_ROOT
 
 
     tree.write('{}/xml/output_xml_Blog_AP_Wire.xml'.format(MEDIA_ROOT), encoding="utf-8")
@@ -1207,9 +1151,7 @@ def downloadxmlall2(request):
     tree = et.ElementTree(root)
       
     
-    from django.conf import settings
 
-    MEDIA_ROOT = settings.MEDIA_ROOT
 
 
     tree.write('{}/xml/output_xml_Blog_AP_News.xml'.format(MEDIA_ROOT), encoding="utf-8")
@@ -1316,9 +1258,7 @@ def downloadxmlall2file2(request):
     tree = et.ElementTree(root)
       
     
-    from django.conf import settings
 
-    MEDIA_ROOT = settings.MEDIA_ROOT
 
 
     tree.write('{}/xml/output_xml_Blog_AP_News.xml'.format(MEDIA_ROOT), encoding="utf-8")
