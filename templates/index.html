@@ -122,6 +122,8 @@
                
                {% for key,val in context_dict.items %}
                {% comment %} {{UserCustom.accessint}} {% endcomment %}
+               
+               
                 {% if forloop.counter <= user.accessint %}
                 <div class="ns-slider-box slide" data-slide-index="{{forloop.counter0}}">   
                   <h5>{{forloop.counter}}. {{ key}}</h5>
@@ -195,6 +197,10 @@
                             <a class="row-add publishRow" id="publishRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'publishBlog' v.pk %}><i class="fa fa-paper-plane"></i></a>
                             {%endif%}
 
+                            {% if forloop.parentloop.counter == 6 %}
+                            <a class="row-add downloadxml" id="downloadxml-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxml' v.pk %}><i class="fa fa-file-excel-o"></i></a>
+                            {%endif%}
+
                             {% if forloop.parentloop.counter == 7 %}
                             <a class="row-add downloadxml" id="downloadxml-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxml' v.pk %}><i class="fa fa-file-excel-o"></i></a>
                             <a class="row-add downloadpdf" id="downloadpdf-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadpdf' v.pk %}><i class="fa fa-file-powerpoint-o"></i></a>
@@ -220,7 +226,7 @@
                   
                   <div class="table-print-wrp">
                     <div class="print-all-table">
-                      <a style="cursor: pointer;" class="Wiredownloadxml" id="Wiredownload_{{key|replaceSpacewithUnderScore }}" href= {% url 'downloadxmlall' %}><i class="fa fa-plus"></i> Generate xml</a>
+                      {% comment %} <a style="cursor: pointer;" class="Wiredownloadxml" id="Wiredownload_{{key|replaceSpacewithUnderScore }}" href= {% url 'downloadxmlall' %}><i class="fa fa-plus"></i> Generate xml</a> {% endcomment %}
                     </div>
                     {% comment %} <div class="print-all-table-file2">
                       <a style="cursor: pointer;" class="Wiredownloadxmlfile2" id="Wiredownloadfile2_{{key|replaceSpacewithUnderScore }}" href = {% url 'downloadxmlallfile2' %} ><i class="fa fa-plus"></i> Generate xml</a>
@@ -324,6 +330,11 @@
                             <a class="row-add publishRow2" id="publishRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'publishBlog2' v.pk %} ><i class="fa fa-paper-plane"></i></a>
                             {%endif%}
 
+                            {% if forloop.parentloop.counter == 6 %}
+                            
+                            <a class="row-add downloadxml2file2" id="downloadxml2file2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxml2file2' v.pk %}><i class="fa fa-file-excel-o"></i></a>
+                            {%endif%}
+
                             {% if forloop.parentloop.counter == 7 %}
                             {% comment %} <a class="row-add downloadxml2" id="downloadxml2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxml2' v.pk %}><i class="fa fa-file-excel-o"></i></a> {% endcomment %}
                             <a class="row-add downloadxml2file2" id="downloadxml2file2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxml2file2' v.pk %}><i class="fa fa-file-excel-o"></i></a>
@@ -355,7 +366,7 @@
                     <a style="cursor: pointer;" class="NewsOpenAddModelxml" id="NewsOpenAddModel_{{key|replaceSpacewithUnderScore }}" href = {% url 'downloadxmlall2' %} ><i class="fa fa-plus"></i> Generate xml</a>
                   </div> {% endcomment %}
                   <div class="print-all-table-file2">
-                    <a style="cursor: pointer;" class="NewsOpenAddModelxmlfile2" id="NewsOpenAddModelfile2_{{key|replaceSpacewithUnderScore }}" href = {% url 'downloadxmlall2file2' %} ><i class="fa fa-plus"></i> Generate xml</a>
+                    {% comment %} <a style="cursor: pointer;" class="NewsOpenAddModelxmlfile2" id="NewsOpenAddModelfile2_{{key|replaceSpacewithUnderScore }}" href = {% url 'downloadxmlall2file2' %} ><i class="fa fa-plus"></i> Generate xml</a> {% endcomment %}
                   </div>
                 </div>
              
@@ -1215,19 +1226,12 @@
                
 
                 
-
+                
               
 
-                if(response.tableIndex == 7){
-                  $(`#${row_id} td > div`).append(
-                    `
-                    <a class="row-add downloadxml" id="downloadxml-App_Published" href="/downloadxml/${pk}/"><i class="fa fa-file-excel-o"></i></a>
-                    <a class="row-add downloadpdf" id="downloadpdf-App_Published" href="/downloadpdf/${pk}/"><i class="fa fa-file-powerpoint-o"></i></a>
-                    `
-                  )
-                }
                 
-
+                
+                
                 
               
 
@@ -1264,7 +1268,25 @@
                   $(`#${row_id} td > div > a.deleteRow`).css('display','block')
                 }
                 
-                
+                if(response.tableIndex == 6){
+                  $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add downloadxml" href="/downloadxml/${pk}/"><i class="fa fa-file-excel-o"></i></a>
+                    `
+                  )
+                }
+                if(response.tableIndex == 5 || response.tableIndex == 7 ){
+                  $(`#${row_id} td > div > a.downloadxml`).remove()
+                }
+
+                if(response.tableIndex == 7){
+                  $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add downloadxml" id="downloadxml-App_Published" href="/downloadxml/${pk}/"><i class="fa fa-file-excel-o"></i></a>
+                    <a class="row-add downloadpdf" id="downloadpdf-App_Published" href="/downloadpdf/${pk}/"><i class="fa fa-file-powerpoint-o"></i></a>
+                    `
+                  )
+                }
               }
             }) 
             
@@ -1391,14 +1413,7 @@
 
               
 
-                if(response.tableIndex == 7){
-                  $(`#${row_id} td > div`).append(
-                    `
-                    <a class="row-add downloadxml2file2" id="downloadxml2file2-App_Published" href="/downloadxml2file2/${pk}/"><i class="fa fa-file-excel-o"></i></a>
-                    <a class="row-add downloadpdf2" id="downloadpdf2-App_Published" href="/downloadpdf2/${pk}/"><i class="fa fa-file-powerpoint-o"></i></a>
-                    `
-                  )
-                }
+               
                 
 
                 
@@ -1437,6 +1452,26 @@
                   $(`#${row_id} td > div > a.deleteRow2`).css('display','block')
                 }
                 
+                if(response.tableIndex == 6){
+                  $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add downloadxml2file2" id="downloadxml2file2-Ready_For_Release" href="/downloadxml2file2/${pk}/"><i class="fa fa-file-excel-o"></i></a>
+                    `
+                  )
+                }
+
+                if(response.tableIndex == 7  ){
+                  $(`#${row_id} td > div > a.downloadxml2file2`).remove()
+                }
+
+                if(response.tableIndex == 7){
+                  $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add downloadxml2file2" id="downloadxml2file2-App_Published" href="/downloadxml2file2/${pk}/"><i class="fa fa-file-excel-o"></i></a>
+                    <a class="row-add downloadpdf2" id="downloadpdf2-App_Published" href="/downloadpdf2/${pk}/"><i class="fa fa-file-powerpoint-o"></i></a>
+                    `
+                  )
+                }
                 
               }
             }) 

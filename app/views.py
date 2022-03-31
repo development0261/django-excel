@@ -275,24 +275,7 @@ def viewfunction(request):
     else:
         return redirect('loginview')
 
-def viewfunction2(request):
-    
-    # qs1 = models.apwire_ContentPitching.objects.get(id=1)
-    # context_dict= {}
-    # for i in qs1:
-    #     context_dict['topic'] = qs1.topic
-    #     context_dict['topic'] = qs1.topic
-    #     context_dict['topic'] = qs1.topic
 
-    # userobj = User.objects.get(username=request.user)
-    # roleint = userdata(user=userobj).accessint
-    # print(roleint)
-
-    if request.user.is_authenticated:
-      
-        return render(request,'index.html',{'context_dict2':context_dict})
-    else:
-        return redirect('loginview')
 
 
 
