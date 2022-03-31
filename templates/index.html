@@ -918,6 +918,8 @@
         $(document).on('click','.viewRow',function(){
           console.log("viewrow")
           var keys = $(this).attr('id').split('-')
+          var element = document.getElementById(id);
+          alert(element)
        
           
           var id = keys[1]
@@ -1096,18 +1098,10 @@
       });
    })
     
-   $(document).ready(function() {
-    $.ajax({
-      url : "", // Url of backend (can be python, php, etc..)
-      type: "POST", // data type (can be get, post, put, delete)
-      data : {},
-      success:function(response){
-        if(response.tableIndex == 7){
-          $(`#${row_id} td > div > a.editRow`).remove()
-        }
-      }
-   })
-  })
+   
+
+
+
 
     $(document).ready(function() {
       $("tbody.connectedSortable").sortable({
@@ -1144,6 +1138,7 @@
           */
           console.log($(this))
           var row_id = ui.item[0].id
+          alert(ui)
            var addedTo = $(this).closest("table.mytable")
             
             

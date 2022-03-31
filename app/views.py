@@ -318,7 +318,8 @@ def printpdf(desc,imagepath,topic):
         ptext = i
         Story.append(Paragraph(ptext, styles["Justify"]))
         Story.append(Spacer(1, 12))
-    doc.build(Story)
+
+    x=doc.build(Story)
     response = FileResponse(open(f"{MEDIA_ROOT}/pdf/{topic}.pdf", 'rb'),as_attachment=True)
     return response
 
