@@ -143,18 +143,9 @@
                       </thead>
                       <tbody id="tableBody_{{key|replaceSpacewithUnderScore }}" class=" 
                           
-                          {% if user|validateuser:key == "Writer" and forloop.counter <= 4 %}
+                          {% if user|checkTablePermissionmove:key %}
                           connectedSortable
-                          {% elif user|validateuser:key == "Editor" and forloop.counter <= 5 %}
-                          connectedSortable
-                          {% elif user|validateuser:key == "Approver" and forloop.counter <= 6 %}
-                          connectedSortable
-                          {% elif user|validateuser:key == "Publisher" %}
-                            {% if forloop.counter <= 2 or forloop.counter >= 5 %}
-                              connectedSortable
-                            {% else %}
-                            {% endif %}
-                          {% elif user|validateuser:key == "Admin" %}
+                          
                       
                       
 
@@ -172,33 +163,27 @@
                           <td>{{v.date}}</td>
                           <td> <div class="new-row-control">
                             
-                            <a class="row-add viewRow" id=" -{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-eye"></i></a>
-                          {% if forloop.parentloop.counter != 7  %}  
                             
                             
                             
-
-                            {% if user|validateuser:key == "Writer" and forloop.parentloop.counter < 4 %}
-                            <a class="row-add editRow" id="editRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
-                            {% elif user|validateuser:key == "Editor" and forloop.parentloop.counter < 5 %}
-                            <a class="row-add editRow" id="editRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
-                            {% elif user|validateuser:key == "Approver" and forloop.parentloop.counter < 6 %}
-                            <a class="row-add editRow" id="editRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
-                            {% elif user|validateuser:key == "Publisher" %}
-                            {% if forloop.parentloop.counter == 1 or forloop.parentloop.counter > 4 %}
-                            <a class="row-add editRow" id="editRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
-                            {%else%}
+                            {% if user|checkTablePermissionview:key %}
+                            <a class="row-add viewRow" id="viewRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-eye"></i></a>
                             {% endif %}
-                          {% endif %}
-                            {% elif user|validateuser:key == "Admin" %}
-                            
-                            {% endif %}
-                            {% if user|validateuser:key == "Publisher" and forloop.parentloop.counter == 6 %}
-                            <a class="row-add publishRow" id="publishRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'publishBlog' v.pk %}><i class="fa fa-paper-plane"></i></a>
-                            {%endif%}
 
+                            {% if user|checkTablePermissionedit:key and forloop.parentloop.counter != 7 %}
+                              <a class="row-add editRow" id="editRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
+                            {% endif %}
+
+                            {% if user|checkTablePermissiondelete:key and forloop.parentloop.counter != 7 %}
+                            <a class="row-add deleteRow" id="deleteRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'deleteBlog' v.pk %}><i class="fa fa-trash"></i></a>
+                            {% endif %}
+                            
                             {% if forloop.parentloop.counter == 6 %}
                             <a class="row-add downloadxml" id="downloadxml-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxml' v.pk %}><i class="fa fa-file-excel-o"></i></a>
+                            {%endif%}
+
+                            {% if user|validateuser:key == "Publisher" and forloop.parentloop.counter == 6 %}
+                            <a class="row-add publishRow" id="publishRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'publishBlog' v.pk %}><i class="fa fa-paper-plane"></i></a>
                             {%endif%}
 
                             {% if forloop.parentloop.counter == 7 %}
@@ -208,15 +193,13 @@
 
                             {%endif%}
 
-                            {% if forloop.parentloop.counter <= 2 %}
-                            <a class="row-add deleteRow" id="deleteRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'deleteBlog' v.pk %}><i class="fa fa-trash"></i></a>
-                            {%endif%}
+                          
 
                         {% endfor %}
                       </tbody>
                     </table>
                   </div>
-                  {% if forloop.counter == 1  %}
+                  {% if forloop.counter == 1 and user|checkTablePermissioncreate:key  %}
                   <div class="add-row-table">
                     <a style="cursor: pointer;" class="OpenAddModel" id="OpenAddModel_{{key|replaceSpacewithUnderScore }}">+ Add Row</a>
                   </div>
@@ -228,9 +211,9 @@
                     <div class="print-all-table">
                       {% comment %} <a style="cursor: pointer;" class="Wiredownloadxml" id="Wiredownload_{{key|replaceSpacewithUnderScore }}" href= {% url 'downloadxmlall' %}><i class="fa fa-plus"></i> Generate xml</a> {% endcomment %}
                     </div>
-                    {% comment %} <div class="print-all-table-file2">
-                      <a style="cursor: pointer;" class="Wiredownloadxmlfile2" id="Wiredownloadfile2_{{key|replaceSpacewithUnderScore }}" href = {% url 'downloadxmlallfile2' %} ><i class="fa fa-plus"></i> Generate xml</a>
-                    </div> {% endcomment %}
+                     <div class="print-all-table-file2">
+                      {% comment %} <a style="cursor: pointer;" class="Wiredownloadxmlfile2" id="Wiredownloadfile2_{{key|replaceSpacewithUnderScore }}" href = {% url 'downloadxmlallfile2' %} ><i class="fa fa-plus"></i> Generate xml</a> {% endcomment %}
+                    </div> 
                 </div>
 
 
@@ -274,28 +257,11 @@
                       <tbody id="News_tableBody_{{key|replaceSpacewithUnderScore }}" class="
                       
                             
-                      {% if user|validateuser:key == "Writer" and forloop.counter <= 4 %}
-                      connectedSortable2
-                      {% elif user|validateuser:key == "Editor" and forloop.counter <= 5 %}
-                      connectedSortable2
-                      {% elif user|validateuser:key == "Approver" and forloop.counter <= 6 %}
-                      connectedSortable2
-                      {% elif user|validateuser:key == "Publisher"%}
-                        {% if  forloop.counter <= 2 or forloop.counter > 4 %}
-                        connectedSortable2
-                        {% else %}
-                        
-                        {% endif %}
-                      {% elif user|validateuser:key == "Admin" %}
+                      {% if user|checkTablePermissionmove:key %}
+                          connectedSortable2
                       
                       {% endif %}
 
-                      
-                      {% if val|length < 1 %}
-                      test
-                      {% endif %}
-                      
-                      
                       " >
                   
                           </tr>
@@ -307,42 +273,31 @@
                           <td>{{v.author}}</td>
                           <td>{{v.date}}</td>
                           <td> <div class="new-row-control">
-                            <a class="row-add viewRow2" id=" -{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-eye"></i></a>
-                            {% if forloop.parentloop.counter != 7  %}
-                            
-                            {% if user|validateuser:key == "Writer" and forloop.parentloop.counter < 4 %}
-                            <a class="row-add editRow2" id="editRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
-                            {% elif user|validateuser:key == "Editor" and forloop.parentloop.counter < 5 %}
-                            <a class="row-add editRow2" id="editRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
-                            {% elif user|validateuser:key == "Approver" and forloop.parentloop.counter < 6 %}
-                            <a class="row-add editRow2" id="editRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
-                            {% elif user|validateuser:key == "Publisher" %}
-                              {% if forloop.parentloop.counter < 2 or forloop.parentloop.counter > 4 %}
-                                <a class="row-add editRow2" id="editRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
-                              {%else%}
-                              {% endif %}
-                            {% elif user|validateuser:key == "Admin" %}
-                            
-                            {% endif %}
+                            {% if user|checkTablePermissionview:key %}
+                            <a class="row-add viewRow2" id="viewRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-eye"></i></a>
                             {% endif %}
 
-                            {% if user|validateuser:key == "Publisher" and forloop.parentloop.counter == 6 %}
-                            <a class="row-add publishRow2" id="publishRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'publishBlog2' v.pk %} ><i class="fa fa-paper-plane"></i></a>
+                            {% if user|checkTablePermissionedit:key and forloop.parentloop.counter != 7 %}
+                              <a class="row-add editRow2" id="editRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
+                            {% endif %}
+
+                            {% if user|checkTablePermissiondelete:key and forloop.parentloop.counter != 7 %}
+                            <a class="row-add deleteRow2" id="deleteRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'deleteBlog2' v.pk %}><i class="fa fa-trash"></i></a>
+                            {% endif %}
+                            
+                            {% if forloop.parentloop.counter == 6 %}
+                            <a class="row-add downloadxml2file2" id="downloadxml2file2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxml' v.pk %}><i class="fa fa-file-excel-o"></i></a>
                             {%endif%}
 
-                            {% if forloop.parentloop.counter == 6 %}
-                            
-                            <a class="row-add downloadxml2file2" id="downloadxml2file2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxml2file2' v.pk %}><i class="fa fa-file-excel-o"></i></a>
+                            {% if user|validateuser:key == "Publisher" and forloop.parentloop.counter == 6 %}
+                            <a class="row-add publishRow2" id="publishRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'publishBlog' v.pk %}><i class="fa fa-paper-plane"></i></a>
                             {%endif%}
 
                             {% if forloop.parentloop.counter == 7 %}
-                            {% comment %} <a class="row-add downloadxml2" id="downloadxml2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxml2' v.pk %}><i class="fa fa-file-excel-o"></i></a> {% endcomment %}
-                            <a class="row-add downloadxml2file2" id="downloadxml2file2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxml2file2' v.pk %}><i class="fa fa-file-excel-o"></i></a>
-                            <a class="row-add downloadpdf2" id="downloadpdf2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadpdf2' v.pk %}><i class="fa fa-file-powerpoint-o"></i></a>
-                            {%endif%}
+                            <a class="row-add downloadxml2file2" id="downloadxml2file2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxml' v.pk %}><i class="fa fa-file-excel-o"></i></a>
+                            <a class="row-add downloadpdf2" id="downloadpdf2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadpdf' v.pk %}><i class="fa fa-file-powerpoint-o"></i></a>
+                            {% comment %} <a class="row-add downloadxmlfile2" id="downloadxmlfile2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxmlfile2' v.pk %}><i class="fa fa-file-excel-o"></i></a> {% endcomment %}
 
-                            {% if forloop.parentloop.counter <= 2 %}
-                            <a class="row-add deleteRow2" id="deleteRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'deleteBlog2' v.pk %}><i class="fa fa-trash"></i></a>
                             {%endif%}
 
 
@@ -354,9 +309,9 @@
                       </tbody>
                     </table>
                   </div>
-                  {% if forloop.counter == 1  %}
+                  {% if forloop.counter == 1 and user|checkTablePermissioncreate:key  %}
                   <div class="add-row-table">
-                    <a style="cursor: pointer;" class="NewsOpenAddModel" id="NewsOpenAddModel_{{key|replaceSpacewithUnderScore }}">+ Add Row</a>
+                    <a style="cursor: pointer;" class="NewsOpenAddModel" id="NewsOpenAddModel{{key|replaceSpacewithUnderScore }}">+ Add Row</a>
                   </div>
                   {%endif%}
 
@@ -459,7 +414,7 @@
                             <label>Title</label>
                             <input type="text" placeholder="" name="topic" id="title" required>
                         </div>
-                        <div class="field-name">
+                        <div class="editor">
                             <label>Description*</label>
                         <textarea name="description" rows="10" cols="55" id="description" required></textarea>
                         
@@ -467,7 +422,7 @@
 
                         <div class="field-name">
                             <label>Image</label>
-                            <input type="file" placeholder="" name="image" required>
+                            <input type="file" placeholder="" name="image">
                         </div>
  
                         <button type="submit" class="login-submit" name="Add" value="Add">Save Blog</button>
@@ -501,14 +456,14 @@
                             <label>Title</label>
                             <input type="text" placeholder="" name="topic" id="title" required>
                         </div>
-                        <div class="field-name">
+                        <div class="editor">
                             <label>Description*</label>
                         <textarea name="description2" rows="10" cols="55" id="description" required></textarea>
                         </div>
 
                         <div class="field-name">
                             <label>Image</label>
-                            <input type="file" placeholder="" name="image" required>
+                            <input type="file" placeholder="" name="image">
                         </div>
  
                         <button type="submit" class="login-submit" name="Add" value="Add">Save Blog</button>
@@ -611,16 +566,35 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="https://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
   <script src="https://cdn.ckeditor.com/4.18.0/standard/ckeditor.js"></script>
+  {% comment %} <script src="https://cdn.ckeditor.com/ckeditor5/33.0.0/classic/ckeditor.js"></script> {% endcomment %}
 
 
-  <script>
-    CKEDITOR.config.toolbar = [
+<script>
+     CKEDITOR.config.toolbar = [
     ['Link','Unlink','Bold','Italic','Underline']
  ] ;
+ {% comment %} 
+  ClassicEditor
+          .create( document.querySelector( '.editor' ) )
+          .then( editor => {
+                  console.log( editor );
+          } )
+          .catch( error => {
+                  console.error( error );
+          } ); {% endcomment %}
+
  
-      CKEDITOR.replace( 'description');
-      CKEDITOR.replace( 'description2' );
-      function downloadURI(uri, name) 
+{% comment %} 
+ CKEDITOR.editorConfig = function( config ) {
+	config.toolbar = [
+		{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline'] },
+		{ name: 'links', items: [ 'Link', 'Unlink' ] },
+	],
+  config.removebuttons = ['insert']
+}; {% endcomment %}
+    CKEDITOR.replace( 'description');
+    CKEDITOR.replace( 'description2' );
+    function downloadURI(uri, name) 
 {
    var link = document.createElement("a");
    // If you don't know the name or want to use
@@ -657,7 +631,7 @@
           if(title == "" || author == "" || date == ""){
             alert("Please fill all the values")
           }else{
-            alert("call")
+            
             $.ajax({
                 url : "saveTableRow/"+id+"/", // Url of backend (can be python, php, etc..)
                 type: "POST", // data type (can be get, post, put, delete)
@@ -918,8 +892,8 @@
         $(document).on('click','.viewRow',function(){
           console.log("viewrow")
           var keys = $(this).attr('id').split('-')
-          var element = document.getElementById(id);
-          alert(element)
+          
+   
        
           
           var id = keys[1]
@@ -1005,9 +979,9 @@
       
       
 
-      {% comment %} $('#modalId').on('click', 'button.close', function (eventObject) {
+      $('#modalId').on('click', 'button.close', function (eventObject) {
           $('#modalId').modal('hide');
-       }); {% endcomment %}
+       }); 
 
 
       $(document).on('click','.addEditRow',function(){
@@ -1138,7 +1112,7 @@
           */
           console.log($(this))
           var row_id = ui.item[0].id
-          alert(ui)
+          
            var addedTo = $(this).closest("table.mytable")
             
             
@@ -1148,7 +1122,7 @@
             dropid = dropidArray[dropidArray.length - 1]
             addedto = addedTo.attr('id').slice(7,)
             var idCounter = 0
-            {% comment %} $("table.mytable").each(function(){
+            $("table.mytable").each(function(){
               console.log($(this).attr('id'))
               console.log(addedTo.attr('id'))
                 if($(this).attr('id') == addedTo.attr('id')){
@@ -1157,7 +1131,8 @@
                 idCounter = idCounter + 1 
             })
             
-            console.log("idcounter:"+idCounter) {% endcomment %}
+            console.log("idcounter:"+idCounter) 
+            
             
 
 
@@ -1182,106 +1157,94 @@
                 console.log(row_td_content)
                 
                 
-                if ( response.role == "Publisher"){$(`#${row_id} td > div > a.editRow`).remove()}
                 
-                if(response.tableIndex != 6){
-                  $(`#${row_id} td > div > a.publishRow`).remove()
-                }
+                  
                 
-                
-               
-               
-                
-
-                // publisher control block
-                if(response.tableIndex == 6 && response.role == "Publisher" ){
-                  $(`#${row_id} td > div`).append(
-                    `
-                    <a class="row-add editRow" id="editRow-${pk}-Ready_For_Release" ><i class="fa fa-edit"></i></a>
-                    <a class="row-add publishRow" id="publishRow-${pk}-Ready_For_Release" href="/publishBlog/${pk}/"><i class="fa fa-paper-plane"></i></a>
-                    `
-                  )
-                }
-                else if(response.tableIndex <= 5 && response.role == "Publisher" ){
-                  $(`#${row_id} td > div`).append(
-                    `
-                    <a class="row-add editRow" id="editRow-${pk}-Ready_For_Release" ><i class="fa fa-edit"></i></a>
-                    `
-                  )
-                }
-
-                // editor control block
-                if(response.tableIndex <= 3 && response.role == "Editor" ){
-                  $(`#${row_id} td > div`).append(
-                    `
-                    <a class="row-add editRow" id="editRow-${pk}-Ready_For_Release"  ><i class="fa fa-edit"></i></a>
-                    `
-                  )
-                }
-               
-
-                
-                
-              
-
-                
-                
-                
-                
-              
-
-                if(response.tableIndex <= 6){
-                  $(`#${row_id} td > div > a.downloadxml`).remove()
-                  $(`#${row_id} td > div > a.downloadpdf`).remove()
-                }
-               
-
-                
-
-
-                if (response.tableIndex == "Writer" && response.tableIndex <=3 ){
+                  $(`#${row_id} td > div > a.deleteRow`).remove()
                   $(`#${row_id} td > div > a.editRow`).remove()
-                }
-                
-                
-                
-
-                if(response.role == "Writer" && response.tableIndex < 4){
-                  $(`#${row_id} td > div > a.editRow`).css('display','block')
-                }
-                else if(response.role == "Editor" && response.tableIndex < 5){
-                  $(`#${row_id} td > div > a.editRow`).css('display','block')
-                }
-                else if(response.role == "Approver" && response.tableIndex < 6){
-                  $(`#${row_id} td > div > a.editRow`).css('display','block')
-                }
-                
-                if(response.tableIndex > 2){
-                  $(`#${row_id} td > div > a.deleteRow`).css('display','none')
-                }
-                else{
-                  $(`#${row_id} td > div > a.deleteRow`).css('display','block')
-                }
-                
-                if(response.tableIndex == 6){
-                  $(`#${row_id} td > div`).append(
-                    `
-                    <a class="row-add downloadxml" href="/downloadxml/${pk}/"><i class="fa fa-file-excel-o"></i></a>
-                    `
-                  )
-                }
-                if(response.tableIndex == 5 || response.tableIndex == 7 ){
+                  $(`#${row_id} td > div > a.publishRow`).remove()
+                  $(`#${row_id} td > div > a.viewRow`).remove()
+                  $(`#${row_id} td > div > a.downloadpdf`).remove()
                   $(`#${row_id} td > div > a.downloadxml`).remove()
-                }
-
-                if(response.tableIndex == 7){
-                  $(`#${row_id} td > div`).append(
+                  
+                  
+                  if (response.access_dict['view'] ==  true ){
+                    $(`#${row_id} td > div`).append(
                     `
-                    <a class="row-add downloadxml" id="downloadxml-App_Published" href="/downloadxml/${pk}/"><i class="fa fa-file-excel-o"></i></a>
-                    <a class="row-add downloadpdf" id="downloadpdf-App_Published" href="/downloadpdf/${pk}/"><i class="fa fa-file-powerpoint-o"></i></a>
+                    <a class="row-add viewRow" id="viewRow-${pk}-${addedto}"  ><i class="fa fa-eye"></i></a>
                     `
                   )
-                }
+                  }
+
+                  if (response.access_dict['edit'] ==  true ){
+                    
+                    $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add editRow" id="editRow-${pk}-${addedto}"  ><i class="fa fa-edit"></i></a>
+                    `
+                  )
+                  }
+
+                  if (response.access_dict['to_delete'] ==  true ){
+                    
+                    $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add deleteRow" id="deleteRow-${pk}-${addedto}" href="/deleteBlog/${pk}/" ><i class="fa fa-trash"></i></a>
+                    `
+                  )
+                  }
+                  
+                  
+
+                  if (response.access_dict['view'] ==  true && response.tableIndex >= 6 ){
+                    $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add downloadxml" id="downloadxml-${addedto}" href="/downloadxml/${pk}/" ><i class="fa fa-file-excel-o"></i></a>
+                    
+                    `
+                  )
+                  }
+
+                  if (response.access_dict['publish'] ==  true && response.tableIndex == 6){
+                     
+                    $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add publishRow" id="publishRow-${pk}-${addedto}" href="/publishBlog/${pk}/" ><i class="fa fa-paper-plane"></i></a>
+                    `
+                  )
+                  }
+
+                  if (response.access_dict['view'] ==  true && response.tableIndex == 7 ){
+                    $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add downloadxml" id="downloadxml-${addedto}" href="/downloadxml/${pk}/" ><i class="fa fa-file-powerpoint-o"></i></a>
+                    
+                    `
+                  )
+                  }
+
+                  
+                  
+                  if (response.access_dict['view'] ==  true && response.tableIndex <= 5 && removedfrom == "Ready_For_Release" && addedto == "FDN_Approval_1" ){
+                    $(`#${row_id} td > div > a.downloadxml`).remove()
+                  }
+
+                  if (response.tableIndex==7){
+                  $(`#${row_id} td > div > a.editRow`).remove()
+                  $(`#${row_id} td > div > a.deleteRow`).remove()
+                  
+                  
+
+                  }
+
+                  
+
+                  
+                
+
+                
+
+
               }
             }) 
             
@@ -1365,109 +1328,85 @@
                 var pk = primaryKeyArray[primaryKeyArray.length - 1]
                 var row_td_content = $(`#${row_id} td:last-child`).html()
 
-                console.log(row_td_content)
-                
-                if ( response.role == "Publisher"){$(`#${row_id} td > div > a.editRow2`).remove()}
-                
-                if(response.tableIndex != 6){
-                  $(`#${row_id} td > div > a.publishRow2`).remove()
-                }
-                
-                
-                
-                
-
-                // publisher control block
-                if(response.tableIndex == 6 && response.role == "Publisher" ){
-                  $(`#${row_id} td > div`).append(
-                    `
-                    <a class="row-add editRow2" id="editRow2-${pk}-Ready_For_Release" ><i class="fa fa-edit"></i></a>
-                    <a class="row-add publishRow2" id="publishRow2-${pk}-Ready_For_Release" href="/publishBlog/${pk}/"><i class="fa fa-paper-plane"></i></a>
-                    `
-                  )
-                }
-                else if(response.tableIndex <= 5 && response.role == "Publisher" ){
-                  $(`#${row_id} td > div`).append(
-                    `
-                    <a class="row-add editRow2" id="editRow2-${pk}-Ready_For_Release" ><i class="fa fa-edit"></i></a>
-                    `
-                  )
-                }
-
-                // editor control block
-                if(response.tableIndex <= 3 && response.role == "Editor" ){
-                  $(`#${row_id} td > div`).append(
-                    `
-                    <a class="row-add editRow2" id="editRow2-${pk}-Ready_For_Release"  ><i class="fa fa-edit"></i></a>
-                    `
-                  )
-                }
-               
-
-                
-
-              
-
-               
-                
-
-                
-              
-
-                if(response.tableIndex <= 6){
-                  $(`#${row_id} td > div > a.downloadxml2file2`).remove()
-                  $(`#${row_id} td > div > a.downloadpdf2`).remove()
-                }
-               
-
-                
-
-
-                if (response.tableIndex == "Writer" && response.tableIndex <=3 ){
+                $(`#${row_id} td > div > a.deleteRow2`).remove()
                   $(`#${row_id} td > div > a.editRow2`).remove()
-                }
-                
-                
-                
-
-                if(response.role == "Writer" && response.tableIndex < 4){
-                  $(`#${row_id} td > div > a.editRow2`).css('display','block')
-                }
-                else if(response.role == "Editor" && response.tableIndex < 5){
-                  $(`#${row_id} td > div > a.editRow2`).css('display','block')
-                }
-                else if(response.role == "Approver" && response.tableIndex < 6){
-                  $(`#${row_id} td > div > a.editRow2`).css('display','block')
-                }
-
-                if(response.tableIndex > 2){
-                  $(`#${row_id} td > div > a.deleteRow2`).css('display','none')
-                }
-                else{
-                  $(`#${row_id} td > div > a.deleteRow2`).css('display','block')
-                }
-                
-                if(response.tableIndex == 6){
-                  $(`#${row_id} td > div`).append(
-                    `
-                    <a class="row-add downloadxml2file2" id="downloadxml2file2-Ready_For_Release" href="/downloadxml2file2/${pk}/"><i class="fa fa-file-excel-o"></i></a>
-                    `
-                  )
-                }
-
-                if(response.tableIndex == 7  ){
+                  $(`#${row_id} td > div > a.publishRow2`).remove()
+                  $(`#${row_id} td > div > a.viewRow2`).remove()
+                  $(`#${row_id} td > div > a.downloadpdf2`).remove()
                   $(`#${row_id} td > div > a.downloadxml2file2`).remove()
-                }
-
-                if(response.tableIndex == 7){
-                  $(`#${row_id} td > div`).append(
+                  
+                  
+                  if (response.access_dict['view'] ==  true ){
+                    $(`#${row_id} td > div`).append(
                     `
-                    <a class="row-add downloadxml2file2" id="downloadxml2file2-App_Published" href="/downloadxml2file2/${pk}/"><i class="fa fa-file-excel-o"></i></a>
-                    <a class="row-add downloadpdf2" id="downloadpdf2-App_Published" href="/downloadpdf2/${pk}/"><i class="fa fa-file-powerpoint-o"></i></a>
+                    <a class="row-add viewRow2" id="viewRow2-${pk}-${addedto}"  ><i class="fa fa-eye"></i></a>
                     `
                   )
-                }
+                  }
+
+                  if (response.access_dict['edit'] ==  true ){
+                    
+                    $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add editRow2" id="editRow2-${pk}-${addedto}"  ><i class="fa fa-edit"></i></a>
+                    `
+                  )
+                  }
+
+                  if (response.access_dict['to_delete'] ==  true ){
+                    
+                    $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add deleteRow2" id="deleteRow2-${pk}-${addedto}" href="/deleteBlog2/${pk}/" ><i class="fa fa-trash"></i></a>
+                    `
+                  )
+                  }
+                  
+                  
+
+                  if (response.access_dict['view'] ==  true && response.tableIndex >= 6 ){
+                    $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add downloadxml2file2" id="downloadxml2file2-${addedto}" href="/downloadxml2file2/${pk}/" ><i class="fa fa-file-excel-o"></i></a>
+                    
+                    `
+                  )
+                  }
+
+                  if (response.access_dict['publish'] ==  true && response.tableIndex == 6){
+                     
+                    $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add publishRow2" id="publishRow2-${pk}-${addedto}" href="/publishBlog2/${pk}/" ><i class="fa fa-paper-plane"></i></a>
+                    `
+                  )
+                  }
+
+                  if (response.access_dict['view'] ==  true && response.tableIndex == 7 ){
+                    $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add downloadxml2file2" id="downloadxml2file2-${addedto}" href="/downloadxml2file2/${pk}/" ><i class="fa fa-file-powerpoint-o"></i></a>
+                    
+                    `
+                  )
+                  }
+
+                  
+                  
+                  if (response.access_dict['view'] ==  true && response.tableIndex <= 5 && removedfrom == "Ready_For_Release" && addedto == "FDN_Approval_1" ){
+                    $(`#${row_id} td > div > a.downloadxml2file2`).remove()
+                  }
+
+                  if (response.tableIndex==7){
+                  $(`#${row_id} td > div > a.editRow2`).remove()
+                  $(`#${row_id} td > div > a.deleteRow2`).remove()
+                  
+                  
+
+                  }
+
                 
+
               }
             }) 
             
