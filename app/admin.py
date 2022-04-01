@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.apps import apps
 
-from app.models import Blog, UserCustom,Blog2
+from app.models import Ap_Wire, UserCustom,Ap_News,permissions
 from django.contrib.auth.admin import UserAdmin
 
 # app = apps.get_app_config('app')
@@ -33,12 +33,20 @@ class customuseradmin(UserAdmin):
         ),
     )
 
-admin.site.register(UserCustom,customuseradmin)
+# admin.site.register(UserCustom,customuseradmin)
 
-@admin.register(Blog)
+@admin.register(UserCustom)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ['username','email','first_name','last_name','is_staff','is_superuser']
+
+@admin.register(Ap_Wire)
 class BlogDisplay(admin.ModelAdmin):
     list_display = ("topic", "author","date","status")
 
-@admin.register(Blog2)
+@admin.register(Ap_News)
 class BlogDisplay(admin.ModelAdmin):
     list_display = ("topic", "author","date","status")
+
+@admin.register(permissions)
+class selectiondisplay(admin.ModelAdmin):
+    list_display = ("status",)

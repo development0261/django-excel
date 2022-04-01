@@ -1014,8 +1014,14 @@
                   <td> <div class="new-row-control">
                     <a class="row-add viewRow" id="viewRow-${id}-${tableName}"  ><i class="fa fa-eye"></i></a>
                     <a class="row-add editRow" id="editRow-${id}-${tableName}"><i class="fa fa-edit"></i></a>
-
-          
+                    <a class="row-add deleteRow" id="deleteRow-${id}-${tableName}" href="/deleteBlog/${id}/" ><i class="fa fa-trash"></i></a>
+                    ${
+                      tableName == 'Ready_For_Release' ? `
+                      <a class="row-add downloadxml" id="downloadxml-${tableName}" href="/downloadxml/${id}/" ><i class="fa fa-file-excel-o"></i></a>
+                      <a class="row-add publishRow" id="publishRow-${id}-${tableName}" href="/publishBlog/${id}/" ><i class="fa fa-paper-plane"></i></a>
+                      `:''
+                    }
+                
                     
                   </div></td>
                 `
@@ -1060,7 +1066,13 @@
                 <td> <div class="new-row-control">
                   <a class="row-add viewRow2" id="viewRow2-${id}-${tableName}"  ><i class="fa fa-eye"></i></a>
                   <a class="row-add editRow2" id="editRow2-${id}-${tableName}"><i class="fa fa-edit"></i></a>
-                  
+                  <a class="row-add deleteRow2" id="deleteRow2-${id}-${tableName}" href="/deleteBlog2/${id}/" ><i class="fa fa-trash"></i></a>
+                  ${
+                    tableName == 'Ready_For_Release' ? `
+                    <a class="row-add downloadxml2file2" id="downloadxml2file2-${tableName}" href="/downloadxml2file2/${id}/" ><i class="fa fa-file-excel-o"></i></a>
+                    <a class="row-add publishRow2" id="publishRow2-${id}-${tableName}" href="/publishBlog2/${id}/" ><i class="fa fa-paper-plane"></i></a>
+                    `:''
+                  }
                 </div></td>
               `
             ) 

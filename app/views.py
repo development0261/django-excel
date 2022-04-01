@@ -74,7 +74,13 @@ def userlogin(request):
 # def logfail(req):
 #     return render(req,'logfail.html')
 
-
+def get_permissions(request):
+    try:
+        user_obj = permissions.objects.get(user=request.user)
+        return render(request,'index.html',{'obj':user_obj})
+    except:
+        return HttpResponse("permissions object does not exist")
+    
 
 def register(request):
     registered=False
@@ -96,59 +102,59 @@ def register(request):
         return render(request,'register.html',{'registered':registered})
 
 
-@csrf_exempt
-def saveTableRow(request,tableName):
-    if request.method == "POST":
+# @csrf_exempt
+# def saveTableRow(request,tableName):
+#     if request.method == "POST":
 
-        topic = request.POST['topic']
-        author = request.POST['author']
-        date = request.POST['date']
+#         topic = request.POST['topic']
+#         author = request.POST['author']
+#         date = request.POST['date']
 
-        if tableName == "Content_Pitching":
-            tableObj = apwire_ContentPitching.objects.create(topic = topic,author = author,Date = date)
-            date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
-            formatedDate = date.strftime('%B %d,%Y')
-            return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+#         if tableName == "Content_Pitching":
+#             tableObj = apwire_ContentPitching.objects.create(topic = topic,author = author,Date = date)
+#             date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
+#             formatedDate = date.strftime('%B %d,%Y')
+#             return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
 
-        if tableName == "Writing_Rewrite":
-            tableObj = apwire_WritingRewrite.objects.create(topic = topic,author = author,Date = date)
-            date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
-            formatedDate = date.strftime('%B %d,%Y')
-            return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+#         if tableName == "Writing_Rewrite":
+#             tableObj = apwire_WritingRewrite.objects.create(topic = topic,author = author,Date = date)
+#             date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
+#             formatedDate = date.strftime('%B %d,%Y')
+#             return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
 
-        if tableName == "Review_Draft_1":
-            tableObj = apwire_ReviewDraft1.objects.create(topic = topic,author = author,Date = date)
-            date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
-            formatedDate = date.strftime('%B %d,%Y')
-            return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+#         if tableName == "Review_Draft_1":
+#             tableObj = apwire_ReviewDraft1.objects.create(topic = topic,author = author,Date = date)
+#             date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
+#             formatedDate = date.strftime('%B %d,%Y')
+#             return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
 
-        if tableName == "Review_Draft_2":
-            tableObj = apwire_ReviewDraft2.objects.create(topic = topic,author = author,Date = date)
-            date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
-            formatedDate = date.strftime('%B %d,%Y')
-            return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+#         if tableName == "Review_Draft_2":
+#             tableObj = apwire_ReviewDraft2.objects.create(topic = topic,author = author,Date = date)
+#             date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
+#             formatedDate = date.strftime('%B %d,%Y')
+#             return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
         
-        if tableName == "FDN_Approval_1":
-            tableObj = apwire_FDNApproval.objects.create(topic = topic,author = author,Date = date)
-            date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
-            formatedDate = date.strftime('%B %d,%Y')
-            return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+#         if tableName == "FDN_Approval_1":
+#             tableObj = apwire_FDNApproval.objects.create(topic = topic,author = author,Date = date)
+#             date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
+#             formatedDate = date.strftime('%B %d,%Y')
+#             return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
 
-        if tableName == "Ready_For_Release":
-            tableObj = apwire_ReadyForRelease.objects.create(topic = topic,author = author,Date = date)
-            date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
-            formatedDate = date.strftime('%B %d,%Y')
-            return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+#         if tableName == "Ready_For_Release":
+#             tableObj = apwire_ReadyForRelease.objects.create(topic = topic,author = author,Date = date)
+#             date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
+#             formatedDate = date.strftime('%B %d,%Y')
+#             return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
 
-        if tableName == "App_Published":
-            tableObj = apwire_APPublished.objects.create(topic = topic,author = author,Date = date)
-            date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
-            formatedDate = date.strftime('%B %d,%Y')
-            return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
+#         if tableName == "App_Published":
+#             tableObj = apwire_APPublished.objects.create(topic = topic,author = author,Date = date)
+#             date = datetime.strptime(tableObj.Date, '%Y-%m-%d')
+#             formatedDate = date.strftime('%B %d,%Y')
+#             return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
 
 def getRowData(request,id,tableName):
     
-    tableObj = Blog.objects.get(pk = id)
+    tableObj = Ap_Wire.objects.get(pk = id)
     date = tableObj.date
     formatedDate = date.strftime('%Y-%m-%d')
     # image = tableObj.image
@@ -159,7 +165,7 @@ def getRowData(request,id,tableName):
 
 def getRowData2(request,id,tableName):
     
-    tableObj = Blog2.objects.get(pk = id)
+    tableObj = Ap_News.objects.get(pk = id)
     date = tableObj.date
     formatedDate = date.strftime('%Y-%m-%d')
     imageobj = None
@@ -171,7 +177,7 @@ def editBlog(request,pk):
     if request.method == 'POST':
         print(pk)
         print(request.POST['description'])
-        blog = Blog.objects.filter(pk=pk).update(topic=request.POST['topic'],author=request.user,description=request.POST['description'])
+        blog = Ap_Wire.objects.filter(pk=pk).update(topic=request.POST['topic'],author=request.user,description=request.POST['description'])
        
         blog.save()
         print("called")
@@ -190,7 +196,7 @@ def editData(request,id,tableName):
     print(description)
  
     
-    tableObj = Blog.objects.get(pk = id)
+    tableObj = Ap_Wire.objects.get(pk = id)
     
     print(id)
     
@@ -209,7 +215,7 @@ def editData2(request,id,tableName):
     description = request.POST['description']
  
     
-    tableObj = Blog2.objects.get(pk = id)
+    tableObj = Ap_News.objects.get(pk = id)
     
     tableObj.description = description
     tableObj.topic = topic
@@ -235,13 +241,13 @@ def viewfunction(request):
     # print(roleint)
 
     if request.user.is_authenticated:
-        apwire_ContentPitching_data = Blog.objects.filter(status='Content_Pitching') 
-        apwire_WritingRewrite_data = Blog.objects.filter(status='Writing_Rewrite')
-        apwire_ReviewDraft1_data = Blog.objects.filter(status='Review_Draft_1')
-        apwire_ReviewDraft2_data = Blog.objects.filter(status='Review_Draft_2')
-        apwire_FDNApproval_data = Blog.objects.filter(status='FDN_Approval_1')
-        apwire_ReadyForRelease_data = Blog.objects.filter(status='Ready_For_Release')
-        apwire_APPublished_data = Blog.objects.filter(status='App_Published')
+        apwire_ContentPitching_data = Ap_Wire.objects.filter(status='Content_Pitching') 
+        apwire_WritingRewrite_data = Ap_Wire.objects.filter(status='Writing_Rewrite')
+        apwire_ReviewDraft1_data = Ap_Wire.objects.filter(status='Review_Draft_1')
+        apwire_ReviewDraft2_data = Ap_Wire.objects.filter(status='Review_Draft_2')
+        apwire_FDNApproval_data = Ap_Wire.objects.filter(status='FDN_Approval_1')
+        apwire_ReadyForRelease_data = Ap_Wire.objects.filter(status='Ready_For_Release')
+        apwire_APPublished_data = Ap_Wire.objects.filter(status='App_Published')
         context_dict = {}
         context_dict['Content Pitching'] = apwire_ContentPitching_data
         context_dict['Writing Rewrite'] = apwire_WritingRewrite_data
@@ -252,13 +258,13 @@ def viewfunction(request):
         context_dict['App Published'] = apwire_APPublished_data
 
 
-        apnews_ContentPitching_data = Blog2.objects.filter(status='Content_Pitching') 
-        apnews_WritingRewrite_data = Blog2.objects.filter(status='Writing_Rewrite')
-        apnews_ReviewDraft1_data = Blog2.objects.filter(status='Review_Draft_1')
-        apnews_ReviewDraft2_data = Blog2.objects.filter(status='Review_Draft_2')
-        apnews_FDNApproval_data = Blog2.objects.filter(status='FDN_Approval_1')
-        apnews_ReadyForRelease_data = Blog2.objects.filter(status='Ready_For_Release')
-        apnews_APPublished_data = Blog2.objects.filter(status='App_Published')
+        apnews_ContentPitching_data = Ap_News.objects.filter(status='Content_Pitching') 
+        apnews_WritingRewrite_data = Ap_News.objects.filter(status='Writing_Rewrite')
+        apnews_ReviewDraft1_data = Ap_News.objects.filter(status='Review_Draft_1')
+        apnews_ReviewDraft2_data = Ap_News.objects.filter(status='Review_Draft_2')
+        apnews_FDNApproval_data = Ap_News.objects.filter(status='FDN_Approval_1')
+        apnews_ReadyForRelease_data = Ap_News.objects.filter(status='Ready_For_Release')
+        apnews_APPublished_data = Ap_News.objects.filter(status='App_Published')
         context_dict1 = {}
         context_dict1['Content Pitching'] = apnews_ContentPitching_data
         context_dict1['Writing Rewrite'] = apnews_WritingRewrite_data
@@ -267,6 +273,10 @@ def viewfunction(request):
         context_dict1['FDN Approval 1'] = apnews_FDNApproval_data
         context_dict1['Ready For Release'] = apnews_ReadyForRelease_data
         context_dict1['App Published'] = apnews_APPublished_data
+
+
+        permissions.objects.filter(user=request.user)
+
 
 
 
@@ -281,7 +291,7 @@ def viewfunction(request):
 
 
 def publishBlog2(request,pk):
-    blogobj = Blog2.objects.get(pk=pk)
+    blogobj = Ap_News.objects.get(pk=pk)
     blogobj.status = "App_Published"
     blogobj.publishedon = datetime.today().date()
     blogobj.save()
@@ -325,7 +335,7 @@ def printpdf(desc,imagepath,topic):
 
 
 def downloadpdf(request,pk):
-    blogobj = Blog.objects.get(pk=pk)
+    blogobj = Ap_Wire.objects.get(pk=pk)
     image_data = MEDIA_ROOT+"/"+blogobj.image.name
     print(image_data)
     
@@ -348,7 +358,7 @@ def downloadpdf(request,pk):
     return pdf
 
 def downloadpdf2(request,pk):
-    blogobj = Blog2.objects.get(pk=pk)
+    blogobj = Ap_News.objects.get(pk=pk)
     image_data = MEDIA_ROOT+"/"+blogobj.image.name
     print(image_data)
     
@@ -373,7 +383,7 @@ def downloadpdf2(request,pk):
 
 
 def downloadxml(request,pk,stringPath= None):
-    blogobj = Blog.objects.get(pk=pk)
+    blogobj = Ap_Wire.objects.get(pk=pk)
     root = et.Element('feed')
     root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
     root.set("xmlns:apxh","http://w3.org/1999/xhtml")
@@ -490,7 +500,7 @@ def downloadxml(request,pk,stringPath= None):
         return response
 
 def publishBlog(request,pk):
-    blogobj = Blog.objects.get(pk=pk)
+    blogobj = Ap_Wire.objects.get(pk=pk)
     blogobj.status = "App_Published"
     blogobj.publishedon = datetime.today().date()
     blogobj.save()
@@ -501,7 +511,7 @@ def publishBlog(request,pk):
     return redirect('/?filepath={}'.format(filepath))
 
 def downloadxmlfile2(request,pk):
-    blogobj = Blog.objects.get(pk=pk)
+    blogobj = Ap_Wire.objects.get(pk=pk)
     root = et.Element('feed')
     root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
     root.set("xmlns:apxh","http://w3.org/1999/xhtml")
@@ -618,7 +628,7 @@ def downloadxmlfile2(request,pk):
     return response
 
 def downloadxml2(request,pk,stringPath= None):
-    blogobj = Blog2.objects.get(pk=pk)
+    blogobj = Ap_News.objects.get(pk=pk)
 
     root = et.Element('feed')
     root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
@@ -717,7 +727,7 @@ def downloadxml2(request,pk,stringPath= None):
         return response
 
 def downloadxml2file2(request,pk):
-    blogobj = Blog2.objects.get(pk=pk)
+    blogobj = Ap_News.objects.get(pk=pk)
 
     root = et.Element('feed')
     root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
@@ -879,7 +889,7 @@ def downloadxmlall(request):
     m2 = et.Element('entry')
     root.append (m2)
 
-    blogall = Blog.objects.filter(status="Ready_For_Release")
+    blogall = Ap_Wire.objects.filter(status="Ready_For_Release")
     for blogobj in blogall:
         m2 = et.Element('entry')
         m2.set("xml:lang","en-us")
@@ -983,7 +993,7 @@ def downloadxmlallfile2(request):
     m2.set("xml:lang","en-us")
     root.append (m2)
 
-    blogall = Blog.objects.filter(status="App_Published")
+    blogall = Ap_Wire.objects.filter(status="App_Published")
     for blogobj in blogall:
         m2 = et.Element('entry')
         m2.set("xml:lang","en-us")
@@ -1085,7 +1095,7 @@ def downloadxmlall2(request):
     
 
 
-    blogall = Blog2.objects.filter(status="Ready_For_Release")
+    blogall = Ap_News.objects.filter(status="Ready_For_Release")
     for blogobj in blogall:
         m2 = et.Element('entry')
         m2.set("xml:lang","en-us")
@@ -1188,7 +1198,7 @@ def downloadxmlall2file2(request):
     
 
 
-    blogall = Blog2.objects.filter(status="Ready_For_Release")
+    blogall = Ap_News.objects.filter(status="Ready_For_Release")
     for blogobj in blogall:
         m2 = et.Element('entry')
         m2.set("xml:lang","en-us")
@@ -1261,7 +1271,7 @@ def downloadxmlall2file2(request):
 def createBlog(request):
     print("Createblog")
     if request.method == 'POST':
-        blog = Blog.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description'],status="Content_Pitching")
+        blog = Ap_Wire.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description'],status="Content_Pitching")
         if 'image' in request.FILES:
             image=request.FILES['image']
             blog.image = image
@@ -1273,7 +1283,7 @@ def createBlog(request):
 def createBlog2(request):
     print("Createblog2")
     if request.method == 'POST':
-        blog = Blog2.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description2'],status="Content_Pitching")
+        blog = Ap_News.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description2'],status="Content_Pitching")
         if 'image' in request.FILES:
             image=request.FILES['image']
             blog.image = image
@@ -1293,14 +1303,28 @@ def dropData(request,dropid,removedfrom,addedto):
 
         roles = request.user.get_table_role()
         print(roles[addedto])
-        blog = Blog.objects.get(pk=dropid)
+        blog = Ap_Wire.objects.get(pk=dropid)
         blog.status= addedto
         blog.save()
 
         key_list = list(roles.keys())
         index = key_list.index(addedto)
+        if permissions.objects.filter(user__in = [request.user],status=addedto).exists():
+            permiss = permissions.objects.filter(user = request.user,status=addedto).first()
+            
+            
+            access_dict = {
+                'create':permiss.create ,
+                'edit':permiss.edit ,
+                'view':permiss.view ,
+                'to_delete':permiss.to_delete ,
+                'move':permiss.move,
+                'publish':permiss.publish
+            }
 
-        return JsonResponse({'msg':'success','role':roles[addedto],'tableIndex':index+1})
+
+
+        return JsonResponse({'msg':'success','access_dict':access_dict,'tableIndex':index+1})
 
 
 @csrf_exempt
@@ -1312,25 +1336,39 @@ def dropData2(request,dropid,removedfrom,addedto):
 
         roles = request.user.get_table_role()
         print(roles[addedto])
-        blog = Blog2.objects.get(pk=dropid)
+        blog = Ap_News.objects.get(pk=dropid)
         blog.status= addedto
         blog.save()
 
         key_list = list(roles.keys())
         index = key_list.index(addedto)
+        if permissions.objects.filter(user__in = [request.user],status=addedto).exists():
+            permiss = permissions.objects.filter(user = request.user,status=addedto).first()
+            
+            
+            access_dict = {
+                'create':permiss.create ,
+                'edit':permiss.edit ,
+                'view':permiss.view ,
+                'to_delete':permiss.to_delete ,
+                'move':permiss.move,
+                'publish':permiss.publish
+            }
 
-        return JsonResponse({'msg':'success','role':roles[addedto],'tableIndex':index+1})    
+
+
+        return JsonResponse({'msg':'success','access_dict':access_dict,'tableIndex':index+1})
 
 def deleteBlog(request,pk):
-    blogobj = Blog.objects.filter(pk=pk)
-    name=Blog.objects.get(pk=pk).topic
+    blogobj = Ap_Wire.objects.filter(pk=pk)
+    name=Ap_Wire.objects.get(pk=pk).topic
     blogobj.delete()
     messages.info(request,"Blog {} has been deleted".format(name))
     return redirect('view')
 
 def deleteBlog2(request,pk):
-    blogobj = Blog2.objects.filter(pk=pk)
-    name=Blog2.objects.get(pk=pk).topic
+    blogobj = Ap_News.objects.filter(pk=pk)
+    name=Ap_News.objects.get(pk=pk).topic
     blogobj.delete()
     messages.info(request,"Blog {} has been deleted".format(name))
     return redirect('view')

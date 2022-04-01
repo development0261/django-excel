@@ -3,7 +3,6 @@ from secrets import choice
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
-from multiselectfield import MultiSelectField
 ROLE = [
         ('Admin', 'Admin'),
         ('Writer', 'Writer'),
@@ -47,7 +46,8 @@ class UserCustom(AbstractUser):
             'Ready_For_Release':self.ReadyForRelease,
             'App_Published':self.APPublished
         }
-
+    
+       
     # def get_role_data(self):
     #     return UserTableConnection.objects.filter(user = self)
 # class userdata(models.Model):
@@ -62,7 +62,7 @@ from ckeditor.fields import RichTextField
 import uuid
 
 
-class Blog(models.Model):
+class Ap_Wire(models.Model):
     topic = models.CharField(max_length=30)
     author = models.ForeignKey(UserCustom,on_delete=models.CASCADE)
     description = RichTextField()
@@ -73,7 +73,7 @@ class Blog(models.Model):
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     updated = models.DateField(auto_now=True)
 
-class Blog2(models.Model):
+class Ap_News(models.Model):
     topic = models.CharField(max_length=30)
     author = models.ForeignKey(UserCustom,on_delete=models.CASCADE)
     description = RichTextField()
@@ -83,7 +83,23 @@ class Blog2(models.Model):
     publishedon = models.DateField(null=True, blank=True)
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     updated = models.DateField(auto_now=True)
-   
+
+
+
+class permissions(models.Model):
+    user = models.ManyToManyField(UserCustom)
+    status = models.CharField(choices=tables_choice,max_length=20)
+    create = models.BooleanField(default=False)
+    edit = models.BooleanField(default=False)
+    view = models.BooleanField(default=False)
+    move = models.BooleanField(default=False)
+    publish = models.BooleanField(default=False)
+    to_delete = models.BooleanField(default=False,verbose_name="delete")
+
+    
+        
+        
+
 
 # class apwire_ContentPitching(models.Model):
 #     title = models.CharField(max_length=20)
