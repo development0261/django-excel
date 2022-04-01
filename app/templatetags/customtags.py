@@ -52,7 +52,7 @@ def checkTablePermissionmove(obj, tableName):
         return permissions.objects.filter(user = obj,status=tableName).first().move
 
 @register.filter
-def checkTablePermissionmove(obj, tableName):
+def checkTablePermissionpublish(obj, tableName):
     tableName = tableName.replace(" ","_")
     if permissions.objects.filter(user__in = [obj],status=tableName).exists():
         return permissions.objects.filter(user = obj,status=tableName).first().publish

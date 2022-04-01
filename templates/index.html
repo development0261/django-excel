@@ -182,7 +182,7 @@
                             <a class="row-add downloadxml" id="downloadxml-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxml' v.pk %}><i class="fa fa-file-excel-o"></i></a>
                             {%endif%}
 
-                            {% if user|validateuser:key == "Publisher" and forloop.parentloop.counter == 6 %}
+                            {% if user|checkTablePermissionpublish:key and forloop.parentloop.counter == 6 %}
                             <a class="row-add publishRow" id="publishRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'publishBlog' v.pk %}><i class="fa fa-paper-plane"></i></a>
                             {%endif%}
 
@@ -289,7 +289,7 @@
                             <a class="row-add downloadxml2file2" id="downloadxml2file2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxml' v.pk %}><i class="fa fa-file-excel-o"></i></a>
                             {%endif%}
 
-                            {% if user|validateuser:key == "Publisher" and forloop.parentloop.counter == 6 %}
+                            {% if user|checkTablePermissionpublish:key and forloop.parentloop.counter == 6 %}
                             <a class="row-add publishRow2" id="publishRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'publishBlog' v.pk %}><i class="fa fa-paper-plane"></i></a>
                             {%endif%}
 
