@@ -36,8 +36,30 @@ class customuseradmin(UserAdmin):
 # admin.site.register(UserCustom,customuseradmin)
 
 @admin.register(UserCustom)
-class UserProfileAdmin(admin.ModelAdmin):
+class UserProfileAdmin(UserAdmin):
     list_display = ['username','email','first_name','last_name','is_staff','is_superuser']
+
+    fieldsets = (
+        *UserAdmin.fieldsets,  # original form fieldsets, expanded
+        (                      # new fieldset added on to the bottom
+            'Admin User Actions',  # group heading of your choice; set to None for a blank space instead of a header
+            {
+                'fields': (
+                    'Content_Pitching',
+                    'Writing_Rewrite',
+                    'ReviewDraft1',
+                    'ReviewDraft2',
+                    'FDNApproval',
+                    'ReadyForRelease',
+                    'APPublished',
+                    'accessint'
+
+                    
+                ),
+            },
+        ),
+    )
+
 
 @admin.register(Ap_Wire)
 class BlogDisplay(admin.ModelAdmin):
@@ -49,4 +71,7 @@ class BlogDisplay(admin.ModelAdmin):
 
 @admin.register(permissions)
 class selectiondisplay(admin.ModelAdmin):
-    list_display = ("status",)
+    list_display = ("status",'get_user_permission',"create","edit","view","move","publish","to_delete")
+
+    def get_user_permission(self, obj):
+        return " || ".join([i.username for i in obj.user.all()])

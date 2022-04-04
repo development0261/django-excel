@@ -73,6 +73,9 @@ class Ap_Wire(models.Model):
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     updated = models.DateField(auto_now=True)
 
+    class Meta:
+      verbose_name_plural = "Ap-Wire"
+
 class Ap_News(models.Model):
     topic = models.CharField(max_length=30)
     author = models.ForeignKey(UserCustom,on_delete=models.CASCADE)
@@ -83,6 +86,9 @@ class Ap_News(models.Model):
     publishedon = models.DateField(null=True, blank=True)
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     updated = models.DateField(auto_now=True)
+
+    class Meta:
+      verbose_name_plural = "Ap-News"
 
 
 
@@ -95,6 +101,12 @@ class permissions(models.Model):
     move = models.BooleanField(default=False)
     publish = models.BooleanField(default=False)
     to_delete = models.BooleanField(default=False,verbose_name="delete")
+    Permission_Name = models.CharField(max_length=20,null=True,blank=True)
+
+    class Meta:
+      verbose_name_plural = "Permissions"
+
+    
 
     
         
