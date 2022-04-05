@@ -18,14 +18,8 @@ class customuseradmin(UserAdmin):
             'Admin User Actions',  # group heading of your choice; set to None for a blank space instead of a header
             {
                 'fields': (
-                    'Content_Pitching',
-                    'Writing_Rewrite',
-                    'ReviewDraft1',
-                    'ReviewDraft2',
-                    'FDNApproval',
-                    'ReadyForRelease',
-                    'APPublished',
-                    'accessint'
+
+                    'accessint',
 
                     
                 ),
@@ -45,14 +39,9 @@ class UserProfileAdmin(UserAdmin):
             'Admin User Actions',  # group heading of your choice; set to None for a blank space instead of a header
             {
                 'fields': (
-                    'Content_Pitching',
-                    'Writing_Rewrite',
-                    'ReviewDraft1',
-                    'ReviewDraft2',
-                    'FDNApproval',
-                    'ReadyForRelease',
-                    'APPublished',
-                    'accessint'
+                    
+
+                    'accessint',
 
                     
                 ),
@@ -74,4 +63,4 @@ class selectiondisplay(admin.ModelAdmin):
     list_display = ("status",'get_user_permission',"create","edit","view","move","publish","to_delete")
 
     def get_user_permission(self, obj):
-        return " || ".join([i.username for i in obj.user.all()])
+        return " || ".join([p.username for p in obj.user.all()])
