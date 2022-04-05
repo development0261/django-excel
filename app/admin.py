@@ -18,14 +18,8 @@ class customuseradmin(UserAdmin):
             'Admin User Actions',  # group heading of your choice; set to None for a blank space instead of a header
             {
                 'fields': (
-                    'Content_Pitching',
-                    'Writing_Rewrite',
-                    'ReviewDraft1',
-                    'ReviewDraft2',
-                    'FDNApproval',
-                    'ReadyForRelease',
-                    'APPublished',
-                    'accessint'
+
+                    'accessint',
 
                     
                 ),
@@ -45,14 +39,8 @@ class UserProfileAdmin(UserAdmin):
             'Admin User Actions',  # group heading of your choice; set to None for a blank space instead of a header
             {
                 'fields': (
-                    'Content_Pitching',
-                    'Writing_Rewrite',
-                    'ReviewDraft1',
-                    'ReviewDraft2',
-                    'FDNApproval',
-                    'ReadyForRelease',
-                    'APPublished',
-                    'accessint'
+
+                    'accessint',
 
                     
                 ),

@@ -24,13 +24,6 @@ tables_choice = [
 from django.contrib.auth.models import AbstractUser
 
 class UserCustom(AbstractUser):
-    Content_Pitching = models.CharField(choices=ROLE, max_length=20,default="Writer")
-    Writing_Rewrite = models.CharField(choices=ROLE, max_length=20,default="Writer")
-    ReviewDraft1 = models.CharField(choices=ROLE, max_length=20,default="Writer")
-    ReviewDraft2 = models.CharField(choices=ROLE, max_length=20,default="Writer")
-    FDNApproval = models.CharField(choices=ROLE, max_length=20,default="Writer")
-    ReadyForRelease = models.CharField(choices=ROLE, max_length=20,default="Writer")
-    APPublished = models.CharField(choices=ROLE, max_length=20,default="Writer")
     accessint = models.IntegerField(default=7,validators=[
         MaxValueValidator(limit_value=7),
         MinValueValidator(limit_value=1)
