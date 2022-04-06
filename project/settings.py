@@ -31,7 +31,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'app.UserCustom'
-
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8002']
 # Application definition
 
 INSTALLED_APPS = [
@@ -116,22 +116,22 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'static')
 ]
 
-DATABASES = {
-  'default': {
-    'ENGINE': 'django.db.backends.postgresql',
-    'HOST': os.environ.get('DB_HOST','ruby.db.elephantsql.com'),
-    'NAME': os.environ.get('DB_NAME','bzfgfjvg'),
-    'USER': os.environ.get('DB_USER','bzfgfjvg'),
-    'PASSWORD': os.environ.get('DB_PASS','9chqJT87ipug2ykOTAQ9e6pADtAYVj_n'),
-   }
-}
-
 # DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db1.sqlite3',
-#     }
+#   'default': {
+#     'ENGINE': 'django.db.backends.postgresql',
+#     'HOST': os.environ.get('DB_HOST','ruby.db.elephantsql.com'),
+#     'NAME': os.environ.get('DB_NAME','shaktiblog'),
+#     'USER': os.environ.get('DB_USER','postgres'),
+#     'PASSWORD': os.environ.get('DB_PASS','ShaktiDB123'),
+#    }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db1.sqlite3',
+    }
+}
 
 
 # Password validation

@@ -1,7 +1,8 @@
 version: '3.9'
 
 networks:
-  shaktiblog:
+  shaktiblog_net:
+    name: shaktiblog_net
     driver: bridge
 
 volumes:
@@ -10,9 +11,11 @@ volumes:
 
 services:
   web:
-    build: .
+    #build: .
+    image: $FULL_IMAGE_NAME
     container_name: shaktiblog
     ports: ["8001:8000"]
+    #command: ping 8.8.8.8
     command: >
       sh -c "python3 manage.py makemigrations && python3 manage.py migrate &&
         python3 manage.py runserver 0.0.0.0:8000"
@@ -25,26 +28,9 @@ services:
       DB_PASS: "ShaktiDB123"
     volumes:
       - shaktiblog_data:/usr/src/app
-    depends_on:
-      - db
     networks:
-      - shaktiblog
+      - shaktiblog_net
     dns:
       - 8.8.8.8
       - 4.4.4.4
 
-  db:
-    image: postgres:13-alpine
-    container_name: shaktiblog_db
-    environment:
-      POSTGRES_DB: "shaktiblog"
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "ShaktiDB123"
-      POSTGRES_HOST_AUTH_METHOD: "trust"
-    ports:
-      - "5432:5432"
-    restart: always
-    networks:
-      - shaktiblog
-    volumes:
-      - shaktiblog_db:/var/lib/postgresql/data"

@@ -43,8 +43,6 @@ from reportlab.lib.units import cm
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import Image, Frame
 
-def newline():
-    pass
 
 def userlogin(request):
     if request.method == 'POST':
@@ -204,6 +202,12 @@ def editData(request,id,tableName):
     tableObj.topic = topic
     tableObj.save()
 
+    if 'image' in request.FILES:
+        image=request.POST['image']
+        tableObj.image = image
+        tableObj.save()
+        return redirect('view')
+
     date = datetime.strptime(str(tableObj.date), '%Y-%m-%d')
 
     formatedDate = date.strftime('%B %d,%Y')
@@ -220,6 +224,11 @@ def editData2(request,id,tableName):
     tableObj.description = description
     tableObj.topic = topic
     tableObj.save()
+    if 'image' in request.FILES:
+        image=request.POST['image']
+        tableObj.image = image
+        tableObj.save()
+        return redirect('view')
 
     date = datetime.strptime(str(tableObj.date), '%Y-%m-%d')
 
@@ -414,8 +423,11 @@ def downloadxml(request,pk,stringPath= None):
     m2.set("xml:lang","en-us")
     root.append (m2)
 
-    
-    uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-2"
+    reverted_count=str(blogobj.reverted_count)
+    if reverted_count == "None" :
+        uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-0"
+    else:
+        uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
 
     b1 = et.SubElement(m2, "id")
     b1.text = str(uid)
@@ -457,34 +469,10 @@ def downloadxml(request,pk,stringPath= None):
             ele1.set("target","_blank")
             ele1.set("rel","nofollow noopener")
             ele1.text=str(obj.text)
-        # for x in listtext:
-        #     ele1 = et.SubElement(ele,"apxh:a")
-        
-    # print(z)
-        
 
-        
-        
-        # soup = bs(str(i))
-        # soup.findAll(href='https://stackoverflow.com/')
-
-        # import re
-        # m = re.search('(<a .*>)', i)
-        # if m:
-        #     print("flag hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
-        #     print(m.group(1))
-        # ele = et.SubElement(o1, "apxh:p")
-        # ele.text = str(i)
-    
-    
-
-    
-    
     tree = et.ElementTree(root)
 
     tree2 = et.ElementTree(root)
-    
-  
 
     tree.write('{}/xml/output_xml_Blog_AP_Wire_{}.xml'.format(MEDIA_ROOT,blogobj.pk), encoding="utf-8")
     
@@ -547,8 +535,12 @@ def downloadxmlfile2(request,pk):
     m2.set("xml:lang","en-us")
     root.append (m2)
 
+    reverted_count=str(blogobj.reverted_count)
+    if reverted_count == "None" :
+        uid = "urn:publicid:www.heart.org:"+str(blogobj.unique_id)+"-0"
+    else:
+        uid = "urn:publicid:www.heart.org:"+str(blogobj.unique_id)+"-"+reverted_count
     
-    uid = "urn:publicid:www.heart.org:"+str(blogobj.unique_id)+"-2"
 
     b1 = et.SubElement(m2, "id")
     b1.text = str(uid)
@@ -1300,15 +1292,28 @@ def dropData(request,dropid,removedfrom,addedto):
         print(dropid)
         print(removedfrom)
         print(addedto)
-
-        roles = request.user.get_table_role()
-        print(roles[addedto])
+        
+        
         blog = Ap_Wire.objects.get(pk=dropid)
         blog.status= addedto
         blog.save()
-
-        key_list = list(roles.keys())
+        roles = [
+            'Content_Pitching',
+            'Writing_Rewrite',
+            'Review_Draft_1',
+            'Review_Draft_2',
+            'FDN_Approval_1',
+            'Ready_For_Release',
+            'App_Published'
+        ]
+        key_list = list(roles)
         index = key_list.index(addedto)
+        print("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+        print(removedfrom)
+        if removedfrom == "App_Published":
+            
+            blog.reverted_count += 1
+            blog.save()
         if permissions.objects.filter(user__in = [request.user],status=addedto).exists():
             permiss = permissions.objects.filter(user = request.user,status=addedto).first()
             
@@ -1334,14 +1339,25 @@ def dropData2(request,dropid,removedfrom,addedto):
         print(removedfrom)
         print(addedto)
 
-        roles = request.user.get_table_role()
-        print(roles[addedto])
         blog = Ap_News.objects.get(pk=dropid)
         blog.status= addedto
         blog.save()
 
-        key_list = list(roles.keys())
+        blog.save()
+        roles = [
+            'Content_Pitching',
+            'Writing_Rewrite',
+            'Review_Draft_1',
+            'Review_Draft_2',
+            'FDN_Approval_1',
+            'Ready_For_Release',
+            'App_Published'
+        ]
+        key_list = list(roles)
         index = key_list.index(addedto)
+        if removedfrom == "App_Published":
+            blog.reverted_count += 1
+            blog.save()
         if permissions.objects.filter(user__in = [request.user],status=addedto).exists():
             permiss = permissions.objects.filter(user = request.user,status=addedto).first()
             

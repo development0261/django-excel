@@ -1,0 +1,24 @@
+version: '3.9'
+
+networks:
+  shaktiblog_net:
+    external:
+      name: shaktiblog_net
+
+volumes:
+  shaktiblog_db:
+
+services:
+  db:
+    image: postgres:13-alpine
+    container_name: shaktiblog_db
+    environment:
+      POSTGRES_DB: "shaktiblog"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "ShaktiDB123"
+      POSTGRES_HOST_AUTH_METHOD: "trust"    
+    restart: always
+    networks:
+      - shaktiblog_net
+    volumes:
+      - shaktiblog_db:/var/lib/postgresql/data"

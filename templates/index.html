@@ -798,7 +798,7 @@
                                       <textarea name="description" rows="10" cols="55" id="description_${tableName}_${data.pk}">${data.content}</textarea>
                                       </div>
               
-                                     
+             
                
                                       <button type="button" class="login-submit addEditRow" id="addEditRow-${data.pk}-${tableName}" name="Add" value="Add">Save Blog</button>
                                       
@@ -870,7 +870,6 @@
                                         <textarea name="description" rows="10" cols="55" id="News_description_${tableName}_${data.pk}">${data.content}</textarea>
                                         </div>
                 
-                                       
                  
                                         <button type="button" class="login-submit addEditRow2" id="News_addEditRow2-${data.pk}-${tableName}" name="Add" value="Add">Save Blog</button>
                                         <a  style="text-decoration:none;cursor:pointer" class="ml-3 closeModel2" data-dismiss="modal" >Close</a>
@@ -1097,6 +1096,7 @@
         cursor: "move",
         zIndex: 99999,
         stop: function (e, t) {
+          console.log("STP")
           console.log(e)
           console.log(t)
           console.log($(this))
@@ -1155,110 +1155,121 @@
        
             console.log(addedto)
             console.log(removedfrom)
+
+            isSuperuser = "{{user.is_superuser}}"
+            console.log(isSuperuser)
+            
             if($(`#tableBody_${removedfrom} tr`).length == 0){
                 $(`#tableBody_${removedfrom}`).addClass('test')
             }
-            $.ajax({
-              url : "draganddrop/"+dropid+"/"+removedfrom+"/"+addedto+"/", // Url of backend (can be python, php, etc..)
-              type: "POST", // data type (can be get, post, put, delete)
-              data : {},
-              success:function(response){
-                var primaryKeyArray = row_id.split("_")
-                var pk = primaryKeyArray[primaryKeyArray.length - 1]
-                var row_td_content = $(`#${row_id} td:last-child`).html()
-                console.log(row_td_content)
-                
-                
-                
-                  
-                
-                  $(`#${row_id} td > div > a.deleteRow`).remove()
-                  $(`#${row_id} td > div > a.editRow`).remove()
-                  $(`#${row_id} td > div > a.publishRow`).remove()
-                  $(`#${row_id} td > div > a.viewRow`).remove()
-                  $(`#${row_id} td > div > a.downloadpdf`).remove()
-                  $(`#${row_id} td > div > a.downloadxml`).remove()
-                  
-                  
-                  if (response.access_dict['view'] ==  true ){
-                    $(`#${row_id} td > div`).append(
-                    `
-                    <a class="row-add viewRow" id="viewRow-${pk}-${addedto}"  ><i class="fa fa-eye"></i></a>
-                    `
-                  )
-                  }
 
-                  if (response.access_dict['edit'] ==  true ){
+         
+              $.ajax({
+                url : "draganddrop/"+dropid+"/"+removedfrom+"/"+addedto+"/", // Url of backend (can be python, php, etc..)
+                type: "POST", // data type (can be get, post, put, delete)
+                data : {},
+                success:function(response){
+                  var primaryKeyArray = row_id.split("_")
+                  var pk = primaryKeyArray[primaryKeyArray.length - 1]
+                  var row_td_content = $(`#${row_id} td:last-child`).html()
+                  console.log(row_td_content)
+                  
+                  
+                  
                     
-                    $(`#${row_id} td > div`).append(
-                    `
-                    <a class="row-add editRow" id="editRow-${pk}-${addedto}"  ><i class="fa fa-edit"></i></a>
-                    `
-                  )
-                  }
-
-                  if (response.access_dict['to_delete'] ==  true ){
-                    
-                    $(`#${row_id} td > div`).append(
-                    `
-                    <a class="row-add deleteRow" id="deleteRow-${pk}-${addedto}" href="/deleteBlog/${pk}/" ><i class="fa fa-trash"></i></a>
-                    `
-                  )
-                  }
                   
-                  
-
-                  if (response.access_dict['view'] ==  true && response.tableIndex >= 6 ){
-                    $(`#${row_id} td > div`).append(
-                    `
-                    <a class="row-add downloadxml" id="downloadxml-${addedto}" href="/downloadxml/${pk}/" ><i class="fa fa-file-excel-o"></i></a>
-                    
-                    `
-                  )
-                  }
-
-                  if (response.access_dict['publish'] ==  true && response.tableIndex == 6){
-                     
-                    $(`#${row_id} td > div`).append(
-                    `
-                    <a class="row-add publishRow" id="publishRow-${pk}-${addedto}" href="/publishBlog/${pk}/" ><i class="fa fa-paper-plane"></i></a>
-                    `
-                  )
-                  }
-
-                  if (response.access_dict['view'] ==  true && response.tableIndex == 7 ){
-                    $(`#${row_id} td > div`).append(
-                    `
-                    <a class="row-add downloadxml" id="downloadxml-${addedto}" href="/downloadxml/${pk}/" ><i class="fa fa-file-powerpoint-o"></i></a>
-                    
-                    `
-                  )
-                  }
-
-                  
-                  
-                  if (response.access_dict['view'] ==  true && response.tableIndex <= 5 && removedfrom == "Ready_For_Release" && addedto == "FDN_Approval_1" ){
+                    $(`#${row_id} td > div > a.deleteRow`).remove()
+                    $(`#${row_id} td > div > a.editRow`).remove()
+                    $(`#${row_id} td > div > a.publishRow`).remove()
+                    $(`#${row_id} td > div > a.viewRow`).remove()
+                    $(`#${row_id} td > div > a.downloadpdf`).remove()
                     $(`#${row_id} td > div > a.downloadxml`).remove()
-                  }
-
-                  if (response.tableIndex==7){
-                  $(`#${row_id} td > div > a.editRow`).remove()
-                  $(`#${row_id} td > div > a.deleteRow`).remove()
+                    
+                    
+                    if (response.access_dict['view'] ==  true ){
+                      $(`#${row_id} td > div`).append(
+                      `
+                      <a class="row-add viewRow" id="viewRow-${pk}-${addedto}"  ><i class="fa fa-eye"></i></a>
+                      `
+                    )
+                    }
+  
+                    if (response.access_dict['edit'] ==  true ){
+                      
+                      $(`#${row_id} td > div`).append(
+                      `
+                      <a class="row-add editRow" id="editRow-${pk}-${addedto}"  ><i class="fa fa-edit"></i></a>
+                      `
+                    )
+                    }
+  
+                    if (response.access_dict['to_delete'] ==  true ){
+                      
+                      $(`#${row_id} td > div`).append(
+                      `
+                      <a class="row-add deleteRow" id="deleteRow-${pk}-${addedto}" href="/deleteBlog/${pk}/" ><i class="fa fa-trash"></i></a>
+                      `
+                    )
+                    }
+                    
+                    
+  
+                    if (response.access_dict['view'] ==  true && response.tableIndex >= 6 ){
+                      $(`#${row_id} td > div`).append(
+                      `
+                      <a class="row-add downloadxml" id="downloadxml-${addedto}" href="/downloadxml/${pk}/" ><i class="fa fa-file-excel-o"></i></a>
+                      
+                      `
+                    )
+                    }
+  
+                    if (response.access_dict['publish'] ==  true && response.tableIndex == 6){
+                       
+                      $(`#${row_id} td > div`).append(
+                      `
+                      <a class="row-add publishRow" id="publishRow-${pk}-${addedto}" href="/publishBlog/${pk}/" ><i class="fa fa-paper-plane"></i></a>
+                      `
+                    )
+                    }
+  
+                    if (response.access_dict['view'] ==  true && response.tableIndex == 7 ){
+                      $(`#${row_id} td > div`).append(
+                      `
+                      <a class="row-add downloadxml" id="downloadxml-${addedto}" href="/downloadxml/${pk}/" ><i class="fa fa-file-powerpoint-o"></i></a>
+                      
+                      `
+                    )
+                    }
+  
+                    
+                    
+                    if (response.access_dict['view'] ==  true && response.tableIndex <= 5 && removedfrom == "Ready_For_Release" && addedto == "FDN_Approval_1" ){
+                      $(`#${row_id} td > div > a.downloadxml`).remove()
+                    }
+  
+                    if (response.tableIndex==7){
+                    $(`#${row_id} td > div > a.editRow`).remove()
+                    $(`#${row_id} td > div > a.deleteRow`).remove()
+                    
+                    
+  
+                    }
+  
+                   
+  
+                    
+  
+                    
                   
+  
                   
+  
+  
+                }
+              }) 
+           
 
-                  }
-
-                  
-
-                  
-                
-
-                
-
-
-              }
-            }) 
+           
             
         }
       }

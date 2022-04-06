@@ -56,7 +56,7 @@ import uuid
 
 
 class Ap_Wire(models.Model):
-    topic = models.CharField(max_length=30)
+    topic = models.CharField(max_length=200)
     author = models.ForeignKey(UserCustom,on_delete=models.CASCADE)
     description = RichTextField()
     image = models.ImageField(null=True,blank=True)
@@ -65,12 +65,13 @@ class Ap_Wire(models.Model):
     publishedon = models.DateField(null=True, blank=True)
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     updated = models.DateField(auto_now=True)
+    reverted_count = models.IntegerField(default=1)
 
     class Meta:
-      verbose_name_plural = "Ap-Wire"
+      verbose_name_plural = "AP-Wire"
 
 class Ap_News(models.Model):
-    topic = models.CharField(max_length=30)
+    topic = models.CharField(max_length=200)
     author = models.ForeignKey(UserCustom,on_delete=models.CASCADE)
     description = RichTextField()
     image = models.ImageField(null=True,blank=True)
@@ -79,9 +80,10 @@ class Ap_News(models.Model):
     publishedon = models.DateField(null=True, blank=True)
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     updated = models.DateField(auto_now=True)
+    reverted_count = models.IntegerField(default=1)
 
     class Meta:
-      verbose_name_plural = "Ap-News"
+      verbose_name_plural = "AP-News"
 
 
 
