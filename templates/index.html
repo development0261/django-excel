@@ -1719,8 +1719,8 @@ $(document).on('change','.wire_cat',function(){
   var tbId = $(this).attr('id').slice(9,)
   var value=  $(this).val().toLowerCase();
   console.log(value,tbId)
-  $(`#${tbId} tbody tr`).filter(function() {
-    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+  $(`#${tbId} tbody tr td:nth-child(4)`).filter(function() {
+    $(`#${tbId} tbody tr`).toggle($(this).text().toLowerCase().indexOf(value) > -1)
   });
 })
 
@@ -1745,7 +1745,7 @@ $(document).on('change','.news_cat',function(){
   var tbId = $(this).attr('id').slice(9,)
   var value=  $(this).val().toLowerCase();
   console.log(value,tbId)
-  $(`#${tbId} tbody tr`).filter(function() {
+  $(`#${tbId} tbody tr td:nth-child(3)`).filter(function() {
     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
   });
 })
