@@ -854,7 +854,7 @@
               url: "getRowData/"+id+"/"+tableName+"/",
               success: function(data){ 
                   console.log(data)
-                  alert(data.category)
+                  
 
                   
                   // $(`#${keys[2]}_${keys[1]}`).children('td').remove()
@@ -955,7 +955,7 @@
               $.ajax({
                 url: "getRowData2/"+id+"/"+tableName+"/",
                 success: function(data){ 
-                  alert(data.category)
+                  
                     console.log(data)
                     // $(`#${keys[2]}_${keys[1]}`).children('td').remove()
                     // $(`#${keys[2]}_${keys[1]}`).append(
@@ -1168,6 +1168,8 @@
 
                   <td>${data.topic}</td>
                   <td>${data.author}</td>
+                  <td>${data.category}</td>
+
                   <td>${data.date}</td>
                   
                   <td> <div class="new-row-control">
@@ -1232,6 +1234,7 @@
 
                 <td>${data.topic}</td>
                 <td>${data.author}</td>
+                <td>${data.category}</td>
                 <td>${data.date}</td>
                 
                 <td> <div class="new-row-control">

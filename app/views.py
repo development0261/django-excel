@@ -211,7 +211,7 @@ def editData(request,id,tableName):
     date = datetime.strptime(str(tableObj.date), '%Y-%m-%d')
 
     formatedDate = date.strftime('%B %d,%Y')
-    return JsonResponse({'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})
+    return JsonResponse({'category':tableObj.category.name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})
 
 @csrf_exempt
 def editData2(request,id,tableName):
@@ -235,7 +235,7 @@ def editData2(request,id,tableName):
     date = datetime.strptime(str(tableObj.date), '%Y-%m-%d')
 
     formatedDate = date.strftime('%B %d,%Y')
-    return JsonResponse({'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})
+    return JsonResponse({'category':tableObj.category.name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})
 
 
 
