@@ -54,6 +54,16 @@ class UserCustom(AbstractUser):
 from ckeditor.fields import RichTextField
 import uuid
 
+# categories = {
+#     ('Education','Education'),
+#     ("Minig Digital Currency","Minig Digital Currency"),
+#     ("MSB & PayDay","MSB & PayDay"),
+#     ("Child Poverty","Child Poverty"),
+#     ("Money with Hearts and Mind","Money with Hearts and Mind")
+# }
+
+class category(models.Model):
+    name = models.CharField(max_length=100)
 
 class Ap_Wire(models.Model):
     topic = models.CharField(max_length=200)
@@ -62,10 +72,11 @@ class Ap_Wire(models.Model):
     image = models.ImageField(null=True,blank=True)
     date = models.DateField(auto_now_add=True)
     status = models.CharField(choices=tables_choice,max_length=30,default="APWire_Content_Pitching")
-    publishedon = models.DateField(null=True, blank=True)
+    published_on = models.DateField(null=True, blank=True)
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    updated = models.DateField(auto_now=True)
+    updated = models.DateTimeField(auto_now=True)
     reverted_count = models.IntegerField(default=1)
+    category = models.ForeignKey(category,on_delete=models.CASCADE)
 
     class Meta:
       verbose_name_plural = "AP-Wire"
@@ -77,10 +88,11 @@ class Ap_News(models.Model):
     image = models.ImageField(null=True,blank=True)
     date = models.DateField(auto_now_add=True)
     status = models.CharField(choices=tables_choice,max_length=30,default="APNews_Content_Pitching")
-    publishedon = models.DateField(null=True, blank=True)
+    published_on = models.DateField(null=True, blank=True)
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    updated = models.DateField(auto_now=True)
+    updated = models.DateTimeField(auto_now=True)
     reverted_count = models.IntegerField(default=1)
+    category = models.ForeignKey(category,on_delete=models.CASCADE)
 
     class Meta:
       verbose_name_plural = "AP-News"
@@ -101,7 +113,7 @@ class permissions(models.Model):
     class Meta:
       verbose_name_plural = "Permissions"
 
-    
+
 
     
         

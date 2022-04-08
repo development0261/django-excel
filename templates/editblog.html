@@ -49,6 +49,23 @@
                             <label>Image</label>
                             <input type="file" placeholder="" name="image">
                         </div>
+
+                        <div class="ns-slider-box slide">   
+                          <div class="table_top_bar">
+                            <label>Category</label>
+                            <div class="select_box">
+                              <select class="box" onchange="showCategories(this.value)" name="dropdown"> >
+                                <option selected>Open this select menu</option>
+                                
+                                <option value="Education">Education</option>
+                                <option value="Minig Digital Currency">Minig Digital Currency</option>
+                                <option value="MSB & PayDay">MSB & PayDay</option>
+                                <option value="Child Poverty">Child Poverty</option>
+                                <option value="Money with Hearts and Mind">Money with Hearts and Mind</option>
+                              </select>
+                            </div> 
+                            
+                          </div>
  
                         <button type="submit" class="login-submit" name="Add" value="Add">Save Blog</button>
                         <a class="ml-3" style="text-decoration:none" href="{% url 'view' %}" name="login" value="Log in">Go Back</a>

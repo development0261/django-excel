@@ -1,5 +1,6 @@
 from ast import While
 from multiprocessing import AuthenticationError
+from .models import category
 from urllib import request
 from django.shortcuts import render,redirect
 from django.http import HttpResponse, JsonResponse
@@ -159,7 +160,7 @@ def getRowData(request,id,tableName):
     imageobj = None
     if tableObj.image:
         imageobj =tableObj.image.url
-    return JsonResponse({'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj})
+    return JsonResponse({'category':tableObj.category.name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj})
 
 def getRowData2(request,id,tableName):
     
@@ -169,13 +170,13 @@ def getRowData2(request,id,tableName):
     imageobj = None
     if tableObj.image:
         imageobj =tableObj.image.url
-    return JsonResponse({'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj})
+    return JsonResponse({'category':tableObj.category.name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj})
 
 def editBlog(request,pk):
     if request.method == 'POST':
-        print(pk)
-        print(request.POST['description'])
-        blog = Ap_Wire.objects.filter(pk=pk).update(topic=request.POST['topic'],author=request.user,description=request.POST['description'])
+        print("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+        print(request.POST['dropdown'])
+        blog = Ap_Wire.objects.filter(pk=pk).update(topic=request.POST['topic'],author=request.user,description=request.POST['description'],category=request.POST['dropdown'])
        
         blog.save()
         print("called")
@@ -191,16 +192,14 @@ def editData(request,id,tableName):
     print(request.POST)
     topic = request.POST['topic']
     description = request.POST['description']
-    print(topic)
-    print(description)
- 
-    
+    cat_id = request.POST['category']
     tableObj = Ap_Wire.objects.get(pk = id)
     
-    print(id)
+    cat_obj = category.objects.get(id=cat_id)
     
     tableObj.description = description
     tableObj.topic = topic
+    tableObj.category = cat_obj
     tableObj.save()
 
     if 'image' in request.FILES:
@@ -218,10 +217,12 @@ def editData(request,id,tableName):
 def editData2(request,id,tableName):
     topic = request.POST['topic']
     description = request.POST['description']
- 
+    cat_id = request.POST['category']
+    
+    cat_obj = category.objects.get(id=cat_id)
     
     tableObj = Ap_News.objects.get(pk = id)
-    
+    tableObj.category = cat_obj
     tableObj.description = description
     tableObj.topic = topic
     tableObj.save()
@@ -287,11 +288,10 @@ def viewfunction(request):
 
         permissions.objects.filter(user=request.user)
 
+        categories = category.objects.all()
 
 
-
-
-        return render(request,'index.html',{'context_dict':context_dict,'context_dict1':context_dict1})
+        return render(request,'index.html',{'context_dict':context_dict,'context_dict1':context_dict1,'category_dict':categories})
     else:
         return redirect('loginview')
 
@@ -368,7 +368,8 @@ def buildxml(pk,blogobj):
     a6 = et.SubElement(root,'rights')
     a6.text = "Copyright 2022 ShaktiCoin"
     a7 = et.SubElement(root,'updated')
-    a7.text = "2022-03-19T01:58:31Z"
+    a7.text = str(blogobj.updated)
+
 
     m2 = et.Element('entry')
     m2.set("xml:lang","en-us")
@@ -385,9 +386,19 @@ def buildxml(pk,blogobj):
     b5 = et.SubElement(m2, "published")
     b5.text = str(blogobj.publishedon)
     b6 = et.SubElement(m2, "updated")
-    b6.text = str(blogobj.updated)
+    updated = str(blogobj.updated)
+    utz = updated[:10]+"T"+updated[11:25]+"Z"
+    b6.text = str(utz)
     b2 = et.SubElement(m2, "title")
     b2.text = str(blogobj.topic)
+    if blogobj.image :
+        a5 = et.SubElement(m2,'link')
+        a5.set("href",blogobj.image) #path to set here when on live server
+        a5.set("rel","self")
+    a = et.SubElement(m2,"category")
+    a.set("label","Global")
+    a.set("term","Global")
+    a.set("scheme","http://cv.ap.org/keyword")
 
     n1 = et.Element('content')
     n1.set("type","xhtml")
@@ -395,6 +406,22 @@ def buildxml(pk,blogobj):
 
     o1 = et.Element('apxh:div')
     n1.append (o1)
+
+    elee = et.SubElement(n1,"apnm:NewsManagement")
+    elem = et.SubElement(elee,"apnm:ManagementId")
+    if reverted_count == "None" :
+        elem.text = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-0"
+    else:
+        elem.text = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
+    elem = et.SubElement(elee,"apnm:ManagementType")
+    elem.text="Change"
+    elem = et.SubElement(elee,"apnm:ManagementSequenceNumber")
+    elem.text="3"
+    elem = et.SubElement(elee,"apnm:PublishingStatus")
+    elem.text="Usable"
+    
+    
+    
     
     x = blogobj.description.split("\n")
     y = []
@@ -416,6 +443,8 @@ def buildxml(pk,blogobj):
         ele.text = str(i)
         for obj in results:
             ele1 = et.SubElement(ele,"apxh:a")
+            # b2 = et.SubElement(ele, "title")
+            # b2.text = ""
             ele1.set("href",str(obj['href']))
             ele1.set("target","_blank")
             ele1.set("rel","nofollow noopener")
@@ -476,7 +505,9 @@ def buildxml2(pk,blogobj):
     b5 = et.SubElement(m2, "published")
     b5.text = str(blogobj.publishedon)
     b6 = et.SubElement(m2, "updated")
-    b6.text = str(blogobj.updated)
+    updated = str(blogobj.updated)
+    utz = updated[:10]+"T"+updated[11:25]+"Z"
+    b6.text = str(utz)
     b2 = et.SubElement(m2, "title")
     b2.text = str(blogobj.topic)
     b3 = et.SubElement(m2,'rights')
@@ -505,9 +536,19 @@ def buildxml2(pk,blogobj):
     b5 = et.SubElement(m2, "published")
     b5.text = str(blogobj.publishedon)
     b6 = et.SubElement(m2, "updated")
-    b6.text = str(blogobj.updated)
+    updated = str(blogobj.updated)
+    utz = updated[:10]+"T"+updated[11:25]+"Z"
+    b6.text = str(utz)
     b2 = et.SubElement(m2, "title")
     b2.text = str(blogobj.topic)
+    if blogobj.image :
+        a5 = et.SubElement(m2,'link')
+        a5.set("href",blogobj.image) #path to set here when on live server
+        a5.set("rel","self")
+    a = et.SubElement(m2,"category")
+    a.set("label","Global")
+    a.set("term","Global")
+    a.set("scheme","http://cv.ap.org/keyword")
 
     n1 = et.Element('content')
     n1.set("type","xhtml")
@@ -545,7 +586,7 @@ def buildxml2(pk,blogobj):
 
 
     tree = et.ElementTree(root)
-    print("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+    
 
     tree.write('{}/xml/output_xml_Blog_AP_News_{}.xml'.format(MEDIA_ROOT,blogobj.pk), encoding="utf-8")
 
@@ -686,9 +727,19 @@ def buildxmlall():
         b5 = et.SubElement(m2, "published")
         b5.text = str(blogobj.publishedon)
         b6 = et.SubElement(m2, "updated")
-        b6.text = str(blogobj.updated)
+        updated = str(blogobj.updated)
+        utz = updated[:10]+"T"+updated[11:25]+"Z"
+        b6.text = str(utz)
         b2 = et.SubElement(m2, "title")
         b2.text = str(blogobj.topic)
+        if blogobj.image :
+            a5 = et.SubElement(m2,'link')
+            a5.set("href",blogobj.image) #path to set here when on live server
+            a5.set("rel","self")
+        a = et.SubElement(m2,"category")
+        a.set("label","Global")
+        a.set("term","Global")
+        a.set("scheme","http://cv.ap.org/keyword")
 
         n1 = et.Element('content')
         n1.set("type","xhtml")
@@ -773,9 +824,19 @@ def buildxmlall2():
         b5 = et.SubElement(m2, "published")
         b5.text = str(blogobj.publishedon)
         b6 = et.SubElement(m2, "updated")
-        b6.text = str(blogobj.updated)
+        updated = str(blogobj.updated)
+        utz = updated[:10]+"T"+updated[11:25]+"Z"
+        b6.text = str(utz)
         b2 = et.SubElement(m2, "title")
         b2.text = str(blogobj.topic)
+        if blogobj.image :
+            a5 = et.SubElement(m2,'link')
+            a5.set("href",blogobj.image) #path to set here when on live server
+            a5.set("rel","self")
+        a = et.SubElement(m2,"category")
+        a.set("label","Global")
+        a.set("term","Global")
+        a.set("scheme","http://cv.ap.org/keyword")
 
         n1 = et.Element('content')
         n1.set("type","xhtml")
@@ -866,7 +927,10 @@ def downloadxmlall2file2(request):
 def createBlog(request):
     print("Createblog")
     if request.method == 'POST':
-        blog = Ap_Wire.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description'],status="Content_Pitching")
+        cat = request.POST['category']
+        cat_boj = category.objects.get(pk = int(cat))
+
+        blog = Ap_Wire.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description'],status="Content_Pitching",category=cat_boj)
         if 'image' in request.FILES:
             image=request.FILES['image']
             blog.image = image
@@ -878,7 +942,10 @@ def createBlog(request):
 def createBlog2(request):
     print("Createblog2")
     if request.method == 'POST':
-        blog = Ap_News.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description2'],status="Content_Pitching")
+        cat = request.POST['category']
+        cat_boj = category.objects.get(pk = int(cat))
+
+        blog = Ap_News.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description2'],status="Content_Pitching",category=cat_boj)
         if 'image' in request.FILES:
             image=request.FILES['image']
             blog.image = image

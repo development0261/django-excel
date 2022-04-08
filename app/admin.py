@@ -1,3 +1,5 @@
+
+from .models import category
 from django.contrib import admin
 from django.apps import apps
 
@@ -47,15 +49,19 @@ class UserProfileAdmin(UserAdmin):
             },
         ),
     )
-
+# @admin.register(category)
+# class BlogDisplay(admin.ModelAdmin):
+#     pass
 
 @admin.register(Ap_Wire)
 class BlogDisplay(admin.ModelAdmin):
     list_display = ("topic", "author","date","status")
+    exclude = ('reverted_count',)
 
 @admin.register(Ap_News)
 class BlogDisplay(admin.ModelAdmin):
     list_display = ("topic", "author","date","status")
+    exclude = ('reverted_count',)
 
 @admin.register(permissions)
 class selectiondisplay(admin.ModelAdmin):
@@ -63,3 +69,6 @@ class selectiondisplay(admin.ModelAdmin):
 
     def get_user_permission(self, obj):
         return " || ".join([p.username for p in obj.user.all()])
+
+
+admin.site.register(category)

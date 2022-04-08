@@ -126,7 +126,37 @@
                
                 {% if forloop.counter <= user.accessint %}
                 <div class="ns-slider-box slide" data-slide-index="{{forloop.counter0}}">   
-                  <h5>{{forloop.counter}}. {{ key}}</h5>
+                  <div class="table_top_bar">
+                    <div class="title">
+                        <h5>{{forloop.counter}}. {{ key}}</h5>
+                    </div>
+                    {% comment %} <div class="custom-select-category">
+                      <div class="list-select-wrp">
+                        <ul class="list-unstyled">
+                          <li class="init">Select Category</li>
+                          {% for cat in category_dict %}
+                          <li value="{{cat.pk}}" class="wire_cat" id="wire_cat_ApWire_{{key|replaceSpacewithUnderScore }}">{{cat.name}}</li>
+                          {% endfor %}
+                            
+                        </ul>
+                      </div>
+                  </div>  {% endcomment %}
+
+               <div class="select_box">
+                      <select class="wire_cat box" id="wire_cat_ApWire_{{key|replaceSpacewithUnderScore }}" >
+                        <option selected>Select Category</option>
+                        
+                        {% for cat in category_dict %}
+                        <option value="{{cat.name}}">{{cat.name}}</option>
+                        {% endfor %}
+                      </select>
+                    </div> 
+                    
+                  </div> 
+
+                  
+
+
                   <div class="ns-slider-box-table sortablecolumn">
                   
                     {% comment %} {{user|validateuser:key}} {% endcomment %}
@@ -137,8 +167,11 @@
                           <th>#</th>
                           <th>Title</th>
                           <th>Author</th>
+                          <th>Category</th>
                           <th>Date</th>
+                          
                           <th>Action</th>
+                          
                         </tr>
                       </thead>
                       <tbody id="tableBody_{{key|replaceSpacewithUnderScore }}" class=" 
@@ -157,9 +190,12 @@
                       " >
                         {% for v in val %}
                         <tr id="{{key|replaceSpacewithUnderScore }}_{{v.pk}}">
+                          
+                          
                           <th>{{forloop.counter}}</th>
                           <td>{{v.topic}}</td>
                           <td>{{v.author}}</td>
+                          <td>{{v.category.name}}</td>
                           <td>{{v.date}}</td>
                           <td> <div class="new-row-control">
                             
@@ -237,9 +273,23 @@
                
                {% for key,val in context_dict1.items %}
                {% comment %} {{UserCustom.accessint}} {% endcomment %}
-                {% if forloop.counter <= user.accessint %}
-                <div class="ns-slider-box">   
-                  <h5>{{forloop.counter}}. {{key}}</h5>
+               {% if forloop.counter <= user.accessint %}
+                <div class="ns-slider-box slide" data-slide-index="{{forloop.counter0}}">   
+                  <div class="table_top_bar">
+                  <div class="title">
+                    <h5>{{forloop.counter}}. {{ key}}</h5>
+                </div>
+                  <div class="select_box">
+                    <select class="news_cat box" id="news_cat_ApNews_{{key|replaceSpacewithUnderScore }}" >
+                      <option selected>Select Category</option>
+                      
+                      {% for cat in category_dict %}
+                      <option value="{{cat.name}}">{{cat.name}}</option>
+                      {% endfor %}
+                    </select>
+                  </div> 
+                  
+                </div> 
                   <div class="ns-slider-box-table sortablecolumn">
                   
                     {% comment %} {{user|validateuser:key}} {% endcomment %}
@@ -250,6 +300,7 @@
                           <th>#</th>
                           <th>Title</th>
                           <th>Author</th>
+                          <th>Category</th>
                           <th>Date</th>
                           <th>Action</th>
                         </tr>
@@ -271,6 +322,8 @@
                           <th>{{forloop.counter}}</th>
                           <td>{{v.topic}}</td>
                           <td>{{v.author}}</td>
+                          <td>{{v.category.name}}</td>
+
                           <td>{{v.date}}</td>
                           <td> <div class="new-row-control">
                             {% if user|checkTablePermissionview:key %}
@@ -362,7 +415,7 @@
                     </div>
                     <div class="modal-body editModel1" id="editmodalbody_{{key|replaceSpacewithUnderScore }}">
 
-            
+                      
                     </div>
             
                 </div>
@@ -407,7 +460,7 @@
                 <div  class="title">
                     <h2>Add Blog</h2>
                 </div>
-                <div class="login-form">
+                <div class="login-form" >
                     <form method="POST" enctype="multipart/form-data" action="{% url 'createBlog' %}">
                       {% csrf_token %}
                         <div class="field-name">
@@ -419,11 +472,28 @@
                         <textarea name="description" rows="10" cols="55" id="description" required></textarea>
                         
                         </div>
+                        <div class="field-name">
+                          
+                            <label>Category *</label>
+                            <div class="select_box">
+                              <select class="box" onchange="showCategories(this.value)" name="category"> 
+                                <option selected>Select Category</option>
+                                
+                                {% for cat in category_dict %}
+                                <option value="{{cat.pk}}">{{cat.name}}</option>
+                                {% endfor %}
+                              </select>
+                           
+                            
+                            </div>
 
+                          </div>
                         <div class="field-name">
                             <label>Image</label>
-                            <input type="file" placeholder="" name="image">
+                            <input type="file" placeholder="" name="image" class="image">
                         </div>
+
+                        
  
                         <button type="submit" class="login-submit" name="Add" value="Add">Save Blog</button>
                         <a class="ml-3" style="text-decoration:none" href="{% url 'view' %}" name="login" value="Log in">Go Back</a>
@@ -462,9 +532,28 @@
                         </div>
 
                         <div class="field-name">
-                            <label>Image</label>
-                            <input type="file" placeholder="" name="image">
+                          
+                          <label>Category *</label>
+                          <div class="select_box">
+                            <select class="box" onchange="showCategories(this.value)" name="category"> 
+                              <option selected>Select Category</option>
+                              
+                              {% for cat in category_dict %}
+                              <option value="{{cat.pk}}">{{cat.name}}</option>
+                              {% endfor %}
+                            </select>
+                         
+                          
                         </div>
+                      </div>
+
+
+                        <div class="field-name">
+                            <label>Image</label>
+                            <input type="file" placeholder="" name="image" class="image">
+                        </div>
+
+                        
  
                         <button type="submit" class="login-submit" name="Add" value="Add">Save Blog</button>
                         <a class="ml-3" style="text-decoration:none" href="{% url 'view' %}" name="login" value="Log in">Go Back</a>
@@ -570,6 +659,12 @@
 
 
 <script>
+    var cat_array  = [
+    {% for cat in category_dict %}
+    ["{{cat.name}}","{{cat.pk}}"],
+    {% endfor%}
+    ]
+  console.log(cat_array)
      CKEDITOR.config.toolbar = [
     ['Link','Unlink','Bold','Italic','Underline']
  ] ;
@@ -759,6 +854,7 @@
               url: "getRowData/"+id+"/"+tableName+"/",
               success: function(data){ 
                   console.log(data)
+                  alert(data.category)
 
                   
                   // $(`#${keys[2]}_${keys[1]}`).children('td').remove()
@@ -797,12 +893,32 @@
                                           <label>Description*</label>
                                       <textarea name="description" rows="10" cols="55" id="description_${tableName}_${data.pk}">${data.content}</textarea>
                                       </div>
+                                      <div class="field-name">   
+                                       
+                                        <label>Category</label>
+                                        <div class="select_box">
+                                          <select class="box" id="category_${tableName}_${data.pk}" onchange="showCategories(this.value)" name="category"> 
+                                            <option selected>Select Category</option>
 
+                                            
+                                            ${
+                                              cat_array.map((item,index)=>{
+                                                return(
+                                                  `<option value="${item[1]}" ${data.category == item[0]?`selected`:''}>${item[0]}</option>`
+                                                )
+                                              })
+                                            }
+                                          </select>
+                                        </div> 
+                                        
+                                    </div>
+            
                                       <div class="field-name">
                                         <label>Image</label>
-                                        <input type="file" placeholder="" name="image" id="image_${tableName}_${data.pk}">
+                                        <input type="file" placeholder="" name="image" id="image_${tableName}_${data.pk}" class="image" >
                                       </div>
-              
+
+                                   
              
                
                                       <button type="button" class="login-submit addEditRow" id="addEditRow-${data.pk}-${tableName}" name="Add" value="Add">Save Blog</button>
@@ -839,6 +955,7 @@
               $.ajax({
                 url: "getRowData2/"+id+"/"+tableName+"/",
                 success: function(data){ 
+                  alert(data.category)
                     console.log(data)
                     // $(`#${keys[2]}_${keys[1]}`).children('td').remove()
                     // $(`#${keys[2]}_${keys[1]}`).append(
@@ -874,10 +991,28 @@
                                             <label>Description*</label>
                                         <textarea name="description" rows="10" cols="55" id="News_description_${tableName}_${data.pk}">${data.content}</textarea>
                                         </div>
+                                        <div class="field-name">   
+                                       
+                                          <label>Category</label>
+                                          <div class="select_box">
+                                          <select class="box" id="category_${tableName}_${data.pk}" onchange="showCategories(this.value)" name="category"> 
+                                            <option selected>Select Category</option>
 
+                                            
+                                            ${
+                                              cat_array.map((item,index)=>{
+                                                return(
+                                                  `<option value="${item[1]}" ${data.category == item[0]?`selected`:''}>${item[0]}</option>`
+                                                )
+                                              })
+                                            }
+                                          </select>
+                                        </div> 
+                                          
+                                      </div>
                                       <div class="field-name">
                                         <label>Image</label>
-                                        <input type="file" placeholder="" name="image" id="image_${tableName}_${data.pk}">
+                                        <input type="file" placeholder="" name="image" id="image_${tableName}_${data.pk}" class="image">
                                       </div>
                 
                  
@@ -913,6 +1048,7 @@
             url: "viewgetRowData/"+id+"/"+tableName+"/",
             success: function(data){ 
                 console.log(data)
+  
                 $(`#viewmodalBody`).empty()
                 $(`#viewmodalBody`).append(`
                                             ${
@@ -924,6 +1060,7 @@
                                             <h2 class="post-title" id="title_${tableName}_${data.pk}">${data.topic}</h2>
                                             <div class="auth-date">
                                                 <h6 id="author_${tableName}_${data.pk}">Author:- <a href="#">${data.author}</a></h6>
+                                                <h6 id="category_${tableName}_${data.pk}">Category:- <a href="#">${data.category}</a></h6>
                                                 <h6 id="date_${tableName}_${data.pk}">Date:- <a href="#">${data.date}</a></h6>
                                             </div>
                                             <p id="date_${tableName}_${data.pk}">${data.content}</p>
@@ -967,6 +1104,7 @@
                                             <h2 class="post-title" id="title_${tableName}_${data.pk}">${data.topic}</h2>
                                             <div class="auth-date">
                                                 <h6 id="author_${tableName}_${data.pk}">Author:- <a href="#">${data.author}</a></h6>
+                                                <h6 id="category_${tableName}_${data.pk}">Category:- <a href="#">${data.category}</a></h6>
                                                 <h6 id="date_${tableName}_${data.pk}">Date:- <a href="#">${data.date}</a></h6>
                                             </div>
                                             <p id="date_${tableName}_${data.pk}">${data.content}</p>
@@ -998,19 +1136,16 @@
         var keys = $(this).attr('id').split('-')
         var id = keys[1]
         var tableName = keys[2] 
-        console.log(id)
-        console.log(keys)
         var title = $("#title_"+tableName+"_"+id).val()
         var description = CKEDITOR.instances[`description_${tableName}_${id}`].getData( )
-        console.log("TEst")
-        console.log(CKEDITOR.instances[`description_${tableName}_${id}`].getData())
-        console.log($("#image_"+tableName+"_"+id))
+      
         var image = $("#image_"+tableName+"_"+id).prop('files')[0];
+        var category = $("#category_"+tableName+"_"+id).val()
         var formData = new FormData();
         formData.append('topic', title);
         formData.append('description', description);
         formData.append('image', image);
-
+        formData.append('category',category)
         console.log(image)
         $.ajax({
           url: "editData/"+id+"/"+tableName+"/",
@@ -1052,19 +1187,20 @@
               ) 
               $(`#editmodal_${tableName}`).modal('hide')
           },
-          error: function(){
+          error: function(){  
             alert("There was an error");
           }
         });
      })
 
+     
 
      $(document).on('click','.addEditRow2',function(){
         
       var keys = $(this).attr('id').split('-')
       var id = keys[1]
       var tableName = keys[2] 
-
+      
       
       console.log(id)
       console.log(keys)
@@ -1072,11 +1208,12 @@
       
       var description = CKEDITOR.instances[`News_description_${tableName}_${id}`].getData()
       var image = $("#image_"+tableName+"_"+id).prop('files')[0];
+      var category = $("#category_"+tableName+"_"+id).val()
       var formData = new FormData();
       formData.append('topic', title);
       formData.append('description', description);
       formData.append('image', image);
-
+      formData.append('category',category)
       console.log(description)
       $.ajax({
         url: "editData2/"+id+"/"+tableName+"/",
@@ -1521,8 +1658,97 @@
 
 
 
- 
+  var _URL = window.URL || window.webkitURL;
 
+  $(document).on('change','.image',function(){
+    var file, img;
+
+
+    if ((file = this.files[0])) {
+        img = new Image();
+        img.onload = function() {
+          if(this.width > 1020 ){
+            alert("image should not be less than 1020 pixels width");
+            
+  
+            $(this).empty()
+           return false
+           }
+        };
+        img.onerror = function() {
+            alert( "not a valid file: " + file.type);
+        };
+        img.src = _URL.createObjectURL(file);
+ 
+ 
+    }
+  })
+
+  function showCategories(str) {
+    var xhttp;    
+    if (str == "") {
+      document.getElementById("txtHint").innerHTML = "";
+      return;
+    }
+    xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("txtHint").innerHTML = this.responseText;
+      }
+    };
+    xhttp.open("GET", "getcustomer.php?q="+str, true);
+    xhttp.send();
+  }
+
+  $("ul").on("click", ".init", function() {
+    $(this).closest("ul").children('li:not(.init)').toggle();
+});
+
+var allOptions = $("ul").children('li:not(.init)');
+$("ul").on("click", "li:not(.init)", function() {
+    allOptions.removeClass('selected');
+    $(this).addClass('selected');
+    $("ul").children('.init').html($(this).html());
+    allOptions.toggle();
+});
+$('.list-unstyled').click(function(){
+    $('.init').toggleClass('active');
+  });
+
+$(document).on('change','.wire_cat',function(){
+  var tbId = $(this).attr('id').slice(9,)
+  var value=  $(this).val().toLowerCase();
+  console.log(value,tbId)
+  $(`#${tbId} tbody tr`).filter(function() {
+    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+  });
+})
+
+
+
+  $("ul").on("click", ".init", function() {
+    $(this).closest("ul").children('li:not(.init)').toggle();
+});
+
+var allOptions = $("ul").children('li:not(.init)');
+$("ul").on("click", "li:not(.init)", function() {
+    allOptions.removeClass('selected');
+    $(this).addClass('selected');
+    $("ul").children('.init').html($(this).html());
+    allOptions.toggle();
+});
+$('.list-unstyled').click(function(){
+    $('.init').toggleClass('active');
+  });
+
+$(document).on('change','.news_cat',function(){
+  var tbId = $(this).attr('id').slice(9,)
+  var value=  $(this).val().toLowerCase();
+  console.log(value,tbId)
+  $(`#${tbId} tbody tr`).filter(function() {
+    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+  });
+})
 
   </script>
 
