@@ -1,2 +1,3 @@
 .venv
 serializers.py
+.app/migrations
