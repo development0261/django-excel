@@ -387,15 +387,23 @@ body {
     left: 8px;
     display: none;
   }
-  .list-select-wrp ul li.init.active::after{
+  .list-select-wrp ul.active li.init::after{
     display: block;
   }
-  .list-select-wrp ul li:not(.init) {
+  /* .list-select-wrp ul li:not(.init) {
     display: none;
      
-  }
+  } */
   
-  
+  .list-select-wrp ul li {
+    display: none;
+}
+.list-select-wrp ul.active li {
+    display: block;
+}
+.list-select-wrp ul li.init {
+    display: block;
+}
   .list-select-wrp ul li:not(.init):hover,
   .list-select-wrp ul li.selected:not(.init) {
     background: #e8e4f2;

@@ -128,21 +128,22 @@
                 <div class="ns-slider-box slide" data-slide-index="{{forloop.counter0}}">   
                   <div class="table_top_bar">
                     <div class="title">
-                        <h5>{{forloop.counter}}. {{ key}}</h5>
+                        <h5>{{forloop.counter}}. {{key}}</h5>
                     </div>
-                    {% comment %} <div class="custom-select-category">
+                     <div class="custom-select-category">
                       <div class="list-select-wrp">
-                        <ul class="list-unstyled">
+                        <ul class="list-unstyled" id="wire_cat_ApWire_{{key|replaceSpacewithUnderScore }}"> 
+                          
                           <li class="init">Select Category</li>
                           {% for cat in category_dict %}
-                          <li value="{{cat.pk}}" class="wire_cat" id="wire_cat_ApWire_{{key|replaceSpacewithUnderScore }}">{{cat.name}}</li>
+                          <li value="{{cat.pk}}" class="wire_cat" >{{cat.name}}</li>
                           {% endfor %}
                             
                         </ul>
                       </div>
-                  </div>  {% endcomment %}
+                  </div> 
 
-               <div class="select_box">
+                {% comment %} <div class="select_box">
                       <select class="wire_cat box" id="wire_cat_ApWire_{{key|replaceSpacewithUnderScore }}" >
                         <option selected>Select Category</option>
                         
@@ -150,9 +151,9 @@
                         <option value="{{cat.name}}">{{cat.name}}</option>
                         {% endfor %}
                       </select>
-                    </div> 
+                    </div>   {% endcomment %}
                     
-                  </div> 
+                  </div>  
 
                   
 
@@ -167,7 +168,9 @@
                           <th>#</th>
                           <th>Title</th>
                           <th>Author</th>
-                          <th>Category</th>
+                          <th>Category </th>
+                          
+                          
                           <th>Date</th>
                           
                           <th>Action</th>
@@ -192,10 +195,11 @@
                         <tr id="{{key|replaceSpacewithUnderScore }}_{{v.pk}}">
                           
                           
+                          
                           <th>{{forloop.counter}}</th>
                           <td>{{v.topic}}</td>
                           <td>{{v.author}}</td>
-                          <td>{{v.category.name}}</td>
+                          <td class="category" >{{v.category.name}}</td>
                           <td>{{v.date}}</td>
                           <td> <div class="new-row-control">
                             
@@ -270,24 +274,29 @@
 
             <div class="ns-slider-box-section d-none" id="ApNewsContent">
               <div class="table-carousel owl-carousel owl-theme">
+                
                
                {% for key,val in context_dict1.items %}
                {% comment %} {{UserCustom.accessint}} {% endcomment %}
                {% if forloop.counter <= user.accessint %}
                 <div class="ns-slider-box slide" data-slide-index="{{forloop.counter0}}">   
                   <div class="table_top_bar">
-                  <div class="title">
-                    <h5>{{forloop.counter}}. {{ key}}</h5>
-                </div>
-                  <div class="select_box">
-                    <select class="news_cat box" id="news_cat_ApNews_{{key|replaceSpacewithUnderScore }}" >
-                      <option selected>Select Category</option>
-                      
-                      {% for cat in category_dict %}
-                      <option value="{{cat.name}}">{{cat.name}}</option>
-                      {% endfor %}
-                    </select>
+                    <div class="title">
+                        <h5>{{forloop.counter}}. {{ key}}</h5>
+                    </div>
+                     <div class="custom-select-category">
+                      <div class="list-select-wrp">
+                        <ul class="list-unstyled" id="news_cat_ApNews_{{key|replaceSpacewithUnderScore }}"> 
+                          
+                          <li class="init">Select Category</li>
+                          {% for cat in category_dict %}
+                          <li value="{{cat.pk}}" class="news_cat" >{{cat.name}}</li>
+                          {% endfor %}
+                            
+                        </ul>
+                      </div>
                   </div> 
+         
                   
                 </div> 
                   <div class="ns-slider-box-table sortablecolumn">
@@ -322,7 +331,7 @@
                           <th>{{forloop.counter}}</th>
                           <td>{{v.topic}}</td>
                           <td>{{v.author}}</td>
-                          <td>{{v.category.name}}</td>
+                          <td class="category2">{{v.category.name}}</td>
 
                           <td>{{v.date}}</td>
                           <td> <div class="new-row-control">
@@ -1703,57 +1712,37 @@
     xhttp.send();
   }
 
-  $("ul").on("click", ".init", function() {
-    $(this).closest("ul").children('li:not(.init)').toggle();
-});
-
-var allOptions = $("ul").children('li:not(.init)');
-$("ul").on("click", "li:not(.init)", function() {
-    allOptions.removeClass('selected');
-    $(this).addClass('selected');
-    $("ul").children('.init').html($(this).html());
-    allOptions.toggle();
-});
+ 
 $('.list-unstyled').click(function(){
-    $('.init').toggleClass('active');
+    $(this).toggleClass('active');
   });
 
-$(document).on('change','.wire_cat',function(){
-  var tbId = $(this).attr('id').slice(9,)
-  var value=  $(this).val().toLowerCase();
+$(document).on('click','.wire_cat',function(){
+ 
+  var tbId = $(this).parent()[0].id.slice(16,)
+  var value=  $(this).text();
   console.log(value,tbId)
-  $(`#${tbId} tbody tr td:nth-child(4)`).filter(function() {
-    $(`#${tbId} tbody tr`).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-  });
-})
 
 
+    $(`#ApWire_${tbId} td.category:contains(${value})`).parent().show();
+    $(`#ApWire_${tbId} td.category:not(:contains(${value}))`).parent().hide();
+  })
+  
+  $(document).on('click','.news_cat',function(){
+ 
+    var tbId = $(this).parent()[0].id.slice(16,)
+    var value= $(this).text();
+    console.log(value,tbId)
+  
+  
+      $(`#ApNews_${tbId} td.category2:contains(${value})`).parent().show();
+      $(`#ApNews_${tbId} td.category2:not(:contains(${value}))`).parent().hide();
+    })
+  
+  
 
-  $("ul").on("click", ".init", function() {
-    $(this).closest("ul").children('li:not(.init)').toggle();
-});
+</script>
 
-var allOptions = $("ul").children('li:not(.init)');
-$("ul").on("click", "li:not(.init)", function() {
-    allOptions.removeClass('selected');
-    $(this).addClass('selected');
-    $("ul").children('.init').html($(this).html());
-    allOptions.toggle();
-});
-$('.list-unstyled').click(function(){
-    $('.init').toggleClass('active');
-  });
-
-$(document).on('change','.news_cat',function(){
-  var tbId = $(this).attr('id').slice(9,)
-  var value=  $(this).val().toLowerCase();
-  console.log(value,tbId)
-  $(`#${tbId} tbody tr td:nth-child(3)`).filter(function() {
-    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-  });
-})
-
-  </script>
 
 
 </body>
