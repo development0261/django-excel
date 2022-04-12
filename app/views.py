@@ -393,7 +393,7 @@ def buildxml(pk,blogobj):
     b2.text = str(blogobj.topic)
     if blogobj.image :
         a5 = et.SubElement(m2,'link')
-        a5.set("href",blogobj.image) #path to set here when on live server
+        a5.set("href","http://localhost:8000/media/"+str(blogobj.image)) 
         a5.set("rel","self")
     a = et.SubElement(m2,"category")
     a.set("label","Global")
@@ -550,7 +550,7 @@ def buildxml2(pk,blogobj):
     b2.text = str(blogobj.topic)
     if blogobj.image :
         a5 = et.SubElement(m2,'link')
-        a5.set("href",blogobj.image) #path to set here when on live server
+        a5.set("href","http://localhost:8000/media/"+str(blogobj.image)) 
         a5.set("rel","self")
     a = et.SubElement(m2,"category")
     a.set("label","Global")
@@ -747,7 +747,7 @@ def buildxmlall():
         b2.text = str(blogobj.topic)
         if blogobj.image :
             a5 = et.SubElement(m2,'link')
-            a5.set("href",blogobj.image) #path to set here when on live server
+            a5.set("href","http://localhost:8000/media/"+str(blogobj.image)) 
             a5.set("rel","self")
         a = et.SubElement(m2,"category")
         a.set("label","Global")
@@ -863,7 +863,7 @@ def buildxmlall2():
         b2.text = str(blogobj.topic)
         if blogobj.image :
             a5 = et.SubElement(m2,'link')
-            a5.set("href",blogobj.image) #path to set here when on live server
+            a5.set("href","http://localhost:8000/media/"+str(blogobj.image)) 
             a5.set("rel","self")
         a = et.SubElement(m2,"category")
         a.set("label","Global")
