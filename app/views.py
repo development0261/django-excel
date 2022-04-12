@@ -529,7 +529,14 @@ def buildxml2(pk,blogobj):
     root.append (m2)
 
     
-    uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-2"
+    reverted_count=str(blogobj.reverted_count)
+    if reverted_count == "None" :
+        uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-0"
+    else:
+        uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
+
+    b1 = et.SubElement(m2, "id")
+    b1.text = str(uid)
 
     b1 = et.SubElement(m2, "id")
     b1.text = str(uid)
@@ -720,7 +727,14 @@ def buildxmlall():
         m2 = et.Element('entry')
         m2.set("xml:lang","en-us")
         root.append (m2)
-        uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-2"
+        reverted_count=str(blogobj.reverted_count)
+        if reverted_count == "None" :
+            uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-0"
+        else:
+            uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
+
+        b1 = et.SubElement(m2, "id")
+        b1.text = str(uid)
 
         b1 = et.SubElement(m2, "id")
         b1.text = str(uid)
@@ -747,6 +761,19 @@ def buildxmlall():
 
         o1 = et.Element('apxh:div')
         n1.append (o1)
+
+        elee = et.SubElement(n1,"apnm:NewsManagement")
+        elem = et.SubElement(elee,"apnm:ManagementId")
+        if reverted_count == "None" :
+            elem.text = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-0"
+        else:
+            elem.text = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
+        elem = et.SubElement(elee,"apnm:ManagementType")
+        elem.text="Change"
+        elem = et.SubElement(elee,"apnm:ManagementSequenceNumber")
+        elem.text="3"
+        elem = et.SubElement(elee,"apnm:PublishingStatus")
+        elem.text="Usable"
     
         x = blogobj.description.split("\n")
         print(x)
@@ -817,7 +844,14 @@ def buildxmlall2():
         m2 = et.Element('entry')
         m2.set("xml:lang","en-us")
         root.append (m2)
-        uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-2"
+        reverted_count=str(blogobj.reverted_count)
+        if reverted_count == "None" :
+            uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-0"
+        else:
+            uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
+
+        b1 = et.SubElement(m2, "id")
+        b1.text = str(uid)
 
         b1 = et.SubElement(m2, "id")
         b1.text = str(uid)
@@ -844,6 +878,19 @@ def buildxmlall2():
 
         o1 = et.Element('apxh:div')
         n1.append (o1)
+
+        elee = et.SubElement(n1,"apnm:NewsManagement")
+        elem = et.SubElement(elee,"apnm:ManagementId")
+        if reverted_count == "None" :
+            elem.text = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-0"
+        else:
+            elem.text = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
+        elem = et.SubElement(elee,"apnm:ManagementType")
+        elem.text="Change"
+        elem = et.SubElement(elee,"apnm:ManagementSequenceNumber")
+        elem.text="3"
+        elem = et.SubElement(elee,"apnm:PublishingStatus")
+        elem.text="Usable"
     
         x = blogobj.description.split("\n")
         print(x)
