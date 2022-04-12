@@ -304,44 +304,6 @@ a:hover {
       outline: none;
   }
 
-/* Responcive */
-@media screen and (max-width: 1024px){
-    .table-carousel .owl-nav button.owl-prev {
-        left: 10px;
-        bottom: -80px;
-    }
-    .table-carousel .owl-nav button.owl-next {
-        right: 0px;
-        bottom: -80px;
-    }
-}
-@media (max-width: 1199px) { 
-
- }
-@media (max-width: 991px) {  }
-@media (max-width: 767px) {  }
-@media (max-width: 575px) {  
-    .nav-slider-tabs{
-        flex-direction: column;
-    gap: 30px;
-    margin-top: 50px;
-    }
-    .table-carousel .owl-item.active:first-child, .table-carousel .owl-item + .owl-item.active {
-        width: calc(100vw - 30px) !important;
-        flex: 0 0 calc(100vw - 30px);
-    }
-    
-    .table-carousel .owl-stage {
-        display: flex;
-    }
-    
-    .table-carousel .owl-item.active + .owl-item.active {
-        width: calc(100vw - 30px) !important;
-        flex: 0 0 calc(100vw - 30px);
-        margin-top: 340px;
-        margin-left: calc(-100vw - 0px) !important;
-    }
-}
 
 body {
     padding: 30px;
@@ -416,3 +378,72 @@ body {
   a#submit {
     z-index: 1;
   }
+
+
+
+/* Responcive */
+@media screen and (max-width: 1024px){
+    .table-carousel .owl-nav button.owl-prev {
+        left: 10px;
+        bottom: -80px;
+    }
+    .table-carousel .owl-nav button.owl-next {
+        right: 0px;
+        bottom: -80px;
+    }
+}
+@media (max-width: 1199px) { 
+
+ }
+@media (max-width: 991px) { 
+    .list-select-wrp{
+        width: 160px;
+    }
+    .table_top_bar .title h5 {
+        font-size: 16px;
+    }
+    body{
+        padding: 0;
+    }
+    .owl-carousel .owl-item{
+        overflow: hidden;
+    }
+ }
+@media (max-width: 767px) {
+    .list-select-wrp{
+        width: 160px;
+    }
+    .table_top_bar .title h5 {
+        font-size: 16px;
+    }
+    body{
+        padding: 0;
+    }
+  }
+@media (max-width: 575px) {  
+    .nav-slider-tabs{
+        flex-direction: column;
+    gap: 30px;
+    margin-top: 50px;
+    }
+    .table-carousel .owl-item.active:first-child, .table-carousel .owl-item + .owl-item.active {
+        width: calc(100vw - 30px) !important;
+        flex: 0 0 calc(100vw - 30px);
+     
+    }
+    
+    .table-carousel .owl-stage {
+        display: flex;
+    }
+    
+    .table-carousel .owl-item.active + .owl-item.active {
+        width: calc(100vw - 30px) !important;
+        flex: 0 0 calc(100vw - 30px);
+        margin-top: 340px;
+        margin-left: calc(-100vw - 0px) !important;
+ 
+    }
+    body{
+        padding: 0;
+    }
+}

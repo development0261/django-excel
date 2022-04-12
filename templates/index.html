@@ -94,8 +94,8 @@
   {% if user.is_authenticated %}
   <section class="nav-slider-section">
     <div class="container">
-      <div style="display:flex;justify-content:flex-end">
-        
+      <div style="display:flex;justify-content:space-between">
+        <h4>Hi, {{user.username}}</h4>
         <a class="btn btn-danger" href="{% url 'logout' %}"> Logout</a>
       </div>
       <div class="row"> 
