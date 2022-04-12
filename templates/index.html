@@ -1714,8 +1714,15 @@
 
  
 $('.list-unstyled').click(function(){
-    $(this).toggleClass('active');
+  
+  $(this).toggleClass('active');
+   
   });
+
+$(".list-unstyled li").click(function(){
+  $(this).parent().children('li').removeClass('init')
+  $(this).addClass('init')
+})
 
 $(document).on('click','.wire_cat',function(){
  

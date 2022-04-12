@@ -303,7 +303,7 @@ def viewfunction(request):
 def publishBlog2(request,pk):
     blogobj = Ap_News.objects.get(pk=pk)
     blogobj.status = "App_Published"
-    blogobj.publishedon = datetime.today().date()
+    blogobj.published_on = datetime.today().date()
     blogobj.save()
 
     messages.success(request,"Your blog {} for AP Wire is Published".format(blogobj.topic))
@@ -384,7 +384,7 @@ def buildxml(pk,blogobj):
     b1 = et.SubElement(m2, "id")
     b1.text = str(uid)
     b5 = et.SubElement(m2, "published")
-    b5.text = str(blogobj.publishedon)
+    b5.text = str(blogobj.published_on)
     b6 = et.SubElement(m2, "updated")
     updated = str(blogobj.updated)
     utz = updated[:10]+"T"+updated[11:25]+"Z"
@@ -503,7 +503,7 @@ def buildxml2(pk,blogobj):
     b1 = et.SubElement(m2, "id")
     b1.text = str(uid)
     b5 = et.SubElement(m2, "published")
-    b5.text = str(blogobj.publishedon)
+    b5.text = str(blogobj.published_on)
     b6 = et.SubElement(m2, "updated")
     updated = str(blogobj.updated)
     utz = updated[:10]+"T"+updated[11:25]+"Z"
@@ -534,7 +534,7 @@ def buildxml2(pk,blogobj):
     b1 = et.SubElement(m2, "id")
     b1.text = str(uid)
     b5 = et.SubElement(m2, "published")
-    b5.text = str(blogobj.publishedon)
+    b5.text = str(blogobj.published_on)
     b6 = et.SubElement(m2, "updated")
     updated = str(blogobj.updated)
     utz = updated[:10]+"T"+updated[11:25]+"Z"
@@ -659,7 +659,7 @@ def downloadxml(request,pk,stringPath= None):
 def publishBlog(request,pk):
     blogobj = Ap_Wire.objects.get(pk=pk)
     blogobj.status = "App_Published"
-    blogobj.publishedon = datetime.today().date()
+    blogobj.published_on = datetime.today().date()
     blogobj.save()
     
     messages.success(request,"Your blog {} for AP Wire is Published".format(blogobj.topic))
@@ -725,7 +725,7 @@ def buildxmlall():
         b1 = et.SubElement(m2, "id")
         b1.text = str(uid)
         b5 = et.SubElement(m2, "published")
-        b5.text = str(blogobj.publishedon)
+        b5.text = str(blogobj.published_on)
         b6 = et.SubElement(m2, "updated")
         updated = str(blogobj.updated)
         utz = updated[:10]+"T"+updated[11:25]+"Z"
@@ -822,7 +822,7 @@ def buildxmlall2():
         b1 = et.SubElement(m2, "id")
         b1.text = str(uid)
         b5 = et.SubElement(m2, "published")
-        b5.text = str(blogobj.publishedon)
+        b5.text = str(blogobj.published_on)
         b6 = et.SubElement(m2, "updated")
         updated = str(blogobj.updated)
         utz = updated[:10]+"T"+updated[11:25]+"Z"

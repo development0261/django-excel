@@ -108,7 +108,7 @@ class permissions(models.Model):
     move = models.BooleanField(default=False)
     publish = models.BooleanField(default=False)
     to_delete = models.BooleanField(default=False,verbose_name="delete")
-    Permission_Name = models.CharField(max_length=20,null=True,blank=True)
+    Permission_Name = models.CharField(max_length=100,null=True,blank=True)
 
     class Meta:
       verbose_name_plural = "Permissions"

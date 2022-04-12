@@ -86,7 +86,7 @@ a:hover {
     margin: 0 10px 10px;
     width: calc(100% - 20px);
     box-shadow: 0 0 10px 0 rgb(0 0 0 / 50%);
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 .ns-slider-box-table::-webkit-scrollbar {
     width: 5px;
