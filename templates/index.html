@@ -1420,7 +1420,7 @@
                     if (response.access_dict['view'] ==  true && response.tableIndex == 7 ){
                       $(`#${row_id} td > div`).append(
                       `
-                      <a class="row-add downloadxml" id="downloadxml-${addedto}" href="/downloadxml/${pk}/" ><i class="fa fa-file-powerpoint-o"></i></a>
+                      <a class="row-add downloadxml" id="downloadpdf-${addedto}" href="/downloadpdf/${pk}/" ><i class="fa fa-file-powerpoint-o"></i></a>
                       
                       `
                     )
@@ -1593,7 +1593,7 @@
                   if (response.access_dict['view'] ==  true && response.tableIndex == 7 ){
                     $(`#${row_id} td > div`).append(
                     `
-                    <a class="row-add downloadxml2file2" id="downloadxml2file2-${addedto}" href="/downloadxml2file2/${pk}/" ><i class="fa fa-file-powerpoint-o"></i></a>
+                    <a class="row-add downloadxml2file2" id="downloadpdf2-${addedto}" href="/downloadpdf2/${pk}/" ><i class="fa fa-file-powerpoint-o"></i></a>
                     
                     `
                   )
