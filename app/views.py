@@ -733,8 +733,7 @@ def buildxmlall():
         else:
             uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
 
-        b1 = et.SubElement(m2, "id")
-        b1.text = str(uid)
+        
 
         b1 = et.SubElement(m2, "id")
         b1.text = str(uid)
@@ -850,8 +849,7 @@ def buildxmlall2():
         else:
             uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
 
-        b1 = et.SubElement(m2, "id")
-        b1.text = str(uid)
+        
 
         b1 = et.SubElement(m2, "id")
         b1.text = str(uid)
