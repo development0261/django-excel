@@ -384,7 +384,9 @@ def buildxml(pk,blogobj):
     b1 = et.SubElement(m2, "id")
     b1.text = str(uid)
     b5 = et.SubElement(m2, "published")
-    b5.text = str(blogobj.published_on)
+    updated = str(blogobj.published_on)
+    utz = updated[:10]+"T"+updated[11:19]+"Z"
+    b5.text = str(utz)
     b6 = et.SubElement(m2, "updated")
     updated = str(blogobj.updated)
     utz = updated[:10]+"T"+updated[11:25]+"Z"
@@ -392,9 +394,9 @@ def buildxml(pk,blogobj):
     b2 = et.SubElement(m2, "title")
     b2.text = str(blogobj.topic)
     if blogobj.image :
-        a5 = et.SubElement(m2,'link')
-        a5.set("href","https://ap.shakticoin.com/media/"+str(blogobj.image)) 
-        a5.set("rel","self")
+        a5 = et.SubElement(m2,'content')
+        a5.set("type","image/jpeg")
+        a5.set("src","https://ap.shakticoin.com/media/"+str(blogobj.image)) 
     a = et.SubElement(m2,"category")
     a.set("label","Global")
     a.set("term","Global")
@@ -457,7 +459,7 @@ def buildxml(pk,blogobj):
     tree.write('{}/xml/output_xml_Blog_AP_Wire_{}.xml'.format(MEDIA_ROOT,blogobj.pk), encoding="utf-8")
 
     # response = FileResponse(open(f"{MEDIA_ROOT}/xml/{topic}.pdf", 'rb'),as_attachment=True)
-def buildxml2(pk,blogobj):
+
     root = et.Element('feed')
     root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
     root.set("xmlns:apxh","http://w3.org/1999/xhtml")
@@ -503,7 +505,9 @@ def buildxml2(pk,blogobj):
     b1 = et.SubElement(m2, "id")
     b1.text = str(uid)
     b5 = et.SubElement(m2, "published")
-    b5.text = str(blogobj.published_on)
+    updated = str(blogobj.published_on)
+    utz = updated[:10]+"T"+updated[11:19]+"Z"
+    b5.text = str(utz)
     b6 = et.SubElement(m2, "updated")
     updated = str(blogobj.updated)
     utz = updated[:10]+"T"+updated[11:25]+"Z"
@@ -541,7 +545,9 @@ def buildxml2(pk,blogobj):
     b1 = et.SubElement(m2, "id")
     b1.text = str(uid)
     b5 = et.SubElement(m2, "published")
-    b5.text = str(blogobj.published_on)
+    updated = str(blogobj.published_on)
+    utz = updated[:10]+"T"+updated[11:19]+"Z"
+    b5.text = str(utz)
     b6 = et.SubElement(m2, "updated")
     updated = str(blogobj.updated)
     utz = updated[:10]+"T"+updated[11:25]+"Z"
@@ -549,9 +555,9 @@ def buildxml2(pk,blogobj):
     b2 = et.SubElement(m2, "title")
     b2.text = str(blogobj.topic)
     if blogobj.image :
-        a5 = et.SubElement(m2,'link')
-        a5.set("href","https://ap.shakticoin.com/media/"+str(blogobj.image)) 
-        a5.set("rel","self")
+        a5 = et.SubElement(m2,'content')
+        a5.set("type","image/jpeg")
+        a5.set("src","https://ap.shakticoin.com/media/"+str(blogobj.image)) 
     a = et.SubElement(m2,"category")
     a.set("label","Global")
     a.set("term","Global")
@@ -738,7 +744,9 @@ def buildxmlall():
         b1 = et.SubElement(m2, "id")
         b1.text = str(uid)
         b5 = et.SubElement(m2, "published")
-        b5.text = str(blogobj.published_on)
+        updated = str(blogobj.published_on)
+        utz = updated[:10]+"T"+updated[11:19]+"Z"
+        b5.text = str(utz)
         b6 = et.SubElement(m2, "updated")
         updated = str(blogobj.updated)
         utz = updated[:10]+"T"+updated[11:25]+"Z"
@@ -746,9 +754,9 @@ def buildxmlall():
         b2 = et.SubElement(m2, "title")
         b2.text = str(blogobj.topic)
         if blogobj.image :
-            a5 = et.SubElement(m2,'link')
-            a5.set("href","https://ap.shakticoin.com/media/"+str(blogobj.image)) 
-            a5.set("rel","self")
+            a5 = et.SubElement(m2,'content')
+            a5.set("type","image/jpeg")
+            a5.set("src","https://ap.shakticoin.com/media/"+str(blogobj.image)) 
         a = et.SubElement(m2,"category")
         a.set("label","Global")
         a.set("term","Global")
@@ -854,7 +862,9 @@ def buildxmlall2():
         b1 = et.SubElement(m2, "id")
         b1.text = str(uid)
         b5 = et.SubElement(m2, "published")
-        b5.text = str(blogobj.published_on)
+        updated = str(blogobj.published_on)
+        utz = updated[:10]+"T"+updated[11:19]+"Z"
+        b5.text = str(utz)
         b6 = et.SubElement(m2, "updated")
         updated = str(blogobj.updated)
         utz = updated[:10]+"T"+updated[11:25]+"Z"
@@ -862,9 +872,9 @@ def buildxmlall2():
         b2 = et.SubElement(m2, "title")
         b2.text = str(blogobj.topic)
         if blogobj.image :
-            a5 = et.SubElement(m2,'link')
-            a5.set("href","https://ap.shakticoin.com/media/"+str(blogobj.image)) 
-            a5.set("rel","self")
+            a5 = et.SubElement(m2,'content')
+            a5.set("type","image/jpeg")
+            a5.set("src","https://ap.shakticoin.com/media/"+str(blogobj.image)) 
         a = et.SubElement(m2,"category")
         a.set("label","Global")
         a.set("term","Global")

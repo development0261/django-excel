@@ -407,6 +407,10 @@
     </div>
   </section>
   
+  <div class="button">
+    <button class="Content_brief" id="Content_brief">Content Brief</button>
+  </div>
+
   {% endif %}
 
   {% for key,val in context_dict.items %}
@@ -615,6 +619,25 @@
                   </div>
               </div>
           </div>
+
+          <div class="modal fade blog-modal" id="contentModal" tabindex="" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <button type="button" class="close"  data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    
+                  
+
+
+                    <div class="modal-body" >
+                      <div class="modal-contant" id="contentmodalBody">
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
   
 
   <!-- <div class="modal fade blog-modal" id="exampleModalCenter" tabindex="" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

@@ -62,6 +62,10 @@ import uuid
 #     ("Money with Hearts and Mind","Money with Hearts and Mind")
 # }
 
+class content_brief(models.Model):
+    topic = models.CharField(max_length=100)
+    description = RichTextField()
+
 class category(models.Model):
     name = models.CharField(max_length=100)
 
