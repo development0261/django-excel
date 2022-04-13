@@ -5,6 +5,10 @@ from django.apps import apps
 
 from app.models import Ap_Wire, UserCustom,Ap_News,permissions,content_brief
 from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import Group
+
+admin.site.unregister(Group)
+
 
 # app = apps.get_app_config('app')
 
@@ -76,4 +80,6 @@ class selectiondisplay(admin.ModelAdmin):
 @admin.register(category)
 class Display(admin.ModelAdmin):
     list_display = ("name", )
+
+
 
