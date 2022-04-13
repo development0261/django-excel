@@ -694,6 +694,28 @@ def publishBlog(request,pk):
     filepath = downloadxml(request,pk,stringPath=True)
     return redirect('/?filepath={}'.format(filepath))
 
+def backblog(request,pk):
+    blogobj = Ap_Wire.objects.get(pk=pk)
+    blogobj.status = "Content_Pitching"
+    blogobj.published_on = datetime.today().date()
+    blogobj.save()
+    
+    messages.success(request,"Your blog {} was reverted back to Content Pitching".format(blogobj.topic))
+
+
+    return redirect('view')
+
+def backblog2(request,pk):
+    blogobj = Ap_News.objects.get(pk=pk)
+    blogobj.status = "Content_Pitching"
+    blogobj.published_on = datetime.today().date()
+    blogobj.save()
+    
+    messages.success(request,"Your blog {} was reverted back to Content Pitching".format(blogobj.topic))
+
+
+    return redirect('view')
+
 def downloadxml2file2(request,pk):
     blogobj = Ap_News.objects.get(pk=pk)
     

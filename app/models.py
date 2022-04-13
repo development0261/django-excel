@@ -69,7 +69,7 @@ class content_brief(models.Model):
       verbose_name_plural = "Content Brief"
 
 class category(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100) 
     class Meta:
       verbose_name_plural = "Category"
 

@@ -15,6 +15,9 @@ urlpatterns = [
     path('publishBlog/<str:pk>/',views.publishBlog,name='publishBlog'),
     path('publishBlog2/<str:pk>/',views.publishBlog2,name='publishBlog2'),
 
+    path('backblog/<str:pk>/',views.backblog,name='backblog'),
+    path('backblog2/<str:pk>/',views.backblog2,name='backblog2'),
+
     path('downloadxmlall/',views.downloadxmlall,name='downloadxmlall'),
     path('downloadxmlall2file2/',views.downloadxmlall2file2,name='downloadxmlall2file2'),
 
@@ -49,6 +52,8 @@ urlpatterns = [
     path('draganddrop2/<int:dropid>/<str:removedfrom>/<str:addedto>/',views.dropData2,name="dropData2"),
 
     path('contentgetRowData',views.contentgetRowData,name="contentgetRowData"),
+
+
 
 
 ]

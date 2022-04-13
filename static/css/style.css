@@ -393,9 +393,18 @@ body {
   a#submit {
     z-index: 1;
   }
-
-
-
+  .mytable thead tr {
+    border-bottom: none !important;
+}
+.ns-slider-box .table th {position: relative;}
+.mytable thead tr th:before {content: "";position: absolute;bottom: 0;right: 0;left: 0;height: 1px;background: #5928D3;}
+.init-l a{
+    color: #626262;
+}
+.init-l a:hover{
+    color: #626262;
+    text-decoration: none;
+}
 /* Responcive */
 @media screen and (max-width: 1024px){
     .table-carousel .owl-nav button.owl-prev {

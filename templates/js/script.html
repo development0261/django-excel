@@ -659,160 +659,160 @@
           $helper.css("background-color", "rgb(223, 240, 249)");
           return $helper;
       },
-        receive: function(event, ui) {
-          /* here you can access the dragged row via ui.item
-             ui.item has been removed from the other table, and added to "this" table
-          */
-          console.log($(this))
-          var row_id = ui.item[0].id
+      receive: function(event, ui) {
+        /* here you can access the dragged row via ui.item
+           ui.item has been removed from the other table, and added to "this" table
+        */
+        console.log($(this))
+        var row_id = ui.item[0].id
+        
+         var addedTo = $(this).closest("table.mytable")
           
-           var addedTo = $(this).closest("table.mytable")
-            
-            
-            dataa=ui.item[0]
-      
-            dropidArray = ui.item[0].id.split("_")
-            dropid = dropidArray[dropidArray.length - 1]
-            addedto = addedTo.attr('id').slice(7,)
-            var idCounter = 0
-            $("table.mytable").each(function(){
-              console.log($(this).attr('id'))
-              console.log(addedTo.attr('id'))
-                if($(this).attr('id') == addedTo.attr('id')){
-                    return false;
-                }
-                idCounter = idCounter + 1 
-            })
-            
-            console.log("idcounter:"+idCounter) 
-            
-            
+          
+          dataa=ui.item[0]
+    
+          dropidArray = ui.item[0].id.split("_")
+          dropid = dropidArray[dropidArray.length - 1]
+          addedto = addedTo.attr('id').slice(7,)
+          var idCounter = 0
+          $("table.mytable").each(function(){
+            console.log($(this).attr('id'))
+            console.log(addedTo.attr('id'))
+              if($(this).attr('id') == addedTo.attr('id')){
+                  return false;
+              }
+              idCounter = idCounter + 1 
+          })
+          
+          console.log("idcounter:"+idCounter) 
+          
+          
 
 
-            dropidArray.pop()
-            console.log(dropidArray)
-            removedfrom = dropidArray.join('_')
-            
+          dropidArray.pop()
+          console.log(dropidArray)
+          removedfrom = dropidArray.join('_')
+          
+     
+          console.log(addedto)
+          console.log(removedfrom)
+
+          isSuperuser = "{{user.is_superuser}}"
+          console.log(isSuperuser)
+          
+          if($(`#tableBody_${removedfrom} tr`).length == 0){
+              $(`#tableBody_${removedfrom}`).addClass('test')
+          }
+
        
-            console.log(addedto)
-            console.log(removedfrom)
+            $.ajax({
+              url : "draganddrop/"+dropid+"/"+removedfrom+"/"+addedto+"/", // Url of backend (can be python, php, etc..)
+              type: "POST", // data type (can be get, post, put, delete)
+              data : {},
+              success:function(response){
+                var primaryKeyArray = row_id.split("_")
+                var pk = primaryKeyArray[primaryKeyArray.length - 1]
+                var row_td_content = $(`#${row_id} td:last-child`).html()
+                console.log(row_td_content)
+                
+                
+                
+                  
+                
+                  $(`#${row_id} td > div > a.deleteRow`).remove()
+                  $(`#${row_id} td > div > a.editRow`).remove()
+                  $(`#${row_id} td > div > a.publishRow`).remove()
+                  $(`#${row_id} td > div > a.viewRow`).remove()
+                  $(`#${row_id} td > div > a.downloadpdf`).remove()
+                  $(`#${row_id} td > div > a.downloadxml`).remove()
+                  
+                  
+                  if (response.access_dict['view'] ==  true ){
+                    $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add viewRow" id="viewRow-${pk}-${addedto}"  ><i class="fa fa-eye"></i></a>
+                    `
+                  )
+                  }
 
-            isSuperuser = "{{user.is_superuser}}"
-            console.log(isSuperuser)
-            
-            if($(`#tableBody_${removedfrom} tr`).length == 0){
-                $(`#tableBody_${removedfrom}`).addClass('test')
-            }
+                  if (response.access_dict['edit'] ==  true ){
+                    
+                    $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add editRow" id="editRow-${pk}-${addedto}"  ><i class="fa fa-edit"></i></a>
+                    `
+                  )
+                  }
+
+                  if (response.access_dict['to_delete'] ==  true ){
+                    
+                    $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add deleteRow" id="deleteRow-${pk}-${addedto}" href="/deleteBlog/${pk}/" ><i class="fa fa-trash"></i></a>
+                    `
+                  )
+                  }
+                  
+                  
+
+                  if (response.access_dict['view'] ==  true && response.tableIndex >= 6 ){
+                    $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add downloadxml" id="downloadxml-${addedto}" href="/downloadxml/${pk}/" ><i class="fa fa-file-excel-o"></i></a>
+                    
+                    `
+                  )
+                  }
+
+                  if (response.access_dict['publish'] ==  true && response.tableIndex == 6){
+                     
+                    $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add publishRow" id="publishRow-${pk}-${addedto}" href="/publishBlog/${pk}/" ><i class="fa fa-paper-plane"></i></a>
+                    `
+                  )
+                  }
+
+                  if (response.access_dict['view'] ==  true && response.tableIndex == 7 ){
+                    $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add downloadxml" id="downloadpdf-${addedto}" href="/downloadpdf/${pk}/" ><i class="fa fa-file-powerpoint-o"></i></a>
+                    
+                    `
+                  )
+                  }
+
+                  
+                  
+                  if (response.access_dict['view'] ==  true && response.tableIndex <= 5 && removedfrom == "Ready_For_Release" && addedto == "FDN_Approval_1" ){
+                    $(`#${row_id} td > div > a.downloadxml`).remove()
+                  }
+
+                  if (response.tableIndex==7){
+                  $(`#${row_id} td > div > a.editRow`).remove()
+                  $(`#${row_id} td > div > a.deleteRow`).remove()
+                  
+                  
+
+                  }
+
+                 
+
+                  
+
+                  
+                
+
+                
+
+
+              }
+            }) 
+         
 
          
-              $.ajax({
-                url : "draganddrop/"+dropid+"/"+removedfrom+"/"+addedto+"/", // Url of backend (can be python, php, etc..)
-                type: "POST", // data type (can be get, post, put, delete)
-                data : {},
-                success:function(response){
-                  var primaryKeyArray = row_id.split("_")
-                  var pk = primaryKeyArray[primaryKeyArray.length - 1]
-                  var row_td_content = $(`#${row_id} td:last-child`).html()
-                  console.log(row_td_content)
-                  
-                  
-                  
-                    
-                  
-                    $(`#${row_id} td > div > a.deleteRow`).remove()
-                    $(`#${row_id} td > div > a.editRow`).remove()
-                    $(`#${row_id} td > div > a.publishRow`).remove()
-                    $(`#${row_id} td > div > a.viewRow`).remove()
-                    $(`#${row_id} td > div > a.downloadpdf`).remove()
-                    $(`#${row_id} td > div > a.downloadxml`).remove()
-                    
-                    
-                    if (response.access_dict['view'] ==  true ){
-                      $(`#${row_id} td > div`).append(
-                      `
-                      <a class="row-add viewRow" id="viewRow-${pk}-${addedto}"  ><i class="fa fa-eye"></i></a>
-                      `
-                    )
-                    }
-  
-                    if (response.access_dict['edit'] ==  true ){
-                      
-                      $(`#${row_id} td > div`).append(
-                      `
-                      <a class="row-add editRow" id="editRow-${pk}-${addedto}"  ><i class="fa fa-edit"></i></a>
-                      `
-                    )
-                    }
-  
-                    if (response.access_dict['to_delete'] ==  true ){
-                      
-                      $(`#${row_id} td > div`).append(
-                      `
-                      <a class="row-add deleteRow" id="deleteRow-${pk}-${addedto}" href="/deleteBlog/${pk}/" ><i class="fa fa-trash"></i></a>
-                      `
-                    )
-                    }
-                    
-                    
-  
-                    if (response.access_dict['view'] ==  true && response.tableIndex >= 6 ){
-                      $(`#${row_id} td > div`).append(
-                      `
-                      <a class="row-add downloadxml" id="downloadxml-${addedto}" href="/downloadxml/${pk}/" ><i class="fa fa-file-excel-o"></i></a>
-                      
-                      `
-                    )
-                    }
-  
-                    if (response.access_dict['publish'] ==  true && response.tableIndex == 6){
-                       
-                      $(`#${row_id} td > div`).append(
-                      `
-                      <a class="row-add publishRow" id="publishRow-${pk}-${addedto}" href="/publishBlog/${pk}/" ><i class="fa fa-paper-plane"></i></a>
-                      `
-                    )
-                    }
-  
-                    if (response.access_dict['view'] ==  true && response.tableIndex == 7 ){
-                      $(`#${row_id} td > div`).append(
-                      `
-                      <a class="row-add downloadxml" id="downloadpdf-${addedto}" href="/downloadpdf/${pk}/" ><i class="fa fa-file-powerpoint-o"></i></a>
-                      
-                      `
-                    )
-                    }
-  
-                    
-                    
-                    if (response.access_dict['view'] ==  true && response.tableIndex <= 5 && removedfrom == "Ready_For_Release" && addedto == "FDN_Approval_1" ){
-                      $(`#${row_id} td > div > a.downloadxml`).remove()
-                    }
-  
-                    if (response.tableIndex==7){
-                    $(`#${row_id} td > div > a.editRow`).remove()
-                    $(`#${row_id} td > div > a.deleteRow`).remove()
-                    
-                    
-  
-                    }
-  
-                   
-  
-                    
-  
-                    
-                  
-  
-                  
-  
-  
-                }
-              }) 
-           
-
-           
-            
-        }
+          
+      }
       }
       );
 
@@ -964,6 +964,15 @@
                   if (response.tableIndex==7){
                   $(`#${row_id} td > div > a.editRow2`).remove()
                   $(`#${row_id} td > div > a.deleteRow2`).remove()
+
+                  if (response.tableIndex==6){
+                    $(`#${row_id} td > div > a.editRow`).remove()
+                    $(`#${row_id} td > div > a.deleteRow`).remove()
+                    $(`#${row_id} td > div > a.downloadpdf`).remove()
+                  $(`#${row_id} td > div > a.downloadxml`).remove()
+                  
+
+                  }
                   
                   
 
@@ -1102,6 +1111,10 @@ $(document).on('click','.wire_cat',function(){
       $(`#ApNews_${tbId} td.category2:not(:contains(${value}))`).parent().hide();
     })
   
-  
+    $('.dropdown').click(function(){
+
+      $('.dropdown-menu').toggleClass('show');
+
+  });
 
 </script>

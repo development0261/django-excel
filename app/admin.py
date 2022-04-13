@@ -76,6 +76,11 @@ class selectiondisplay(admin.ModelAdmin):
     def get_user_permission(self, obj):
         return " || ".join([p.username for p in obj.user.all()])
 
+    class Media:
+       js = (
+       'js/admin.js',
+       ) 
+
 
 @admin.register(category)
 class Display(admin.ModelAdmin):
