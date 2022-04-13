@@ -73,4 +73,7 @@ class selectiondisplay(admin.ModelAdmin):
         return " || ".join([p.username for p in obj.user.all()])
 
 
-admin.site.register(category)
+@admin.register(category)
+class Display(admin.ModelAdmin):
+    list_display = ("name", )
+
