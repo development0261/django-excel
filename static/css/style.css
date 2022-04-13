@@ -1,7 +1,17 @@
 body {
-    font-family: 'Roboto', sans-serif;
+    css: 'Roboto', sans-serif;
 }
 
+#Content_brief{
+    border-radius:0px;
+    background: #ffffff;
+    color: #3d2ba5;
+}
+#Content_brief:hover{
+    color: white;
+    background-color: #3d2ba5;
+    
+}
 
 a:hover {
     text-decoration: none;
