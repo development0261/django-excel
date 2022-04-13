@@ -1,0 +1,255 @@
+{% load static %}
+  {% load customtags %}
+  {% for key,val in context_dict.items %}
+
+  <div class="modal fade bd-example-modal-lg"  tabindex="" role="dialog" id="editmodal_{{key|replaceSpacewithUnderScore }}">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+    
+          <button type="button" class="close closeModel" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+            
+            {% comment %} <span aria-hidden="true">&times;</span>
+          </button> {% endcomment %}
+        </div>
+        <div class="modal-body editModel1" id="editmodalbody_{{key|replaceSpacewithUnderScore }}">
+
+          
+        </div>
+
+    </div>
+      
+      </div>
+    </div>
+    {% endfor %}
+
+{% for key,val in context_dict1.items %}
+
+    <div class="modal fade bd-example-modal-lg"  tabindex="" role="dialog" id="editmodal2_{{key|replaceSpacewithUnderScore }}">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+      
+            
+          </div>
+          <div class="modal-body" id="editmodalbody2_{{key|replaceSpacewithUnderScore }}">
+
+  
+          </div>
+  
+      </div>
+        
+        </div>
+      </div>
+      {% endfor %}
+
+
+
+<div class="modal fade bd-example-modal-lg"  tabindex="" role="dialog" id="modal_Content_Pitching">
+<div class="modal-dialog modal-lg" role="document">
+<div class="modal-content">
+
+<div class="modal-body">
+<div class="row justify-content-center">
+<div class="col-md-8">
+    <div  class="title">
+        <h2>Add Blog</h2>
+    </div>
+    <div class="login-form" >
+        <form method="POST" enctype="multipart/form-data" action="{% url 'createBlog' %}">
+          {% csrf_token %}
+            <div class="field-name">
+                <label>Title</label>
+                <input type="text" placeholder="" name="topic" id="title" required>
+            </div>
+            <div class="editor">
+                <label>Description*</label>
+            <textarea name="description" rows="10" cols="55" id="description" required></textarea>
+            
+            </div>
+            <div class="field-name">
+              
+                <label>Category *</label>
+                <div class="select_box">
+                  <select class="box" onchange="showCategories(this.value)" name="category"> 
+                    <option selected>Select Category</option>
+                    
+                    {% for cat in category_dict %}
+                    <option value="{{cat.pk}}">{{cat.name}}</option>
+                    {% endfor %}
+                  </select>
+               
+                
+                </div>
+
+              </div>
+            <div class="field-name">
+                <label>Image</label>
+                <input type="file" placeholder="" name="image" class="image">
+            </div>
+
+            
+
+            <button type="submit" class="login-submit" name="Add" value="Add">Save Blog</button>
+            <a class="ml-3" style="text-decoration:none" href="{% url 'view' %}" name="login" value="Log in">Go Back</a>
+        </form>
+    </div>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+</div>
+
+
+<div class="modal fade bd-example-modal-lg"  tabindex="" role="dialog" id="modal_News_Content_Pitching">
+<div class="modal-dialog modal-lg" role="document">
+<div class="modal-content">
+
+<div class="modal-body">
+<div class="row justify-content-center">
+<div class="col-md-8">
+    <div  class="title">
+        <h2>Add Blog</h2>
+    </div>
+    <div class="login-form">
+        <form method="POST" enctype="multipart/form-data" action="{% url 'createBlog2' %}">
+          {% csrf_token %}
+            <div class="field-name">
+                <label>Title</label>
+                <input type="text" placeholder="" name="topic" id="title" required>
+            </div>
+            <div class="editor">
+                <label>Description*</label>
+            <textarea name="description2" rows="10" cols="55" id="description" required></textarea>
+            </div>
+
+            <div class="field-name">
+              
+              <label>Category *</label>
+              <div class="select_box">
+                <select class="box" onchange="showCategories(this.value)" name="category"> 
+                  <option selected>Select Category</option>
+                  
+                  {% for cat in category_dict %}
+                  <option value="{{cat.pk}}">{{cat.name}}</option>
+                  {% endfor %}
+                </select>
+             
+              
+            </div>
+          </div>
+
+
+            <div class="field-name">
+                <label>Image</label>
+                <input type="file" placeholder="" name="image" class="image">
+            </div>
+
+            
+
+            <button type="submit" class="login-submit" name="Add" value="Add">Save Blog</button>
+            <a class="ml-3" style="text-decoration:none" href="{% url 'view' %}" name="login" value="Log in">Go Back</a>
+        </form>
+    </div>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+</div>
+
+
+
+<div class="modal fade blog-modal" id="viewModal" tabindex="" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <button type="button" class="close"  data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            
+          
+
+
+            <div class="modal-body" >
+              <div class="modal-contant" id="viewmodalBody">
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade blog-modal" id="viewModal2" tabindex="" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          
+        
+
+
+          <div class="modal-body" >
+            <div class="modal-contant" id="viewmodalBody2">
+            </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div class="modal fade blog-modal" id="contentModal" tabindex="" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <button type="button" class="close"  data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        
+      
+
+
+        <div class="modal-body" >
+          <div class="modal-contant" id="contentmodalBody">
+            <h2 class="post-title">{{topic}}</h2>
+            
+            {{description|safe}}
+          </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+<!-- <div class="modal fade blog-modal" id="exampleModalCenter" tabindex="" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal-content">
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+  <span aria-hidden="true">&times;</span>
+</button>
+<div class="modal-body">
+    <div class="modal-contant">
+        <div class="post-image">
+            <img src="https://thumbs.dreamstime.com/b/blog-information-website-concept-workplace-background-text-view-above-127465079.jpg">
+        </div>
+        <h2 class="post-title">What is Lorem Ipsum?</h2>
+        <div class="auth-date">
+            <h6>Author:- <a href="#">Lorem Ipsum</a></h6>
+            <h6>Date:- <a href="#">23/02/2021</a></h6>
+        </div>
+        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+    </div>
+</div>
+</div>
+</div>
+</div> -->

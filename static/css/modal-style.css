@@ -1,0 +1,62 @@
+
+
+.blog-modal .close {
+    position: absolute;
+    top: -30px;
+    right: 0;
+    color: #fff;
+    text-shadow: none;
+    opacity: 1;
+}
+
+.blog-modal .modal-dialog {
+    max-width: 840px;
+}
+
+.blog-modal {
+    padding: 0 !important;
+}
+.blog-modal .modal-body {
+    padding: 30px 30px;
+}
+
+.post-image img {
+    max-width: 100%;
+    height: 400px;
+    object-fit: cover;
+    width: 100%;
+}
+
+.modal-contant .post-title {
+    font-size: 30px;
+    font-weight: 600;
+    color: #5928D3;
+    margin: 30px 0 20px 0;
+}
+
+.auth-date {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.auth-date h6 {
+    margin: 0;
+    color: #5928D3;
+}
+
+.auth-date h6 a {
+    color: #212529;
+}
+.row-add i{
+    color: #5928d3;
+}
+
+.test{
+  display:block;
+  height:30px;
+  width:260px;
+  position:absolute;
+  z-index:-1;
+}

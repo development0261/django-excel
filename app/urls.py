@@ -48,7 +48,7 @@ urlpatterns = [
     path('editData2/<int:id>/<str:tableName>/',views.editData2,name="editData2"),
     path('draganddrop2/<int:dropid>/<str:removedfrom>/<str:addedto>/',views.dropData2,name="dropData2"),
 
-    path('contentgetRowData',views.getRowData,name="contentgetRowData"),
+    path('contentgetRowData',views.contentgetRowData,name="contentgetRowData"),
 
 
 ]
