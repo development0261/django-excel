@@ -162,6 +162,9 @@ def getRowData(request,id,tableName):
         imageobj =tableObj.image.url
     return JsonResponse({'category':tableObj.category.name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj})
 
+def contentgetRowData(request):
+    pass
+
 def getRowData2(request,id,tableName):
     
     tableObj = Ap_News.objects.get(pk = id)
@@ -285,13 +288,24 @@ def viewfunction(request):
         context_dict1['Ready For Release'] = apnews_ReadyForRelease_data
         context_dict1['App Published'] = apnews_APPublished_data
 
+        obj = content_brief.objects.first()
+        topic = obj.topic
+        desc = obj.description
+        desc = desc.replace("&nbsp;","")
+        desc = desc.replace("&#39;","")
+        # desc = re.sub('<[^<]*?/?>', ' ', desc)
+
+        print(desc)
+
+
+
 
         permissions.objects.filter(user=request.user)
 
         categories = category.objects.all()
 
 
-        return render(request,'index.html',{'context_dict':context_dict,'context_dict1':context_dict1,'category_dict':categories})
+        return render(request,'index.html',{'context_dict':context_dict,'context_dict1':context_dict1,'category_dict':categories,'topic':topic,'description':desc})
     else:
         return redirect('loginview')
 

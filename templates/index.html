@@ -408,7 +408,7 @@
   </section>
   
   <div class="button">
-    <button class="Content_brief" id="Content_brief">Content Brief</button>
+    <button class="Content_brief"  data-toggle="modal"  id="Content_brief" data-target="#contentModal">Content Brief</button>
   </div>
 
   {% endif %}
@@ -632,6 +632,9 @@
 
                     <div class="modal-body" >
                       <div class="modal-contant" id="contentmodalBody">
+                        <h2 class="post-title">{{topic}}</h2>
+                        
+                        {{description|safe}}
                       </div>
                     </div>
                 </div>
@@ -948,6 +951,7 @@
             
                                       <div class="field-name">
                                         <label>Image</label>
+
                                         <input type="file" placeholder="" name="image" id="image_${tableName}_${data.pk}" class="image" >
                                       </div>
 
@@ -1106,12 +1110,32 @@
               alert("There was an error");
             }
           });
-
-         
-
-
         })
 
+        $(document).on('click','.contentModal',function(){
+          console.log("contentModal")
+          
+     
+          $.ajax({
+            url: "contentgetRowData/",
+            success: function(data){ 
+                console.log(data)
+                $(`#contentmodalBody`).empty()
+                $(`#contentmodalBody`).append(`
+                
+                <p>123</p>
+                                            <p>${data.topic}</p>
+                                            
+                                   
+                `)
+                $(`#Content_brief`).modal('show')
+            },
+            error: function(){
+              alert("There was an error");
+            }
+          });
+        })
+          
 
         $(document).on('click','.viewRow2',function(){
           console.log("viewrow2")
@@ -1705,13 +1729,13 @@
         img.onload = function() {
           if(this.width > 1020 ){
             alert("image should not be less than 1020 pixels width");
-            
+
   
-            $(this).empty()
-           return false
+            document.getElementsByClassName("image")[0].value = ""
+           
            }
         };
-        img.onerror = function() {
+        img.onerror = function() {  
             alert( "not a valid file: " + file.type);
         };
         img.src = _URL.createObjectURL(file);

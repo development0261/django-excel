@@ -3,7 +3,7 @@ from .models import category
 from django.contrib import admin
 from django.apps import apps
 
-from app.models import Ap_Wire, UserCustom,Ap_News,permissions
+from app.models import Ap_Wire, UserCustom,Ap_News,permissions,content_brief
 from django.contrib.auth.admin import UserAdmin
 
 # app = apps.get_app_config('app')
@@ -11,7 +11,9 @@ from django.contrib.auth.admin import UserAdmin
 # for model_name, model in app.models.items():
 #     admin.site.register(model)
 
-
+@admin.register(content_brief)
+class Display(admin.ModelAdmin):
+    list_display = ('topic',)
 
 class customuseradmin(UserAdmin):
      fieldsets = (
