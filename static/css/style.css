@@ -3,14 +3,15 @@ body {
 }
 
 #Content_brief{
-    border-radius:0px;
+    border-radius: 0px;
     background: #ffffff;
-    color: #3d2ba5;
+    color: #212529;
+    border: 1px solid #5928d3;
+    margin-left: 10px;
 }
 #Content_brief:hover{
     color: white;
-    background-color: #3d2ba5;
-    
+    background-color: #5928d3;
 }
 
 a:hover {
@@ -52,7 +53,11 @@ a:hover {
     background: #5928D3;
     color: #fff;
 }
-.ns-slider-box .table thead {background: #E8E4F2;}
+.ns-slider-box .table thead {
+    background: #E8E4F2;
+    position: sticky;
+    top: 0;
+}
 
 
 
