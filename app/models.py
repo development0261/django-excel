@@ -65,9 +65,13 @@ import uuid
 class content_brief(models.Model):
     topic = models.CharField(max_length=100)
     description = RichTextField()
+    class Meta:
+      verbose_name_plural = "Content Brief"
 
 class category(models.Model):
     name = models.CharField(max_length=100)
+    class Meta:
+      verbose_name_plural = "Category"
 
 class Ap_Wire(models.Model):
     topic = models.CharField(max_length=200)
