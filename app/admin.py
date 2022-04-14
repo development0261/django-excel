@@ -2,7 +2,7 @@
 from .models import category
 from django.contrib import admin
 from django.apps import apps
-
+from import_export.admin import ImportExportModelAdmin
 
 from django.contrib.auth.models import Group, Permission
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
@@ -70,10 +70,10 @@ admin.site.unregister(Group)
 #     admin.site.register(model)
 
 @admin.register(content_brief)
-class Display(admin.ModelAdmin):
+class Display(ImportExportModelAdmin,admin.ModelAdmin):
     list_display = ('topic',)
 
-class customuseradmin(UserAdmin):
+class customuseradmin(UserAdmin,ImportExportModelAdmin):
      fieldsets = (
         *UserAdmin.fieldsets,  # original form fieldsets, expanded
         (                      # new fieldset added on to the bottom
@@ -93,7 +93,7 @@ class customuseradmin(UserAdmin):
 # admin.site.register(UserCustom,customuseradmin)
 
 @admin.register(UserCustom)
-class UserProfileAdmin(UserAdmin):
+class UserProfileAdmin(UserAdmin,ImportExportModelAdmin):
     list_display = ['username','email','first_name','last_name','is_staff','is_superuser']
     class Media:
         css = { 'all': ('css/admin.css',) }
@@ -118,7 +118,7 @@ class UserProfileAdmin(UserAdmin):
 #     pass
 
 @admin.register(Ap_Wire)
-class BlogDisplay(admin.ModelAdmin):
+class BlogDisplay(ImportExportModelAdmin,admin.ModelAdmin):
 
     def image_tag(self, obj):
         return format_html('<img src="{}" style="height:50px; width:90px;" />'.format(obj.image.url))
@@ -129,20 +129,20 @@ class BlogDisplay(admin.ModelAdmin):
     exclude = ('reverted_count',)
 
 @admin.register(Ap_News)
-class BlogDisplay(admin.ModelAdmin):
+class BlogDisplay(ImportExportModelAdmin,admin.ModelAdmin):
     list_display = ("topic", "author","date","status","image")
     exclude = ('reverted_count',)
 
 @admin.register(moreimages_apwire)
-class BlogDisplay(admin.ModelAdmin):
+class BlogDisplay(ImportExportModelAdmin,admin.ModelAdmin):
     list_display = ("post",)
 
 @admin.register(moreimages_apnews)
-class BlogDisplay(admin.ModelAdmin):
+class BlogDisplay(ImportExportModelAdmin,admin.ModelAdmin):
     list_display = ("post",)
 
 @admin.register(permissions)
-class selectiondisplay(admin.ModelAdmin):
+class selectiondisplay(ImportExportModelAdmin,admin.ModelAdmin):
     list_display = ("status",'get_user_permission',"create","edit","view","move","publish","to_delete")
 
     def get_user_permission(self, obj):
@@ -156,7 +156,7 @@ class selectiondisplay(admin.ModelAdmin):
 
 
 @admin.register(category)
-class Display(admin.ModelAdmin):
+class Display(ImportExportModelAdmin,admin.ModelAdmin):
     list_display = ("name", )
 
 

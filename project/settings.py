@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'app',
     'multiselectfield',
     'ckeditor',
+    'import_export',
  
 ]
 # TIME_ZONE = 'Asia/Singapore'
