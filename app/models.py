@@ -1,8 +1,9 @@
 from datetime import date
-from secrets import choice
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.contrib import admin
 ROLE = [
         ('Admin', 'Admin'),
         ('Writer', 'Writer'),
@@ -12,13 +13,13 @@ ROLE = [
     ]
 
 tables_choice = [
-    ('Content_Pitching','Content_Pitching'),
-    ('Writing_Rewrite','Writing_Rewrite'),
-    ('Review_Draft_1','Review_Draft_1'),
-    ('Review_Draft_2','Review_Draft_2'),
-    ('FDN_Approval_1','FDN_Approval_1'),
-    ('Ready_For_Release','Ready_For_Release'),
-    ('App_Published','App_Published')
+    ('Content_Pitching','Story Pitching'),
+    ('Writing_Rewrite','Writing & Rewriting'),
+    ('Review_Draft_1','First Review'),
+    ('Review_Draft_2','Second Review'),
+    ('FDN_Approval_1','Ready For FDN Approval'),
+    ('Ready_For_Release','Ready For Release'),
+    ('App_Published','AP Published')
 ]
 
 from django.contrib.auth.models import AbstractUser
@@ -40,7 +41,7 @@ class UserCustom(AbstractUser):
             'App_Published':self.APPublished
         }
     
-       
+
     # def get_role_data(self):
     #     return UserTableConnection.objects.filter(user = self)
 # class userdata(models.Model):
@@ -62,6 +63,8 @@ import uuid
 #     ("Money with Hearts and Mind","Money with Hearts and Mind")
 # }
 
+
+
 class content_brief(models.Model):
     topic = models.CharField(max_length=100)
     description = RichTextField()
@@ -77,7 +80,7 @@ class Ap_Wire(models.Model):
     topic = models.CharField(max_length=200)
     author = models.ForeignKey(UserCustom,on_delete=models.CASCADE)
     description = RichTextField()
-    image = models.ImageField(null=True,blank=True)
+    image = models.ImageField(null=True,blank=True) 
     date = models.DateField(auto_now_add=True)
     status = models.CharField(choices=tables_choice,max_length=30,default="APWire_Content_Pitching")
     published_on = models.DateTimeField(null=True, blank=True)
@@ -87,7 +90,14 @@ class Ap_Wire(models.Model):
     category = models.ForeignKey(category,on_delete=models.CASCADE)
 
     class Meta:
-      verbose_name_plural = "AP-Wire"
+        verbose_name_plural = "AP-Wire"
+
+class moreimages_apwire(models.Model):
+    post = models.ForeignKey(Ap_Wire, default=None,on_delete=models.CASCADE)
+    image = models.ImageField(verbose_name='Image')
+
+    class Meta:
+        verbose_name_plural = "AP-Wire Images"
 
 class Ap_News(models.Model):
     topic = models.CharField(max_length=200)
@@ -105,6 +115,12 @@ class Ap_News(models.Model):
     class Meta:
       verbose_name_plural = "AP-News"
 
+class moreimages_apnews(models.Model):
+    post = models.ForeignKey(Ap_News, default=None,on_delete=models.CASCADE)
+    image = models.ImageField(verbose_name='Image')
+
+    class Meta:
+        verbose_name_plural = "AP-News Images"
 
 
 class permissions(models.Model):

@@ -1,6 +1,5 @@
 from ast import While
 from multiprocessing import AuthenticationError
-from .models import category
 from urllib import request
 from django.shortcuts import render,redirect
 from django.http import HttpResponse, JsonResponse
@@ -160,7 +159,17 @@ def getRowData(request,id,tableName):
     imageobj = None
     if tableObj.image:
         imageobj =tableObj.image.url
-    return JsonResponse({'category':tableObj.category.name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj})
+    imageobjs = moreimages_apwire.objects.filter(post = tableObj)
+    if not imageobjs:
+        imgdict = {}
+    else:
+        imgdict = {}
+        count = 0
+        for i in imageobjs:
+            count += 1
+            imgdict[str(count)]=i.image.url
+        
+    return JsonResponse({'category':tableObj.category.name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj,'imgdict':imgdict})
 
 def contentgetRowData(request):
     pass
@@ -173,20 +182,32 @@ def getRowData2(request,id,tableName):
     imageobj = None
     if tableObj.image:
         imageobj =tableObj.image.url
-    return JsonResponse({'category':tableObj.category.name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj})
+        imageobjs = moreimages_apnews.objects.filter(post = tableObj)
+    if not imageobjs:
+        imgdict = {}
+    else:
+        imgdict = {}
+        count = 0
+        for i in imageobjs:
+            count += 1
+            imgdict[str(count)]=i.image.url
+        
+    return JsonResponse({'category':tableObj.category.name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj,'imgdict':imgdict})
 
 def editBlog(request,pk):
     if request.method == 'POST':
-        print("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
         print(request.POST['dropdown'])
         blog = Ap_Wire.objects.filter(pk=pk).update(topic=request.POST['topic'],author=request.user,description=request.POST['description'],category=request.POST['dropdown'])
-       
+        
         blog.save()
         print("called")
         if 'image' in request.FILES:
             image=request.POST['image']
             blog.image = image
             blog.save()
+        
+        
+
         return redirect('view')
     return render(request,'editblog.html')  
 
@@ -209,7 +230,12 @@ def editData(request,id,tableName):
         image=request.FILES['image']
         tableObj.image = image
         tableObj.save()
-        
+    
+    if 'extra_image[]' in request.FILES:
+        print("------------------------------------------------------------------------------------")
+        files = request.FILES.getlist('extra_image[]')
+        for i in files:                
+            moreimages_apwire.objects.create(post=blog,image=i)
 
     date = datetime.strptime(str(tableObj.date), '%Y-%m-%d')
 
@@ -325,11 +351,11 @@ def publishBlog2(request,pk):
     filepath = downloadxml(request,pk,stringPath=True)
     return redirect('/?filepath={}'.format(filepath))
 
-def printpdf(desc,imagepath,topic):
+def printpdf(desc,imagepath,topic,images):
     import time
     from reportlab.lib.enums import TA_JUSTIFY
     from reportlab.lib.pagesizes import letter
-    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image,PageBreak
     from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
     from reportlab.lib.units import inch
     topic=str(topic)
@@ -337,8 +363,7 @@ def printpdf(desc,imagepath,topic):
                             rightMargin=72,leftMargin=72,
                             topMargin=72,bottomMargin=18)
     Story=[]
-
-    im = Image(imagepath, 6*inch, 4*inch)
+    im = Image(imagepath, 6*inch, 3.5*inch)
     Story.append(im)
     styles=getSampleStyleSheet()
     styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
@@ -348,11 +373,17 @@ def printpdf(desc,imagepath,topic):
     Story.append(Paragraph(ptext, styles["Title"]))       
     Story.append(Spacer(1, 12))
     Story.append(Spacer(1, 12))
+    
     for i in desc:
         ptext = i
         Story.append(Paragraph(ptext, styles["Justify"]))
         Story.append(Spacer(1, 12))
 
+    for i in images:
+        Story.append(Spacer(1, 12))
+        im = Image(i, 6*inch, 3.5*inch)
+        Story.append(im)
+    print(images)
     x=doc.build(Story)
     response = FileResponse(open(f"{MEDIA_ROOT}/pdf/{topic}.pdf", 'rb'),as_attachment=True)
     return response
@@ -422,8 +453,13 @@ def buildxml(pk,blogobj):
 
     o1 = et.Element('apxh:div')
     n1.append (o1)
+    elee = et.SubElement(m2,"apcm:ContentMetadata")
+    elem = et.SubElement(elee,"apcm:HeadLine")
+    elem.text=str(blogobj.topic)
+    elem = et.SubElement(elee,"apcm:Characteristics")
+    elem.set("MediaType","Text")
 
-    elee = et.SubElement(n1,"apnm:NewsManagement")
+    elee = et.SubElement(m2,"apnm:NewsManagement")
     elem = et.SubElement(elee,"apnm:ManagementId")
     if reverted_count == "None" :
         elem.text = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-0"
@@ -572,6 +608,8 @@ def buildxml(pk,blogobj):
         a5 = et.SubElement(m2,'content')
         a5.set("type","image/jpeg")
         a5.set("src","https://ap.shakticoin.com/media/"+str(blogobj.image)) 
+    
+    
     a = et.SubElement(m2,"category")
     a.set("label","Global")
     a.set("term","Global")
@@ -583,6 +621,11 @@ def buildxml(pk,blogobj):
 
     o1 = et.Element('apxh:div')
     n1.append (o1)
+    elee = et.SubElement(m2,"apcm:ContentMetadata")
+    elem = et.SubElement(elee,"apcm:HeadLine")
+    elem.text=str(blogobj.topic)
+    elem = et.SubElement(elee,"apcm:Characteristics")
+    elem.set("MediaType","Text")
  
     x = blogobj.description.split("\n")
     y = []
@@ -621,6 +664,10 @@ def buildxml(pk,blogobj):
 
 def downloadpdf(request,pk):
     blogobj = Ap_Wire.objects.get(pk=pk)
+    imglist = []
+    
+    for i in moreimages_apwire.objects.filter(post=blogobj):
+        imglist.append(MEDIA_ROOT+"/"+i.image.name)
     image_data = MEDIA_ROOT+"/"+blogobj.image.name
     print(image_data)
     
@@ -638,12 +685,16 @@ def downloadpdf(request,pk):
         
         i = re.sub('<[^<]*?/?>', ' ', i)
         z.append(i)
-
-    pdf = printpdf(z,image_data,str(blogobj.topic)) 
+        
+    pdf = printpdf(z,image_data,str(blogobj.topic),imglist) 
     return pdf
 
 def downloadpdf2(request,pk):
     blogobj = Ap_News.objects.get(pk=pk)
+    imglist = []
+    
+    for i in moreimages_apnews.objects.filter(post=blogobj):
+        imglist.append(MEDIA_ROOT+"/"+i.image.name)
     image_data = MEDIA_ROOT+"/"+blogobj.image.name
     print(image_data)
     
@@ -661,8 +712,8 @@ def downloadpdf2(request,pk):
         
         i = re.sub('<[^<]*?/?>', ' ', i)
         z.append(i)
-
-    pdf = printpdf(z,image_data,str(blogobj.topic))
+    
+    pdf = printpdf(z,image_data,str(blogobj.topic),imglist)
     return pdf
 
 
@@ -793,6 +844,12 @@ def buildxmlall():
             a5 = et.SubElement(m2,'content')
             a5.set("type","image/jpeg")
             a5.set("src","https://ap.shakticoin.com/media/"+str(blogobj.image)) 
+        images_obj = moreimages_apwire.objects.filter(post = blogobj)
+        if images_obj:
+            for i in images_obj:
+                a5 = et.SubElement(m2,'content')
+                a5.set("type","image/jpeg")
+                a5.set("src","https://ap.shakticoin.com/media/"+str(i.image)) 
         a = et.SubElement(m2,"category")
         a.set("label","Global")
         a.set("term","Global")
@@ -804,8 +861,13 @@ def buildxmlall():
 
         o1 = et.Element('apxh:div')
         n1.append (o1)
+        elee = et.SubElement(m2,"apcm:ContentMetadata")
+        elem = et.SubElement(elee,"apcm:HeadLine")
+        elem.text=str(blogobj.topic)
+        elem = et.SubElement(elee,"apcm:Characteristics")
+        elem.set("MediaType","Text")
 
-        elee = et.SubElement(n1,"apnm:NewsManagement")
+        elee = et.SubElement(m2,"apnm:NewsManagement")
         elem = et.SubElement(elee,"apnm:ManagementId")
         if reverted_count == "None" :
             elem.text = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-0"
@@ -911,6 +973,12 @@ def buildxmlall2():
             a5 = et.SubElement(m2,'content')
             a5.set("type","image/jpeg")
             a5.set("src","https://ap.shakticoin.com/media/"+str(blogobj.image)) 
+        images_obj = moreimages_apnews.objects.filter(post = blogobj)
+        if images_obj:
+            for i in images_obj:
+                a5 = et.SubElement(m2,'content')
+                a5.set("type","image/jpeg")
+                a5.set("src","https://ap.shakticoin.com/media/"+str(i.image)) 
         a = et.SubElement(m2,"category")
         a.set("label","Global")
         a.set("term","Global")
@@ -922,8 +990,13 @@ def buildxmlall2():
 
         o1 = et.Element('apxh:div')
         n1.append (o1)
+        elee = et.SubElement(m2,"apcm:ContentMetadata")
+        elem = et.SubElement(elee,"apcm:HeadLine")
+        elem.text=str(blogobj.topic)
+        elem = et.SubElement(elee,"apcm:Characteristics")
+        elem.set("MediaType","Text")
 
-        elee = et.SubElement(n1,"apnm:NewsManagement")
+        elee = et.SubElement(m2,"apnm:NewsManagement")
         elem = et.SubElement(elee,"apnm:ManagementId")
         if reverted_count == "None" :
             elem.text = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-0"
@@ -1026,6 +1099,13 @@ def createBlog(request):
             image=request.FILES['image']
             blog.image = image
             blog.save()
+        
+        if 'extra_image[]' in request.FILES:
+            
+            files = request.FILES.getlist('extra_image[]')
+            for i in files:                
+                moreimages_apwire.objects.create(post=blog,image=i)
+
         return redirect('view')
 
     return render(request,'createBlog.html')
@@ -1041,6 +1121,13 @@ def createBlog2(request):
             image=request.FILES['image']
             blog.image = image
             blog.save()
+
+        if 'extra_image[]' in request.FILES:
+            
+            files = request.FILES.getlist('extra_image[]')
+            for i in files:                
+                moreimages_apnews.objects.create(post=blog,image=i)
+            
         return redirect('/?secondTab=True')
 
     return render(request,'createBlog.html')
@@ -1153,6 +1240,20 @@ def deleteBlog2(request,pk):
 def logout_view(request):
     logout(request)
     return redirect('loginview')
+
+def addimagewire(req,pk):
+    if request.method == 'POST':
+
+        blogobj = Ap_Wire.objects.get(pk=pk)
+
+        if 'image' in request.FILES:
+            image=request.POST['image']
+            moreimages_apwire.objects.create(post = blogobj,image=image)
+        
+        return redirect('view')
+
+    return redirect('view')
+
 
 # Publisher: All steps - view/ edit/ move/ upload
 # Admin: view/ edit

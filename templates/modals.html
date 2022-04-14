@@ -15,7 +15,7 @@
           </button> {% endcomment %}
         </div>
         <div class="modal-body editModel1" id="editmodalbody_{{key|replaceSpacewithUnderScore }}">
-
+          
           
         </div>
 
@@ -39,7 +39,7 @@
             
           </div>
           <div class="modal-body" id="editmodalbody2_{{key|replaceSpacewithUnderScore }}">
-
+            
   
           </div>
   
@@ -54,14 +54,17 @@
 <div class="modal fade bd-example-modal-lg"  tabindex="" role="dialog" id="modal_Content_Pitching">
 <div class="modal-dialog modal-lg" role="document">
 <div class="modal-content">
+  
 
 <div class="modal-body">
 <div class="row justify-content-center">
 <div class="col-md-8">
     <div  class="title">
-        <h2>Add Blog</h2>
+        <h2>Add Blog</h2>        
     </div>
+    
     <div class="login-form" >
+      
         <form method="POST" enctype="multipart/form-data" action="{% url 'createBlog' %}">
           {% csrf_token %}
             <div class="field-name">
@@ -91,10 +94,15 @@
               </div>
             <div class="field-name">
                 <label>Image</label>
-                <input type="file" placeholder="" name="image" class="image">
+                <input type="file" placeholder="" name="image" class="image" >
             </div>
 
-            
+            <div class="field-name">
+              <label>Extra Images (Upload Mulitple)</label>
+              <input type="file" placeholder="" name="extra_image[]" accept="image/*" multiple="multiple" class="image">
+          </div>
+
+        
 
             <button type="submit" class="login-submit" name="Add" value="Add">Save Blog</button>
             <a class="ml-3" style="text-decoration:none" href="{% url 'view' %}" name="login" value="Log in">Go Back</a>
@@ -150,9 +158,14 @@
 
 
             <div class="field-name">
-                <label>Image</label>
+                <label>Primary Image</label>
                 <input type="file" placeholder="" name="image" class="image">
             </div>
+
+            <div class="field-name">
+              <label>Extra Images (Upload Mulitple)</label>
+              <input type="file" placeholder="" name="extra_image[]" accept="image/*" multiple="multiple" class="image">
+          </div>
 
             
 

@@ -81,7 +81,7 @@
                 <div class="ns-slider-box slide" data-slide-index="{{forloop.counter0}}">   
                   <div class="table_top_bar">
                     <div class="title">
-                        <h5>{{forloop.counter}}. {{key}}</h5>
+                        <h5>{{forloop.counter}}. {{key|namereplace}}</h5>
                     </div>
                      <div class="custom-select-category">
                       <div class="list-select-wrp" style="z-index:1">
@@ -159,7 +159,6 @@
                             
                             
                             
-                            
                             {% if user|checkTablePermissionview:key %}
                             <a class="row-add viewRow" id="viewRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-eye"></i></a>
                             {% endif %}
@@ -167,6 +166,10 @@
                             {% if user|checkTablePermissionedit:key and forloop.parentloop.counter <= 5 %}
                               <a class="row-add editRow" id="editRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
                             {% endif %}
+
+                            
+
+                          
 
                             {% if user|checkTablePermissiondelete:key and forloop.parentloop.counter <= 5 %}
                             <a class="row-add deleteRow" id="deleteRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'deleteBlog' v.pk %}><i class="fa fa-trash"></i></a>
@@ -319,7 +322,7 @@
 
                             {% if forloop.parentloop.counter == 7 %}
                             {% comment %} <a class="row-add downloadxml2file2" id="downloadxml2file2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxml2file2' v.pk %}><i class="fa fa-file-excel-o"></i></a> {% endcomment %}
-                            <a class="row-add downloadpdf2" id="downloadpdf2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadpdf' v.pk %}><i class="fa fa-file-powerpoint-o"></i></a>
+                            <a class="row-add downloadpdf2" id="downloadpdf2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadpdf2' v.pk %}><i class="fa fa-file-powerpoint-o"></i></a>
                             {% comment %} <a class="row-add downloadxmlfile2" id="downloadxmlfile2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxmlfile2' v.pk %}><i class="fa fa-file-excel-o"></i></a> {% endcomment %}
 
                             {%endif%}

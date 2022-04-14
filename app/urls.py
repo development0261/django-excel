@@ -53,6 +53,8 @@ urlpatterns = [
 
     path('contentgetRowData',views.contentgetRowData,name="contentgetRowData"),
 
+    path('addimagewire/<str:pk>/',views.addimagewire,name="addimagewire"),
+
 
 
 

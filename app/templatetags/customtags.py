@@ -3,6 +3,21 @@ from pkg_resources import register_finder
 
 register = template.Library()
 
+name_dict = {
+    "Content Pitching": "Story Pitching",
+    "Writing Rewrite": "Writing & Rewriting",
+    "Review Draft 1": "First Review",
+    "Review Draft 2": "Second Review",
+    "FDN Approval 1": "Ready For FDN Approval",
+    "Ready For Release": "Ready For Release",
+    "App Published": "AP Published"
+}
+
+@register.filter
+def namereplace(value):
+    return name_dict[value]
+
+
 @register.filter
 def replaceSpacewithUnderScore(value):
     return str(value).replace(" ","_")

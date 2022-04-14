@@ -264,6 +264,12 @@
                                         <input type="file" placeholder="" name="image" id="image_${tableName}_${data.pk}" class="image" >
                                       </div>
 
+                                      <div class="field-name">
+                                        <label>Extra Images (Upload Mulitple)</label>
+                                        <input type="file" placeholder="" name="extra_image[]" accept="image/*" multiple="multiple" class="image">
+                                    </div>
+                          
+
                                    
              
                
@@ -394,12 +400,18 @@
             url: "viewgetRowData/"+id+"/"+tableName+"/",
             success: function(data){ 
                 console.log(data)
-  
-                $(`#viewmodalBody`).empty()
+                console.log("....")
+                
+                var images = data.imgdict
+                
+                for (let k in images) {
+                  console.log(images[k])
+              }
+              $(`#viewmodalBody`).empty()
                 $(`#viewmodalBody`).append(`
                                             ${
                                               data.image ? ` <div class="post-image">
-                                                <img src="https://ap.shakticoin.com${data.image}">
+                                                <img src="http://localhost:8000${data.image}">
                                             </div>`:``
                                             }
                                            
@@ -413,6 +425,20 @@
                                             
                                    
                 `)
+                
+                for (let k in images) {
+                $(`#viewmodalBody`).append(
+                  images.length != 0 ?  
+                ` 
+                
+                 <div class="post-image">
+                  <img src="http://localhost:8000${images[k]}">
+              </div>
+
+              <br> 
+     
+                
+                `:``)}
                 $(`#viewModal`).modal('show')
             },
             error: function(){
@@ -458,13 +484,17 @@
           $.ajax({
             url: "viewgetRowData2/"+id+"/"+tableName+"/",
             success: function(data){ 
+              var images = data.imgdict
                 console.log(data)
                 $(`#viewmodalBody2`).empty()
+                  
+               
+
                 $(`#viewmodalBody2`).append(`
                 
                 ${
                   data.image ? ` <div class="post-image">
-                    <img src="https://ap.shakticoin.com${data.image}">
+                    <img src="http://localhost:8000${data.image}">
                 </div>`:``
                 }
                                             <h2 class="post-title" id="title_${tableName}_${data.pk}">${data.topic}</h2>
@@ -477,6 +507,19 @@
                                             
                                    
                 `)
+                for (let k in images) {
+                  $(`#viewmodalBody2`).append(
+                    images.length != 0 ?  
+                  ` 
+                  
+                   <div class="post-image">
+                    <img src="http://localhost:8000${images[k]}">
+                </div>
+  
+                <br> 
+       
+                  
+                  `:``)}
                 $(`#viewModal2`).modal('show')
             },
             error: function(){
@@ -1119,4 +1162,5 @@ $(document).on('click','.wire_cat',function(){
 
   });
 
+ 
 </script>

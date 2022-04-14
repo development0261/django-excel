@@ -11,4 +11,4 @@ $("ul").on("click", "li:not(.init)", function() {
 });
 $('.list-unstyled').click(function(){
     $('.init').toggleClass('active');
-  });
+  });   
