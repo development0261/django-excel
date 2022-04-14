@@ -636,6 +636,7 @@
         items: ">*:not(.sort-disabled)",
         cursor: "move",
         zIndex: 99999,
+        revert: true,
         stop: function (e, t) {
           console.log("STP")
           console.log(e)
@@ -826,6 +827,7 @@
         items: ">*:not(.sort-disabled)",
         cursor: "move",
         zIndex: 99999,
+        revert: true,
         stop: function (e, t) {
           
           if($(t.item).closest('tbody').find('tr').length >0){
