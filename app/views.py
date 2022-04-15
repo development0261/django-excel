@@ -325,8 +325,13 @@ def viewfunction(request):
         context_dict1['App Published'] = apnews_APPublished_data
 
         obj = content_brief.objects.first()
-        topic = obj.topic
-        desc = obj.description
+        if obj:
+            topic = obj.topic
+            desc = obj.description
+        else:
+            topic = None
+            desc = None
+        
         # desc = desc.replace("&nbsp;","")
         # desc = desc.replace("&#39;","")
         # desc = re.sub('<[^<]*?/?>', ' ', desc)
@@ -1020,7 +1025,7 @@ def buildxmlall2():
             b1.set("href","urn:publicid:ap.shakticoin.com:"+linkstr+"-"+"-0")
         else:
             b1.set("href","urn:publicid:ap.shakticoin.com:"+linkstr+"-"+reverted_count)
-            
+
         n1 = et.Element('content')
         n1.set("type","xhtml")
         m2.append (n1)
