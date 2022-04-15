@@ -1,4 +1,4 @@
-from ast import While
+import random,string    
 from itertools import count
 from multiprocessing import AuthenticationError
 from urllib import request
@@ -412,13 +412,13 @@ def buildxml(pk,blogobj):
     a1= et.SubElement(m1,"name")
     a1.text = "ShaktiCoin"
     a2= et.SubElement(m1,"uri")
-    a2.text = "https://draftblog.shakticoin.com//"
+    a2.text = "https://ap.shakticoin.com//"
     a3 = et.SubElement(root,"id")
     a3.text = "shakticoin123"
     a4 = et.SubElement(root,"title")
     a4.text = "ShaktiCoin"
     a5 = et.SubElement(root,'link')
-    a5.set("href","https://draftblog.shakticoin.com/post-sitemap.xml")
+    a5.set("href","https://ap.shakticoin.com/post-sitemap.xml")
     a5.set("rel","self")
     a6 = et.SubElement(root,'rights')
     a6.text = "Copyright 2022 ShaktiCoin"
@@ -809,7 +809,7 @@ def buildxmlall():
     a1= et.SubElement(m1,"name")
     a1.text = "ShaktiCoin"
     a2= et.SubElement(m1,"uri")
-    a2.text = "https://draftblog.shakticoin.com//"
+    a2.text = "https://ap.shakticoin.com//"
     a3 = et.SubElement(root,"id")
     a3.text = "shakticoin123"
     a4 = et.SubElement(root,"title")
@@ -827,6 +827,7 @@ def buildxmlall():
 
     blogall = Ap_Wire.objects.filter(Q(status="Ready_For_Release") | Q(status="App_Published"))
     for blogobj in blogall:
+        linkstr=''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
         m2 = et.Element('entry')
         m2.set("xml:lang","en-us")
         root.append (m2)
@@ -850,20 +851,17 @@ def buildxmlall():
         b6.text = str(utz)
         b2 = et.SubElement(m2, "title")
         b2.text = str(blogobj.topic)
-        if blogobj.image :
-            a5 = et.SubElement(m2,'content')
-            a5.set("type","image/jpeg")
-            a5.set("src","https://ap.shakticoin.com/media/"+str(blogobj.image)) 
         images_obj = moreimages_apwire.objects.filter(post = blogobj)
-        if images_obj:
-            for i in images_obj:
-                a5 = et.SubElement(m2,'content')
-                a5.set("type","image/jpeg")
-                a5.set("src","https://ap.shakticoin.com/media/"+str(i.image)) 
         a = et.SubElement(m2,"category")
         a.set("label","Global")
         a.set("term","Global")
         a.set("scheme","http://cv.ap.org/keyword")
+        b1 = et.SubElement(m2, "link")
+        b1.set("rel","related")
+        if reverted_count == "None" :
+            b1.set("href","urn:publicid:ap.shakticoin.com:"+linkstr+"-"+"-0")
+        else:
+            b1.set("href","urn:publicid:ap.shakticoin.com:"+linkstr+"-"+reverted_count)
 
         n1 = et.Element('content')
         n1.set("type","xhtml")
@@ -915,7 +913,35 @@ def buildxmlall():
                 ele1.set("target","_blank")
                 ele1.set("rel","nofollow noopener")
                 ele1.text=str(obj.text)
-        print(z)
+        
+
+        m2 = et.Element('entry')
+        m2.set("xml:lang","en-us")
+        root.append (m2)
+
+        b1 = et.SubElement(m2, "id")
+        b1.text = str(uid)
+
+        if blogobj.image :
+            a5 = et.SubElement(m2,'content')
+            a5.set("type","image/jpeg")
+            a5.set("src","https://ap.shakticoin.com/media/"+str(blogobj.image)) 
+
+        if images_obj:
+            for i in images_obj:
+                a5 = et.SubElement(m2,'content')
+                a5.set("type","image/jpeg")
+                a5.set("src","https://ap.shakticoin.com/media/"+str(i.image)) 
+        
+        b1 = et.SubElement(m2, "link")
+        b1.set("rel","related")
+        if reverted_count == "None" :
+            b1.set("href","urn:publicid:ap.shakticoin.com:"+linkstr+"-"+"-0")
+        else:
+            b1.set("href","urn:publicid:ap.shakticoin.com:"+linkstr+"-"+reverted_count)
+        
+
+        
 
     
       
@@ -956,6 +982,7 @@ def buildxmlall2():
 
     blogall = Ap_News.objects.filter(Q(status="Ready_For_Release") | Q(status="App_Published"))
     for blogobj in blogall:
+        linkstr=''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
         m2 = et.Element('entry')
         m2.set("xml:lang","en-us")
         root.append (m2)
@@ -979,21 +1006,21 @@ def buildxmlall2():
         b6.text = str(utz)
         b2 = et.SubElement(m2, "title")
         b2.text = str(blogobj.topic)
-        if blogobj.image :
-            a5 = et.SubElement(m2,'content')
-            a5.set("type","image/jpeg")
-            a5.set("src","https://ap.shakticoin.com/media/"+str(blogobj.image)) 
+        
         images_obj = moreimages_apnews.objects.filter(post = blogobj)
-        if images_obj:
-            for i in images_obj:
-                a5 = et.SubElement(m2,'content')
-                a5.set("type","image/jpeg")
-                a5.set("src","https://ap.shakticoin.com/media/"+str(i.image)) 
+        
         a = et.SubElement(m2,"category")
         a.set("label","Global")
         a.set("term","Global")
         a.set("scheme","http://cv.ap.org/keyword")
 
+        b1 = et.SubElement(m2, "link")
+        b1.set("rel","related")
+        if reverted_count == "None" :
+            b1.set("href","urn:publicid:ap.shakticoin.com:"+linkstr+"-"+"-0")
+        else:
+            b1.set("href","urn:publicid:ap.shakticoin.com:"+linkstr+"-"+reverted_count)
+            
         n1 = et.Element('content')
         n1.set("type","xhtml")
         m2.append (n1)
@@ -1044,7 +1071,31 @@ def buildxmlall2():
                 ele1.set("target","_blank")
                 ele1.set("rel","nofollow noopener")
                 ele1.text=str(obj.text)
-        print(z)
+        
+        m2 = et.Element('entry')
+        m2.set("xml:lang","en-us")
+        root.append (m2)
+
+        b1 = et.SubElement(m2, "id")
+        b1.text = str(uid)
+
+        if blogobj.image :
+            a5 = et.SubElement(m2,'content')
+            a5.set("type","image/jpeg")
+            a5.set("src","https://ap.shakticoin.com/media/"+str(blogobj.image)) 
+
+        if images_obj:
+            for i in images_obj:
+                a5 = et.SubElement(m2,'content')
+                a5.set("type","image/jpeg")
+                a5.set("src","https://ap.shakticoin.com/media/"+str(i.image)) 
+        
+        b1 = et.SubElement(m2, "link")
+        b1.set("rel","related")
+        if reverted_count == "None" :
+            b1.set("href","urn:publicid:ap.shakticoin.com:"+linkstr+"-"+"-0")
+        else:
+            b1.set("href","urn:publicid:ap.shakticoin.com:"+linkstr+"-"+reverted_count)
 
     
       
