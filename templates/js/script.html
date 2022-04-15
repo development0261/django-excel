@@ -187,7 +187,6 @@
 
         $(document).on('click','.editRow',function(){
           console.log("editrow")
-          
             var keys = $(this).attr('id').split('-')
          
             
@@ -199,9 +198,7 @@
               url: "getRowData/"+id+"/"+tableName+"/",
               success: function(data){ 
                   console.log(data)
-                  
-
-                  
+                                    
                   // $(`#${keys[2]}_${keys[1]}`).children('td').remove()
                   // $(`#${keys[2]}_${keys[1]}`).append(
                   //   `
@@ -228,7 +225,7 @@
                                   <h2>Edit Blog</h2>
                               </div>
                               <div class="login-form">
-                                  <form method="POST">
+                                  <form method="POST" enctype="multipart/form-data">
                                     {% csrf_token %}
                                       <div class="field-name">
                                           <label>Title</label>
@@ -264,8 +261,12 @@
                                         <input type="file" placeholder="" name="image" id="image_${tableName}_${data.pk}" class="image" >
                                       </div>
 
-                                      
+                                      <div class="field-name">
+                                        <label>Extra Images (Upload Mulitple)</label>
+                                        <input type="file" accept="image/*" multiple="multiple" id="images_${tableName}_${data.pk}" placeholder="" name="images[]" class="images" >
+                                      </div>
                           
+                                    
 
                                    
              
@@ -290,7 +291,8 @@
             });
   
           });
-        
+          
+
           $(document).on('click','.editRow2',function(){
             
             console.log("editrow2")
@@ -362,6 +364,11 @@
                                       <div class="field-name">
                                         <label>Image</label>
                                         <input type="file" placeholder="" name="image" id="image_${tableName}_${data.pk}" class="image">
+                                      </div>
+
+                                      <div class="field-name">
+                                        <label>Extra Images (Upload Mulitple)</label>
+                                        <input type="file" accept="image/*" multiple="multiple" id="images_${tableName}_${data.pk}" placeholder="" name="images[]" class="images" >
                                       </div>
                 
                  
@@ -544,15 +551,31 @@
         var tableName = keys[2] 
         var title = $("#title_"+tableName+"_"+id).val()
         var description = CKEDITOR.instances[`description_${tableName}_${id}`].getData( )
-      
+        
         var image = $("#image_"+tableName+"_"+id).prop('files')[0];
-        var category = $("#category_"+tableName+"_"+id).val()
+    
+        var images = $("#images_"+tableName+"_"+id).prop('files');
+        var len = images.length
+        var count = 0
         var formData = new FormData();
+        while (len>0){
+          
+          var img = $("#images_"+tableName+"_"+id).prop('files')[count];
+          var name = "image"+count.toString()
+          formData.append(name, img);
+          len = len -1
+          count = count + 1
+        }
+        var category = $("#category_"+tableName+"_"+id).val()
+        
         formData.append('topic', title);
         formData.append('description', description);
         formData.append('image', image);
+        formData.append('images', images);
         formData.append('category',category)
-        console.log(image)
+        // console.log(image)
+        // console.log("here")
+        // console.log(images)
         $.ajax({
           url: "editData/"+id+"/"+tableName+"/",
           type:'POST',
@@ -616,11 +639,24 @@
       
       var description = CKEDITOR.instances[`News_description_${tableName}_${id}`].getData()
       var image = $("#image_"+tableName+"_"+id).prop('files')[0];
+      var images = $("#images_"+tableName+"_"+id).prop('files')[0];
       var category = $("#category_"+tableName+"_"+id).val()
-      var formData = new FormData();
+      var images = $("#images_"+tableName+"_"+id).prop('files');
+        var len = images.length
+        var count = 0
+        var formData = new FormData();
+        while (len>0){
+          
+          var img = $("#images_"+tableName+"_"+id).prop('files')[count];
+          var name = "image"+count.toString()
+          formData.append(name, img);
+          len = len -1
+          count = count + 1
+        }
       formData.append('topic', title);
       formData.append('description', description);
       formData.append('image', image);
+      formData.append('images', images);
       formData.append('category',category)
       console.log(description)
       $.ajax({

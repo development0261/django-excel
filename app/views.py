@@ -1,4 +1,5 @@
 from ast import While
+from itertools import count
 from multiprocessing import AuthenticationError
 from urllib import request
 from django.shortcuts import render,redirect
@@ -225,17 +226,18 @@ def editData(request,id,tableName):
     tableObj.topic = topic
     tableObj.category = cat_obj
     tableObj.save()
-
+    
     if 'image' in request.FILES:
         image=request.FILES['image']
         tableObj.image = image
         tableObj.save()
-    
-    if 'extra_image[]' in request.FILES:
-        print("------------------------------------------------------------------------------------")
-        files = request.FILES.getlist('extra_image[]')
-        for i in files:                
-            moreimages_apwire.objects.create(post=blog,image=i)
+        del request.FILES['image']
+
+    count = 0
+    if f'image{count}' in request.FILES:    
+        for i in request.FILES:
+            moreimages_apwire.objects.create(post=tableObj,image=request.FILES[f'image{count}'])
+            count += 1
 
     date = datetime.strptime(str(tableObj.date), '%Y-%m-%d')
 
@@ -259,6 +261,12 @@ def editData2(request,id,tableName):
         image=request.FILES['image']
         tableObj.image = image
         tableObj.save()
+
+    count = 0
+    if f'image{count}' in request.FILES:    
+        for i in request.FILES:
+            moreimages_apnews.objects.create(post=tableObj,image=request.FILES[f'image{count}'])
+            count += 1
         
 
     date = datetime.strptime(str(tableObj.date), '%Y-%m-%d')
@@ -1099,6 +1107,7 @@ def createBlog(request):
             image=request.FILES['image']
             blog.image = image
             blog.save()
+        
         
         if 'extra_image[]' in request.FILES:
             
