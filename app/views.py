@@ -232,10 +232,11 @@ def editData(request,id,tableName):
         tableObj.image = image
         tableObj.save()
         del request.FILES['image']
-
+    
     count = 0
     if f'image{count}' in request.FILES:    
         for i in request.FILES:
+            moreimages_apwire.objects.filter(post=tableObj).delete()
             moreimages_apwire.objects.create(post=tableObj,image=request.FILES[f'image{count}'])
             count += 1
 
@@ -265,6 +266,7 @@ def editData2(request,id,tableName):
     count = 0
     if f'image{count}' in request.FILES:    
         for i in request.FILES:
+            moreimages_apnews.objects.filter(post=tableObj).delete()
             moreimages_apnews.objects.create(post=tableObj,image=request.FILES[f'image{count}'])
             count += 1
         

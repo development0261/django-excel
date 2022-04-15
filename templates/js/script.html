@@ -415,7 +415,7 @@
                 $(`#viewmodalBody`).append(`
                                             ${
                                               data.image ? ` <div class="post-image">
-                                                <img src="http://localhost:8000${data.image}">
+                                                <img src="https://ap.shakticoin.com${data.image}">
                                             </div>`:``
                                             }
                                            
@@ -436,7 +436,7 @@
                 ` 
                 
                  <div class="post-image">
-                  <img src="http://localhost:8000${images[k]}">
+                  <img src="https://ap.shakticoin.com${images[k]}">
               </div>
 
               <br> 
@@ -498,7 +498,7 @@
                 
                 ${
                   data.image ? ` <div class="post-image">
-                    <img src="http://localhost:8000${data.image}">
+                    <img src="https://ap.shakticoin.com${data.image}">
                 </div>`:``
                 }
                                             <h2 class="post-title" id="title_${tableName}_${data.pk}">${data.topic}</h2>
@@ -517,7 +517,7 @@
                   ` 
                   
                    <div class="post-image">
-                    <img src="http://localhost:8000${images[k]}">
+                    <img src="https://ap.shakticoin.com${images[k]}">
                 </div>
   
                 <br> 
@@ -567,7 +567,6 @@
           count = count + 1
         }
         var category = $("#category_"+tableName+"_"+id).val()
-        
         formData.append('topic', title);
         formData.append('description', description);
         formData.append('image', image);
