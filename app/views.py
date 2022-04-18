@@ -831,8 +831,7 @@ def buildxmlall():
     root.append (m2)
 
     blogall = Ap_Wire.objects.filter(Q(status="Ready_For_Release") | Q(status="App_Published"))
-    for blogobj in blogall:
-        linkstr=''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+    for blogobj in blogall:        
         m2 = et.Element('entry')
         m2.set("xml:lang","en-us")
         root.append (m2)
@@ -864,9 +863,9 @@ def buildxmlall():
         b1 = et.SubElement(m2, "link")
         b1.set("rel","related")
         if reverted_count == "None" :
-            b1.set("href","urn:publicid:ap.shakticoin.com:"+linkstr+"-"+"-0")
+            b1.set("href","urn:publicid:ap.shakticoin.com:"+str(blogobj.unique_id)+"-"+"-0")
         else:
-            b1.set("href","urn:publicid:ap.shakticoin.com:"+linkstr+"-"+reverted_count)
+            b1.set("href","urn:publicid:ap.shakticoin.com:"+str(blogobj.unique_id)+"-"+reverted_count)
 
         n1 = et.Element('content')
         n1.set("type","xhtml")
@@ -941,9 +940,9 @@ def buildxmlall():
         b1 = et.SubElement(m2, "link")
         b1.set("rel","related")
         if reverted_count == "None" :
-            b1.set("href","urn:publicid:ap.shakticoin.com:"+linkstr+"-"+"-0")
+            b1.set("href","urn:publicid:ap.shakticoin.com:"+str(blogobj.unique_id)+"-"+"-0")
         else:
-            b1.set("href","urn:publicid:ap.shakticoin.com:"+linkstr+"-"+reverted_count)
+            b1.set("href","urn:publicid:ap.shakticoin.com:"+str(blogobj.unique_id)+"-"+reverted_count)
         
 
         
@@ -986,8 +985,7 @@ def buildxmlall2():
     
 
     blogall = Ap_News.objects.filter(Q(status="Ready_For_Release") | Q(status="App_Published"))
-    for blogobj in blogall:
-        linkstr=''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+    for blogobj in blogall:        
         m2 = et.Element('entry')
         m2.set("xml:lang","en-us")
         root.append (m2)
@@ -1022,9 +1020,9 @@ def buildxmlall2():
         b1 = et.SubElement(m2, "link")
         b1.set("rel","related")
         if reverted_count == "None" :
-            b1.set("href","urn:publicid:ap.shakticoin.com:"+linkstr+"-"+"-0")
+            b1.set("href","urn:publicid:ap.shakticoin.com:"+str(blogobj.unique_id)+"-"+"-0")
         else:
-            b1.set("href","urn:publicid:ap.shakticoin.com:"+linkstr+"-"+reverted_count)
+            b1.set("href","urn:publicid:ap.shakticoin.com:"+str(blogobj.unique_id)+"-"+reverted_count)
 
         n1 = et.Element('content')
         n1.set("type","xhtml")
@@ -1098,9 +1096,9 @@ def buildxmlall2():
         b1 = et.SubElement(m2, "link")
         b1.set("rel","related")
         if reverted_count == "None" :
-            b1.set("href","urn:publicid:ap.shakticoin.com:"+linkstr+"-"+"-0")
+            b1.set("href","urn:publicid:ap.shakticoin.com:"+str(blogobj.unique_id)+"-"+"-0")
         else:
-            b1.set("href","urn:publicid:ap.shakticoin.com:"+linkstr+"-"+reverted_count)
+            b1.set("href","urn:publicid:ap.shakticoin.com:"+str(blogobj.unique_id)+"-"+reverted_count)
 
     
       
