@@ -834,6 +834,7 @@ def buildxmlall():
 
     blogall = Ap_Wire.objects.filter(Q(status="Ready_For_Release") | Q(status="App_Published"))
     for blogobj in blogall:        
+        randno = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
         m2 = et.Element('entry')
         m2.set("xml:lang","en-us")
         root.append (m2)
@@ -865,9 +866,9 @@ def buildxmlall():
         b1 = et.SubElement(m2, "link")
         b1.set("rel","related")
         if reverted_count == "None" :
-            b1.set("href","urn:publicid:ap.shakticoin.com:"+str(blogobj.unique_id)+"-"+"-0")
+            b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+"-0")
         else:
-            b1.set("href","urn:publicid:ap.shakticoin.com:"+str(blogobj.unique_id)+"-"+reverted_count)
+            b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+reverted_count)
 
         n1 = et.Element('content')
         n1.set("type","xhtml")
@@ -925,6 +926,11 @@ def buildxmlall():
         m2.set("xml:lang","en-us")
         root.append (m2)
 
+        if reverted_count == "None" :
+            uid = "urn:publicid:shakticoin:"+randno+"-0"
+        else:
+            uid = "urn:publicid:shakticoin:"+randno+"-"+reverted_count
+
         b1 = et.SubElement(m2, "id")
         b1.text = str(uid)
         b5 = et.SubElement(m2, "published")
@@ -954,9 +960,9 @@ def buildxmlall():
         # b1 = et.SubElement(m2, "link")
         # b1.set("rel","related")
         # if reverted_count == "None" :
-        #     b1.set("href","urn:publicid:ap.shakticoin.com:"+str(blogobj.unique_id)+"-"+"-0")
+        #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+"-0")
         # else:
-        #     b1.set("href","urn:publicid:ap.shakticoin.com:"+str(blogobj.unique_id)+"-"+reverted_count)
+        #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+reverted_count)
 
         elee = et.SubElement(m2,"apcm:ContentMetadata")
         elem = et.SubElement(elee,"apcm:HeadLine")
@@ -967,9 +973,9 @@ def buildxmlall():
         elee = et.SubElement(m2,"apnm:NewsManagement")
         elem = et.SubElement(elee,"apnm:ManagementId")
         if reverted_count == "None" :
-            elem.text = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-0"
+            elem.text = "urn:publicid:shakticoin:"+randno+"-0"
         else:
-            elem.text = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
+            elem.text = "urn:publicid:shakticoin:"+randno+"-"+reverted_count
         elem = et.SubElement(elee,"apnm:ManagementType")
         elem.text="Change"
         elem = et.SubElement(elee,"apnm:ManagementSequenceNumber")
@@ -1019,6 +1025,7 @@ def buildxmlall2():
 
     blogall = Ap_News.objects.filter(Q(status="Ready_For_Release") | Q(status="App_Published"))
     for blogobj in blogall:        
+        randno = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
         m2 = et.Element('entry')
         m2.set("xml:lang","en-us")
         root.append (m2)
@@ -1053,9 +1060,9 @@ def buildxmlall2():
         b1 = et.SubElement(m2, "link")
         b1.set("rel","related")
         if reverted_count == "None" :
-            b1.set("href","urn:publicid:ap.shakticoin.com:"+str(blogobj.unique_id)+"-"+"-0")
+            b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+"-0")
         else:
-            b1.set("href","urn:publicid:ap.shakticoin.com:"+str(blogobj.unique_id)+"-"+reverted_count)
+            b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+reverted_count)
 
         n1 = et.Element('content')
         n1.set("type","xhtml")
@@ -1111,7 +1118,10 @@ def buildxmlall2():
         m2 = et.Element('entry')
         m2.set("xml:lang","en-us")
         root.append (m2)
-
+        if reverted_count == "None" :
+            uid = "urn:publicid:shakticoin:"+randno+"-0"
+        else:
+            uid = "urn:publicid:shakticoin:"+randno+"-"+reverted_count
 
         b1 = et.SubElement(m2, "id")
         b1.text = str(uid)
@@ -1138,12 +1148,12 @@ def buildxmlall2():
                 a5.set("type","image/jpeg")
                 a5.set("src","https://ap.shakticoin.com/media/"+str(i.image)) 
         
-        b1 = et.SubElement(m2, "link")
-        b1.set("rel","related")
-        if reverted_count == "None" :
-            b1.set("href","urn:publicid:ap.shakticoin.com:"+str(blogobj.unique_id)+"-"+"-0")
-        else:
-            b1.set("href","urn:publicid:ap.shakticoin.com:"+str(blogobj.unique_id)+"-"+reverted_count)
+        # b1 = et.SubElement(m2, "link")
+        # b1.set("rel","related")
+        # if reverted_count == "None" :
+        #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+"-0")
+        # else:
+        #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+reverted_count)
 
         o1 = et.Element('apxh:div')
         n1.append (o1)
@@ -1156,9 +1166,9 @@ def buildxmlall2():
         elee = et.SubElement(m2,"apnm:NewsManagement")
         elem = et.SubElement(elee,"apnm:ManagementId")
         if reverted_count == "None" :
-            elem.text = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-0"
+            elem.text = "urn:publicid:shakticoin:"+randno+"-0"
         else:
-            elem.text = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
+            elem.text = "urn:publicid:shakticoin:"+randno+"-"+reverted_count
         elem = et.SubElement(elee,"apnm:ManagementType")
         elem.text="Change"
         elem = et.SubElement(elee,"apnm:ManagementSequenceNumber")
