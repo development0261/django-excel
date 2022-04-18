@@ -809,6 +809,8 @@ def buildxmlall():
     root.set("xmlns:apcm","http://www.w3.org/2005/Atom")
     root.set("xml:lang","en-us")
 
+    
+
     m1 = et.Element('author')
     root.append (m1)
     a1= et.SubElement(m1,"name")
@@ -925,6 +927,18 @@ def buildxmlall():
 
         b1 = et.SubElement(m2, "id")
         b1.text = str(uid)
+        b5 = et.SubElement(m2, "published")
+        updated = str(blogobj.published_on)
+        utz = updated[:10]+"T"+updated[11:19]+"Z"
+        b5.text = str(utz)
+        b6 = et.SubElement(m2, "updated")
+        updated = str(blogobj.updated)
+        utz = updated[:10]+"T"+updated[11:25]+"Z"
+        b6.text = str(utz)
+        b2 = et.SubElement(m2, "title")
+        b2.text = str(blogobj.topic)
+
+        
 
         if blogobj.image :
             a5 = et.SubElement(m2,'content')
@@ -937,12 +951,31 @@ def buildxmlall():
                 a5.set("type","image/jpeg")
                 a5.set("src","https://ap.shakticoin.com/media/"+str(i.image)) 
         
-        b1 = et.SubElement(m2, "link")
-        b1.set("rel","related")
+        # b1 = et.SubElement(m2, "link")
+        # b1.set("rel","related")
+        # if reverted_count == "None" :
+        #     b1.set("href","urn:publicid:ap.shakticoin.com:"+str(blogobj.unique_id)+"-"+"-0")
+        # else:
+        #     b1.set("href","urn:publicid:ap.shakticoin.com:"+str(blogobj.unique_id)+"-"+reverted_count)
+
+        elee = et.SubElement(m2,"apcm:ContentMetadata")
+        elem = et.SubElement(elee,"apcm:HeadLine")
+        elem.text=str(blogobj.topic)
+        elem = et.SubElement(elee,"apcm:Characteristics")
+        elem.set("MediaType","Text")
+
+        elee = et.SubElement(m2,"apnm:NewsManagement")
+        elem = et.SubElement(elee,"apnm:ManagementId")
         if reverted_count == "None" :
-            b1.set("href","urn:publicid:ap.shakticoin.com:"+str(blogobj.unique_id)+"-"+"-0")
+            elem.text = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-0"
         else:
-            b1.set("href","urn:publicid:ap.shakticoin.com:"+str(blogobj.unique_id)+"-"+reverted_count)
+            elem.text = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
+        elem = et.SubElement(elee,"apnm:ManagementType")
+        elem.text="Change"
+        elem = et.SubElement(elee,"apnm:ManagementSequenceNumber")
+        elem.text="3"
+        elem = et.SubElement(elee,"apnm:PublishingStatus")
+        elem.text="Usable"
         
 
         
@@ -1079,8 +1112,20 @@ def buildxmlall2():
         m2.set("xml:lang","en-us")
         root.append (m2)
 
+
         b1 = et.SubElement(m2, "id")
         b1.text = str(uid)
+        b5 = et.SubElement(m2, "published")
+        updated = str(blogobj.published_on)
+        utz = updated[:10]+"T"+updated[11:19]+"Z"
+        b5.text = str(utz)
+        b6 = et.SubElement(m2, "updated")
+        updated = str(blogobj.updated)
+        utz = updated[:10]+"T"+updated[11:25]+"Z"
+        b6.text = str(utz)
+        b2 = et.SubElement(m2, "title")
+        b2.text = str(blogobj.topic)
+        
 
         if blogobj.image :
             a5 = et.SubElement(m2,'content')
@@ -1099,6 +1144,27 @@ def buildxmlall2():
             b1.set("href","urn:publicid:ap.shakticoin.com:"+str(blogobj.unique_id)+"-"+"-0")
         else:
             b1.set("href","urn:publicid:ap.shakticoin.com:"+str(blogobj.unique_id)+"-"+reverted_count)
+
+        o1 = et.Element('apxh:div')
+        n1.append (o1)
+        elee = et.SubElement(m2,"apcm:ContentMetadata")
+        elem = et.SubElement(elee,"apcm:HeadLine")
+        elem.text=str(blogobj.topic)
+        elem = et.SubElement(elee,"apcm:Characteristics")
+        elem.set("MediaType","Text")
+
+        elee = et.SubElement(m2,"apnm:NewsManagement")
+        elem = et.SubElement(elee,"apnm:ManagementId")
+        if reverted_count == "None" :
+            elem.text = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-0"
+        else:
+            elem.text = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
+        elem = et.SubElement(elee,"apnm:ManagementType")
+        elem.text="Change"
+        elem = et.SubElement(elee,"apnm:ManagementSequenceNumber")
+        elem.text="3"
+        elem = et.SubElement(elee,"apnm:PublishingStatus")
+        elem.text="Usable"
 
     
       
