@@ -1,7 +1,9 @@
 body {
     css: 'Roboto', sans-serif;
 }
-
+.active{
+    background: transparent;
+}
 #Content_brief{
     border-radius: 0px;
     background: #ffffff;
