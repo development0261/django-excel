@@ -1249,5 +1249,20 @@ $(document).on('click','.wire_cat',function(){
 
   });
 
+  
+  $(function() {
+    var thHeight = $("table.mytable th:first").height();
+    $("table.mytable th").resizable({
+        handles: "e",
+        minHeight: thHeight,
+        maxHeight: thHeight,
+        minWidth: 40,
+        resize: function (event, ui) {
+          var sizerID = "#" + $(event.target).attr("id") + "-sizer";
+          $(sizerID).width(ui.size.width);
+        }
+    });
+  });
  
 </script>
+

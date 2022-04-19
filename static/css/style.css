@@ -105,6 +105,7 @@ a:hover {
 }
 .ns-slider-box-table::-webkit-scrollbar {
     width: 5px;
+    height: 5px;
   }
   
   /* Track */
@@ -405,6 +406,19 @@ body {
     color: #626262;
     text-decoration: none;
 }
+.content-brief-slider .carousel-control-next, .content-brief-slider .carousel-control-prev {
+    width: 50px;
+    height: 50px;
+    color: #fff;
+    border-radius: 100px;opacity: 1;
+    background: #5928d3;
+}
+.content-brief-slider .carousel-control-next-icon, .content-brief-slider .carousel-control-prev-icon {
+    width: 16px;
+    height: 16px;
+}
+.content-brief-slider .carousel-inner {width: 85%; margin: 0 auto;}
+
 /* Responcive */
 @media screen and (max-width: 1024px){
     .table-carousel .owl-nav button.owl-prev {
