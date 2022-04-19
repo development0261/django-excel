@@ -88,15 +88,17 @@
                      <div class="custom-select-category">
                       <div class="list-select-wrp" style="z-index:1">
                         <ul class="list-unstyled" id="wire_cat_ApWire_{{key|replaceSpacewithUnderScore }}"> 
-                          
-                          <li class="init">Select Category</li>
+                          <li class="init news_cat">Select Category</li>
+                          <li value="Show all" class="wire_cat">Show all</li>
                           {% for cat in category_dict %}
                           <li value="{{cat.pk}}" class="wire_cat" >{{cat.name}}</li>
                           {% endfor %}
-                            
                         </ul>
                       </div>
                   </div> 
+                  
+                  <a type="button"  data-toggle="modal" data-target="#expandModal"> <i class="fa fa-expand" aria-hidden="true"></i>
+                  </a>
 
                 {% comment %} <div class="select_box">
                       <select class="wire_cat box" id="wire_cat_ApWire_{{key|replaceSpacewithUnderScore }}" >
@@ -247,8 +249,8 @@
                      <div class="custom-select-category">
                       <div class="list-select-wrp" style="z-index:1">
                         <ul class="list-unstyled" id="news_cat_ApNews_{{key|replaceSpacewithUnderScore }}"> 
-                          
-                          <li class="init">Select Category</li>
+                          <li class="init news_cat">Select Category</li>
+                          <li value="Show all" class="news_cat">Show all</li>
                           {% for cat in category_dict %}
                           <li value="{{cat.pk}}" class="news_cat" >{{cat.name}}</li>
                           {% endfor %}
@@ -266,12 +268,12 @@
                     <table class="table mytable"  id="ApNews_{{key|replaceSpacewithUnderScore }}">
                       <thead>
                         <tr>
-                          <th>#</th>
-                          <th>Title</th>
-                          <th>Author</th>
-                          <th>Category</th>
-                          <th>Date</th>
-                          <th>Action</th>
+                          <th id="column-header-1">#</th>
+                          <th id="column-header-2">Title</th>
+                          <th id="column-header-3">Author</th>
+                          <th id="column-header-4">Category </th>
+                          <th id="column-header-5">Date</th>
+                          <th id="column-header-6">Action</th>
                         </tr>
                       </thead>
                       <tbody id="News_tableBody_{{key|replaceSpacewithUnderScore }}" class="
@@ -380,13 +382,13 @@
 
   {% endif %}
 
-{% include "modals.html" %}
+
 
 {% include "js/base-script.html" %}
 
 {% include "js/script.html" %}
   
-
+{% include "modals.html" %}
 
 </body>
 

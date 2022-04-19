@@ -230,59 +230,75 @@
       
 
 
-        <div class="modal-body" >
-          <div class="content-brief-slider">
-            <h3>Content Brief</h3>
-          <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
-             
-              {% for it in context %}
-            
-              <div class="carousel-item {% if forloop.counter == 1 %} active {% endif %}"
-            
-              >
-                <h2 class="post-title">{{it.topic}}</h2>
-                {{it.description|safe}}
-              </div>
-
-              {%endfor%}              
-
-              {% comment %} {% for it in context %}
-            
-              <div class="carousel-item"
-              {% if forloop.counter == 1 %}
-              active
-              {% endif %}
-              >
-                <h2 class="post-title">{{it.topic}}</h2>
-                {{it.description|safe}}
-              </div>
-
-              {%endfor%}   {% endcomment %}
-              
-            </div>
-            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="sr-only">Next</span>
-            </a>
-          </div>
 
 
           <div class="modal-contant" id="contentmodalBody">
-{% comment %}             
-            {% for it in context %}
-            <h2 class="post-title">{{it.topic}}</h2>
-            {{it.description|safe}}
-            {%endfor%} {% endcomment %}
+
+            <div class="modal-body" >
+              <div class="content-brief-slider">
+                <h3>Content Brief</h3>
+              <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                 
+                  {% for it in context %}
+                
+                  <div class="carousel-item {% if forloop.counter == 1 %} active {% endif %}"
+                
+                  >
+                    <h2 class="post-title">{{it.topic}}</h2>
+                    {{it.description|safe}}
+                  </div>
+    
+                  {%endfor%}              
+    
+                  {% comment %} {% for it in context %}
+                
+                  <div class="carousel-item"
+                  {% if forloop.counter == 1 %}
+                  active
+                  {% endif %}
+                  >
+                    <h2 class="post-title">{{it.topic}}</h2>
+                    {{it.description|safe}}
+                  </div>
+    
+                  {%endfor%}   {% endcomment %}
+                  
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </div>
           </div>
         </div>
     </div>
 </div>
 </div>
+
+<div class="modal fade blog-modal" id="expandModal" tabindex="" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+          <button type="button" class="close"  data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          
+        
+
+
+          <div class="modal-body" >
+            <div class="modal-contant" id="expandModalbody">
+            </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+
 
 
 
