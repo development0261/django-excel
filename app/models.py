@@ -125,7 +125,7 @@ class moreimages_apnews(models.Model):
 
 class permissions(models.Model):
     user = models.ManyToManyField(UserCustom)
-    status = models.CharField(choices=tables_choice,max_length=20)
+    status = models.CharField(choices=tables_choice,max_length=20,unique=True)
     create = models.BooleanField(default=False)
     edit = models.BooleanField(default=False)
     view = models.BooleanField(default=False)

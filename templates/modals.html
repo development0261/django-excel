@@ -232,9 +232,11 @@
 
         <div class="modal-body" >
           <div class="modal-contant" id="contentmodalBody">
-            <h2 class="post-title">{{topic}}</h2>
             
-            {{description|safe}}
+            {% for it in context %}
+            <h2 class="post-title">{{it.topic}}</h2>
+            {{it.description|safe}}
+            {%endfor%}
           </div>
         </div>
     </div>

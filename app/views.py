@@ -324,19 +324,18 @@ def viewfunction(request):
         context_dict1['Ready For Release'] = apnews_ReadyForRelease_data
         context_dict1['App Published'] = apnews_APPublished_data
 
-        obj = content_brief.objects.first()
+        obj = content_brief.objects.all()
         if obj:
-            topic = obj.topic
-            desc = obj.description
+            context = obj
         else:
-            topic = None
-            desc = None
+            context = None
+            
         
         # desc = desc.replace("&nbsp;","")
         # desc = desc.replace("&#39;","")
         # desc = re.sub('<[^<]*?/?>', ' ', desc)
 
-        print(desc)
+        
 
 
 
@@ -346,7 +345,7 @@ def viewfunction(request):
         categories = category.objects.all()
 
 
-        return render(request,'index.html',{'context_dict':context_dict,'context_dict1':context_dict1,'category_dict':categories,'topic':topic,'description':desc})
+        return render(request,'index.html',{'context_dict':context_dict,'context_dict1':context_dict1,'category_dict':categories,'context':context})
     else:
         return redirect('loginview')
 
@@ -417,13 +416,13 @@ def buildxml(pk,blogobj):
     a1= et.SubElement(m1,"name")
     a1.text = "ShaktiCoin"
     a2= et.SubElement(m1,"uri")
-    a2.text = "https://ap.shakticoin.com//"
+    a2.text = "https://ap.shakticoin.com/"
     a3 = et.SubElement(root,"id")
     a3.text = "shakticoin123"
     a4 = et.SubElement(root,"title")
     a4.text = "ShaktiCoin"
     a5 = et.SubElement(root,'link')
-    a5.set("href","https://ap.shakticoin.com/post-sitemap.xml")
+    a5.set("href","https://ap.shakticoin.compost-sitemap.xml")
     a5.set("rel","self")
     a6 = et.SubElement(root,'rights')
     a6.text = "Copyright 2022 ShaktiCoin"
@@ -456,7 +455,7 @@ def buildxml(pk,blogobj):
     if blogobj.image :
         a5 = et.SubElement(m2,'content')
         a5.set("type","image/jpeg")
-        a5.set("src","https://ap.shakticoin.com/media/"+str(blogobj.image)) 
+        a5.set("src","https://ap.shakticoin.commedia/"+str(blogobj.image)) 
     a = et.SubElement(m2,"category")
     a.set("label","Global")
     a.set("term","Global")
@@ -622,7 +621,7 @@ def buildxml(pk,blogobj):
     if blogobj.image :
         a5 = et.SubElement(m2,'content')
         a5.set("type","image/jpeg")
-        a5.set("src","https://ap.shakticoin.com/media/"+str(blogobj.image)) 
+        a5.set("src","https://ap.shakticoin.commedia/"+str(blogobj.image)) 
     
     
     a = et.SubElement(m2,"category")
@@ -816,7 +815,7 @@ def buildxmlall():
     a1= et.SubElement(m1,"name")
     a1.text = "ShaktiCoin"
     a2= et.SubElement(m1,"uri")
-    a2.text = "https://ap.shakticoin.com//"
+    a2.text = "https://ap.shakticoin.com/"
     a3 = et.SubElement(root,"id")
     a3.text = "shakticoin123"
     a4 = et.SubElement(root,"title")
@@ -949,13 +948,13 @@ def buildxmlall():
         if blogobj.image :
             a5 = et.SubElement(m2,'content')
             a5.set("type","image/jpeg")
-            a5.set("src","https://ap.shakticoin.com/media/"+str(blogobj.image)) 
+            a5.set("src","https://ap.shakticoin.commedia/"+str(blogobj.image)) 
 
         if images_obj:
             for i in images_obj:
                 a5 = et.SubElement(m2,'content')
                 a5.set("type","image/jpeg")
-                a5.set("src","https://ap.shakticoin.com/media/"+str(i.image)) 
+                a5.set("src","https://ap.shakticoin.commedia/"+str(i.image)) 
         
         # b1 = et.SubElement(m2, "link")
         # b1.set("rel","related")
@@ -1140,13 +1139,13 @@ def buildxmlall2():
         if blogobj.image :
             a5 = et.SubElement(m2,'content')
             a5.set("type","image/jpeg")
-            a5.set("src","https://ap.shakticoin.com/media/"+str(blogobj.image)) 
+            a5.set("src","https://ap.shakticoin.commedia/"+str(blogobj.image)) 
 
         if images_obj:
             for i in images_obj:
                 a5 = et.SubElement(m2,'content')
                 a5.set("type","image/jpeg")
-                a5.set("src","https://ap.shakticoin.com/media/"+str(i.image)) 
+                a5.set("src","https://ap.shakticoin.commedia/"+str(i.image)) 
         
         # b1 = et.SubElement(m2, "link")
         # b1.set("rel","related")

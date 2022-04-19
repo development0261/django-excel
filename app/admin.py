@@ -121,7 +121,8 @@ class UserProfileAdmin(UserAdmin,ImportExportModelAdmin):
 class BlogDisplay(ImportExportModelAdmin,admin.ModelAdmin):
 
     def image_tag(self, obj):
-        return format_html('<img src="{}" style="height:50px; width:90px;" />'.format(obj.image.url))
+        if obj.image:
+            return format_html('<img src="{}" style="height:50px; width:90px;" />'.format(obj.image.url))
 
     image_tag.short_description = 'image'
 
