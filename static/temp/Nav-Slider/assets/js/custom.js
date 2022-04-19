@@ -18,3 +18,4 @@ $(".nav-slider-tabs button").click(function () {
     $(".nav-slider-tabs button").removeClass("nav-active");
     $(this).addClass("nav-active");
 });
+

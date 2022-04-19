@@ -28,6 +28,30 @@ $('.table-carousel').owlCarousel({
 })
 
 
+$(".before-b-click").click(function(){
+    $(this).addClass("d-none");
+    $(".after-b-click").removeClass("d-none");
+    $('.table-carousel').owlCarousel({
+        items: 1,
+        responsive: {
+            0: {
+                items: 1
+            },
+        }
+    })
+});
+$(".after-b-click").click(function(){
+    $(this).addClass("d-none");
+    $(".before-b-click").removeClass("d-none");
+    $('.table-carousel').owlCarousel({
+        items: 2,
+        responsive: {
+            0: {
+                items: 1
+            },
+        }
+    })
+});
 
 // $(document).ready(function() {
 //     var el = $('.table-carousel');
