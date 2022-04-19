@@ -1234,7 +1234,7 @@ $(document).on('click','.wire_cat',function(){
     $(`#ApWire_${tbId} td.category:not(:contains(${value}))`).parent().hide();
     
     if (value == "Show all"){
-      $(`#ApWire_${tbId} td.category`).parent().show();
+      $(`#ApWire_${tbId} td.category:contains()`).parent().show();
     }
     
     
