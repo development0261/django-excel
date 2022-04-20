@@ -72,7 +72,7 @@ class content_brief(models.Model):
       verbose_name_plural = "Content Brief"
 
 class category(models.Model):
-    name = models.CharField(max_length=100) 
+    name = models.CharField(max_length=100,null=True,blank=True )
     class Meta:
       verbose_name_plural = "Category"
 
@@ -87,7 +87,7 @@ class Ap_Wire(models.Model):
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     updated = models.DateTimeField(auto_now=True)
     reverted_count = models.IntegerField(default=1)
-    category = models.ForeignKey(category,on_delete=models.CASCADE)
+    category = models.ForeignKey(category,null=True,blank=True ,on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural = "AP-Wire"
@@ -110,7 +110,7 @@ class Ap_News(models.Model):
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     updated = models.DateTimeField(auto_now=True)
     reverted_count = models.IntegerField(default=1)
-    category = models.ForeignKey(category,on_delete=models.CASCADE)
+    category = models.ForeignKey(category,null=True,blank=True ,on_delete=models.CASCADE)
 
     class Meta:
       verbose_name_plural = "AP-News"

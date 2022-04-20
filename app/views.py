@@ -169,8 +169,13 @@ def getRowData(request,id,tableName):
         for i in imageobjs:
             count += 1
             imgdict[str(count)]=i.image.url
+
+    if tableObj.category:
+        category_name = tableObj.category.name
+    else:
+        category_name = None
         
-    return JsonResponse({'category':tableObj.category.name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj,'imgdict':imgdict})
+    return JsonResponse({'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj,'imgdict':imgdict})
 
 def contentgetRowData(request):
     pass
@@ -192,8 +197,13 @@ def getRowData2(request,id,tableName):
         for i in imageobjs:
             count += 1
             imgdict[str(count)]=i.image.url
-        
-    return JsonResponse({'category':tableObj.category.name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj,'imgdict':imgdict})
+    
+    if tableObj.category:
+        category_name = tableObj.category.name
+    else:
+        category_name = None
+
+    return JsonResponse({'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj,'imgdict':imgdict})
 
 def editBlog(request,pk):
     if request.method == 'POST':
@@ -220,7 +230,10 @@ def editData(request,id,tableName):
     cat_id = request.POST['category']
     tableObj = Ap_Wire.objects.get(pk = id)
     
-    cat_obj = category.objects.get(id=cat_id)
+    if cat_id == "Select Category":
+        cat_obj = None
+    else:
+        cat_obj= category.objects.get(id=cat_id)
     
     tableObj.description = description
     tableObj.topic = topic
@@ -241,9 +254,14 @@ def editData(request,id,tableName):
             count += 1
 
     date = datetime.strptime(str(tableObj.date), '%Y-%m-%d')
+    
+    if tableObj.category:
+        category_name = tableObj.category.name
+    else:
+        category_name = None
 
     formatedDate = date.strftime('%B %d,%Y')
-    return JsonResponse({'category':tableObj.category.name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})
+    return JsonResponse({'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})
 
 @csrf_exempt
 def editData2(request,id,tableName):
@@ -251,7 +269,10 @@ def editData2(request,id,tableName):
     description = request.POST['description']
     cat_id = request.POST['category']
     
-    cat_obj = category.objects.get(id=cat_id)
+    if cat_id == "Select Category":
+        cat_obj = None
+    else:
+        cat_obj= category.objects.get(id=cat_id)
     
     tableObj = Ap_News.objects.get(pk = id)
     tableObj.category = cat_obj
@@ -273,8 +294,13 @@ def editData2(request,id,tableName):
 
     date = datetime.strptime(str(tableObj.date), '%Y-%m-%d')
 
+    if tableObj.category:
+        category_name = tableObj.category.name
+    else:
+        category_name = None
+
     formatedDate = date.strftime('%B %d,%Y')
-    return JsonResponse({'category':tableObj.category.name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})
+    return JsonResponse({'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})
 
 
 
@@ -1231,9 +1257,13 @@ def createBlog(request):
     print("Createblog")
     if request.method == 'POST':
         cat = request.POST['category']
-        cat_boj = category.objects.get(pk = int(cat))
+        if cat == "Select Category":
+            cat_obj = None
+        else:
+            cat_obj= category.objects.get(id=cat)
 
-        blog = Ap_Wire.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description'],status="Content_Pitching",category=cat_boj)
+
+        blog = Ap_Wire.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description'],status="Content_Pitching",category=cat_obj)
         if 'image' in request.FILES:
             image=request.FILES['image']
             blog.image = image
@@ -1254,9 +1284,13 @@ def createBlog2(request):
     print("Createblog2")
     if request.method == 'POST':
         cat = request.POST['category']
-        cat_boj = category.objects.get(pk = int(cat))
+        if cat == "Select Category":
+            cat_obj = None
+        else:
+            cat_obj= category.objects.get(id=cat)
+        
 
-        blog = Ap_News.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description2'],status="Content_Pitching",category=cat_boj)
+        blog = Ap_News.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description2'],status="Content_Pitching",category=cat_obj)
         if 'image' in request.FILES:
             image=request.FILES['image']
             blog.image = image
@@ -1296,7 +1330,6 @@ def dropData(request,dropid,removedfrom,addedto):
         ]
         key_list = list(roles)
         index = key_list.index(addedto)
-        print("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
         print(removedfrom)
         if removedfrom == "App_Published":
             

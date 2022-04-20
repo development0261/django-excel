@@ -567,11 +567,14 @@
           count = count + 1
         }
         var category = $("#category_"+tableName+"_"+id).val()
+                
+        formData.append('category',category)
+        
         formData.append('topic', title);
         formData.append('description', description);
         formData.append('image', image);
         formData.append('images', images);
-        formData.append('category',category)
+        
         // console.log(image)
         // console.log("here")
         // console.log(images)
@@ -1233,7 +1236,7 @@ $(document).on('click','.wire_cat',function(){
     $(`#ApWire_${tbId} td.category:contains(${value})`).parent().show();
     $(`#ApWire_${tbId} td.category:not(:contains(${value}))`).parent().hide();
     
-    if (value == "Show all"){
+    if (value == "1"){
       $(`#ApWire_${tbId} td.category:contains()`).parent().show();
     }
     
@@ -1250,7 +1253,7 @@ $(document).on('click','.wire_cat',function(){
       $(`#ApNews_${tbId} td.category2:contains(${value})`).parent().show();
       $(`#ApNews_${tbId} td.category2:not(:contains(${value}))`).parent().hide();
 
-      if (value == "Show all"){
+      if (value == "1"){
         $(`#ApNews_${tbId} td.category2`).parent().show();
       }
       
@@ -1279,5 +1282,6 @@ $(document).on('click','.wire_cat',function(){
  
   $( ".mytable" ).clone().appendTo( ".expandModalbody" );
 
+  
 </script>
 

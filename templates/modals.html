@@ -65,7 +65,7 @@
     
     <div class="login-form" >
       
-        <form method="POST" enctype="multipart/form-data" action="{% url 'createBlog' %}">
+        <form method="POST" id="createform" enctype="multipart/form-data" action="{% url 'createBlog' %}">
           {% csrf_token %}
             <div class="field-name">
                 <label>Title</label>
@@ -80,7 +80,7 @@
               
                 <label>Category *</label>
                 <div class="select_box">
-                  <select class="box" onchange="showCategories(this.value)" name="category"> 
+                  <select id="selectform" class="box" onchange="showCategories(this.value)" name="category"> 
                     <option selected>Select Category</option>
                     
                     {% for cat in category_dict %}
@@ -104,7 +104,7 @@
 
         
 
-            <button type="submit" class="login-submit" name="Add" value="Add">Save Blog</button>
+            <button type="submit" id="commit" class="login-submit" name="Add" value="Add">Save Blog</button>
             <a class="ml-3" style="text-decoration:none" href="{% url 'view' %}" name="login" value="Log in">Go Back</a>
         </form>
     </div>
