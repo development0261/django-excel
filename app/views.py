@@ -161,10 +161,10 @@ def getRowData(request,id,tableName):
     if tableObj.image:
         imageobj =tableObj.image.url
     imageobjs = moreimages_apwire.objects.filter(post = tableObj)
+    imgdict = {}
     if not imageobjs:
-        imgdict = {}
+        pass
     else:
-        imgdict = {}
         count = 0
         for i in imageobjs:
             count += 1
@@ -188,11 +188,11 @@ def getRowData2(request,id,tableName):
     imageobj = None
     if tableObj.image:
         imageobj =tableObj.image.url
-        imageobjs = moreimages_apnews.objects.filter(post = tableObj)
+    imageobjs = moreimages_apnews.objects.filter(post = tableObj)
+    imgdict = {}
     if not imageobjs:
-        imgdict = {}
+        pass
     else:
-        imgdict = {}
         count = 0
         for i in imageobjs:
             count += 1
@@ -1267,9 +1267,8 @@ def createBlog(request):
             blog.save()
         
         
-        if 'extra_image[]' in request.FILES:
-            
-            files = request.FILES.getlist('extra_image[]')
+        if 'extra_imagewire[]' in request.FILES:
+            files = request.FILES.getlist('extra_imagewire[]')
             for i in files:                
                 moreimages_apwire.objects.create(post=blog,image=i)
 
@@ -1293,9 +1292,8 @@ def createBlog2(request):
             blog.image = image
             blog.save()
 
-        if 'extra_image[]' in request.FILES:
-            
-            files = request.FILES.getlist('extra_image[]')
+        if 'extra_imagenews[]' in request.FILES:
+            files = request.FILES.getlist('extra_imagenews[]')
             for i in files:                
                 moreimages_apnews.objects.create(post=blog,image=i)
             

@@ -415,7 +415,7 @@
                 $(`#viewmodalBody`).append(`
                                             ${
                                               data.image ? ` <div class="post-image">
-                                                <img src="https://ap.shakticoin.com${data.image}">
+                                                <img src="${data.image}">
                                             </div>`:``
                                             }
                                            
@@ -436,7 +436,7 @@
                 ` 
                 
                  <div class="post-image">
-                  <img src="https://ap.shakticoin.com${images[k]}">
+                  <img src="${images[k]}">
               </div>
 
               <br> 
@@ -498,7 +498,7 @@
                 
                 ${
                   data.image ? ` <div class="post-image">
-                    <img src="https://ap.shakticoin.com${data.image}">
+                    <img src="${data.image}">
                 </div>`:``
                 }
                                             <h2 class="post-title" id="title_${tableName}_${data.pk}">${data.topic}</h2>
@@ -517,7 +517,7 @@
                   ` 
                   
                    <div class="post-image">
-                    <img src="https://ap.shakticoin.com${images[k]}">
+                    <img src="${images[k]}">
                 </div>
   
                 <br> 
@@ -894,7 +894,8 @@
                       `)
                    
                   }
-
+                  
+                  
                   if (removedfrom  == "FDN_Approval_1" && addedto == "Ready_For_Release"){
                     $(`#${row_id} td > div > a.editRow`).remove()
                     $(`#${row_id} td > div > a.deleteRow`).remove()
@@ -1180,8 +1181,37 @@
             alert("image should not be less than 1020 pixels width");
 
   
+            document.getElementById("imagewire").value = ""
+            document.getElementById("imagenews").value = ""
+            
+           
+           }
+        };
+        img.onerror = function() {  
+            alert( "not a valid file: " + file.type);
             document.getElementsByClassName("image")[0].value = ""
             document.getElementsByClassName("image")[1].value = ""
+        };
+        img.src = _URL.createObjectURL(file);
+ 
+ 
+    }
+  })
+
+$(document).on('change','.imagemult',function(){
+    var file, img;
+
+
+    if ((file = this.files[0])) {
+        img = new Image();
+        img.onload = function() {
+          if(this.width > 1020 ){
+            alert("image should not be less than 1020 pixels width");
+
+  
+            document.getElementById("extra_imagewire[]").value = ""
+            document.getElementById("extra_imagenews[]").value = ""
+            
            
            }
         };

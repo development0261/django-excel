@@ -72,7 +72,7 @@ class content_brief(models.Model):
       verbose_name_plural = "Content Brief"
 
 class category(models.Model):
-    name = models.CharField(max_length=100,null=True,blank=True )
+    name = models.CharField(max_length=100)
     class Meta:
       verbose_name_plural = "Category"
 
@@ -80,7 +80,7 @@ class Ap_Wire(models.Model):
     topic = models.CharField(max_length=200)
     author = models.ForeignKey(UserCustom,on_delete=models.CASCADE)
     description = RichTextField()
-    image = models.ImageField(null=True,blank=True) 
+    image = models.ImageField(upload_to='media/',null=True,blank=True) 
     date = models.DateField(auto_now_add=True)
     status = models.CharField(choices=tables_choice,max_length=30,default="APWire_Content_Pitching")
     published_on = models.DateTimeField(null=True, blank=True)
@@ -94,7 +94,7 @@ class Ap_Wire(models.Model):
 
 class moreimages_apwire(models.Model):
     post = models.ForeignKey(Ap_Wire, default=None,on_delete=models.CASCADE)
-    image = models.ImageField(verbose_name='Image')
+    image = models.ImageField(upload_to='media/',verbose_name='Image')
 
     class Meta:
         verbose_name_plural = "AP-Wire Images"
@@ -103,7 +103,7 @@ class Ap_News(models.Model):
     topic = models.CharField(max_length=200)
     author = models.ForeignKey(UserCustom,on_delete=models.CASCADE)
     description = RichTextField()
-    image = models.ImageField(null=True,blank=True)
+    image = models.ImageField(upload_to='media/',null=True,blank=True)
     date = models.DateField(auto_now_add=True)
     status = models.CharField(choices=tables_choice,max_length=30,default="APNews_Content_Pitching")
     published_on = models.DateTimeField (null=True, blank=True)
@@ -117,7 +117,7 @@ class Ap_News(models.Model):
 
 class moreimages_apnews(models.Model):
     post = models.ForeignKey(Ap_News, default=None,on_delete=models.CASCADE)
-    image = models.ImageField(verbose_name='Image')
+    image = models.ImageField(upload_to='media/',verbose_name='Image')
 
     class Meta:
         verbose_name_plural = "AP-News Images"
