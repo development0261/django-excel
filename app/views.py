@@ -232,8 +232,10 @@ def editData(request,id,tableName):
     
     if cat_id == "Select Category":
         cat_obj = None
+        category_name = None
     else:
         cat_obj= category.objects.get(id=cat_id)
+        category_name = cat_obj.name
     
     tableObj.description = description
     tableObj.topic = topic
@@ -255,10 +257,7 @@ def editData(request,id,tableName):
 
     date = datetime.strptime(str(tableObj.date), '%Y-%m-%d')
     
-    if tableObj.category:
-        category_name = tableObj.category.name
-    else:
-        category_name = None
+    
 
     formatedDate = date.strftime('%B %d,%Y')
     return JsonResponse({'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})
@@ -271,8 +270,10 @@ def editData2(request,id,tableName):
     
     if cat_id == "Select Category":
         cat_obj = None
+        category_name = None
     else:
         cat_obj= category.objects.get(id=cat_id)
+        category_name = cat_obj.name
     
     tableObj = Ap_News.objects.get(pk = id)
     tableObj.category = cat_obj
@@ -294,10 +295,6 @@ def editData2(request,id,tableName):
 
     date = datetime.strptime(str(tableObj.date), '%Y-%m-%d')
 
-    if tableObj.category:
-        category_name = tableObj.category.name
-    else:
-        category_name = None
 
     formatedDate = date.strftime('%B %d,%Y')
     return JsonResponse({'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})

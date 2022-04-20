@@ -89,7 +89,7 @@
                       <div class="list-select-wrp" style="z-index:1">
                         <ul class="list-unstyled" id="wire_cat_ApWire_{{key|replaceSpacewithUnderScore }}"> 
                           <li value="0" class="news_cat init">Select Category</li>
-                          <li value="1" class="wire_cat">Show all</li>
+                          <li value="Show all" class="wire_cat">Show all</li>
                           {% for cat in category_dict %}
                           <li value="{{cat.pk}}" class="wire_cat" >{{cat.name}}</li>
                           {% endfor %}
@@ -250,7 +250,7 @@
                       <div class="list-select-wrp" style="z-index:1">
                         <ul class="list-unstyled" id="news_cat_ApNews_{{key|replaceSpacewithUnderScore }}"> 
                           <li value="0" class=" news_cat init">Select Category</li>
-                          <li value="1" class="news_cat">Show all</li>
+                          <li value="Show all" class="news_cat">Show all</li>
                           {% for cat in category_dict %}
                           <li value="{{cat.pk}}" class="news_cat" >{{cat.name}}</li>
                           {% endfor %}
