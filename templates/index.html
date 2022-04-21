@@ -86,7 +86,6 @@
                         <h5>{{forloop.counter}}. {{key|namereplace}}</h5>
                     </div>
                     <div class="select-button">
-
                      <div class="custom-select-category">
                       <div class="list-select-wrp" style="z-index:1">
                         <ul class="list-unstyled" id="wire_cat_ApWire_{{key|replaceSpacewithUnderScore }}"> 
@@ -100,10 +99,11 @@
                           <i class="fa fa-angle-down"></i>
                         </div>
                       </div>
+                      
                   </div> 
-                  
                   <a type="button" class="expandModal" id="modal_expand_{{key|replaceSpacewithUnderScore}}" > <i class="fa fa-expand" aria-hidden="true"></i>
                   </a> 
+                  
                 </div>
 
                 {% comment %} <div class="select_box">
@@ -247,11 +247,14 @@
                {% for key,val in context_dict1.items %}
                {% comment %} {{UserCustom.accessint}} {% endcomment %}
                {% if forloop.counter <= user.accessint %}
+
+
                 <div class="ns-slider-box slide" data-slide-index="{{forloop.counter0}}">   
                   <div class="table_top_bar">
                     <div class="title">
                         <h5>{{forloop.counter}}. {{ key|namereplace}}</h5>
                     </div>
+                    <div class="select-button">
                      <div class="custom-select-category">
                       <div class="list-select-wrp" style="z-index:1">
                         <ul class="list-unstyled" id="news_cat_ApNews_{{key|replaceSpacewithUnderScore }}"> 
@@ -260,13 +263,18 @@
                           {% for cat in category_dict %}
                           <li value="{{cat.pk}}" class="news_cat" >{{cat.name}}</li>
                           {% endfor %}
-                            
                         </ul>
+                        <div class="downarrow">
+                          <i class="fa fa-angle-down"></i>
+                        </div>
                       </div>
                   </div> 
-         
                   <a type="button" class="expandModal2" id="modal_expand2_{{key|replaceSpacewithUnderScore}}" > <i class="fa fa-expand" aria-hidden="true"></i>
                   </a> 
+                </div> 
+                
+         
+                  
                 </div> 
                   <div class="ns-slider-box-table sortablecolumn">
                   
