@@ -282,15 +282,20 @@
 
 
 
-
+        
           <div class="modal-contant" id="contentmodalBody">
 
             <div class="modal-body" >
+              {% if  contenxt.vars %}
               <div class="content-brief-slider">
                 <h3>Content Brief</h3>
               <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
-                 
+                  
+                  
+                  
+                  
+
                   {% for it in context %}
                 
                   <div class="carousel-item {% if forloop.counter == 1 %} active {% endif %}"
@@ -300,7 +305,9 @@
                     {{it.description|safe}}
                   </div>
     
-                  {%endfor%}              
+                  {%endfor%}   
+                  
+                  
     
                   {% comment %} {% for it in context %}
                 
@@ -324,12 +331,17 @@
                   <span class="carousel-control-next-icon" aria-hidden="true"></span>
                   <span class="sr-only">Next</span>
                 </a>
+                {% else %}
+                  <center><h2>No notices to display</h2></center>
+                {% endif%}
               </div>
           </div>
         </div>
     </div>
 </div>
 </div>
+
+
 
 
 
