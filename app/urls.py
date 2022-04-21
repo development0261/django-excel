@@ -51,7 +51,8 @@ urlpatterns = [
     path('editData2/<int:id>/<str:tableName>/',views.editData2,name="editData2"),
     path('draganddrop2/<int:dropid>/<str:removedfrom>/<str:addedto>/',views.dropData2,name="dropData2"),
 
-    path('contentgetRowData',views.contentgetRowData,name="contentgetRowData"),
+    path('contentgetRowData/',views.contentgetRowData,name="contentgetRowData"),
+    path('contentgetRowData2/',views.contentgetRowData2,name="contentgetRowData2"),
 
     path('addimagewire/<str:pk>/',views.addimagewire,name="addimagewire"),
 

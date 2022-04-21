@@ -451,7 +451,29 @@
           });
         })
 
-        
+        $(document).on('click','.contentModal',function(){
+          console.log("contentModal")
+          
+     
+          $.ajax({
+            url: "contentgetRowData/",
+            success: function(data){ 
+                console.log(data)
+                $(`#contentmodalBody`).empty()
+                $(`#contentmodalBody`).append(`
+                
+                <p>123</p>
+                                            <p>${data.topic}</p>
+                                            
+                                   
+                `)
+                $(`#Content_brief`).modal('show')
+            },
+            error: function(){
+              alert("There was an error");
+            }
+          });
+        })
           
 
         $(document).on('click','.viewRow2',function(){
@@ -873,7 +895,7 @@
                    
                   }
                   
-                
+                  
                   if (removedfrom  == "FDN_Approval_1" && addedto == "Ready_For_Release"){
                     $(`#${row_id} td > div > a.editRow`).css("display", "none");
                     $(`#${row_id} td > div > a.deleteRow`).css("display", "none");
@@ -1116,21 +1138,7 @@
     
   })
 
-$(document).on('click','.expandModal',function(){
-  
-    var id = $(this).attr('id').slice(13,)
-    
-    $(`#modal_expandview_${id}`).modal('show')
-    
-  })
 
-$(document).on('click','.expandModal2',function(){
-  
-  var id = $(this).attr('id').slice(14,)
-  
-  $(`#modal_expandview2_${id}`).modal('show')
-  
-})
 
 
 
@@ -1302,66 +1310,8 @@ $(document).on('click','.wire_cat',function(){
     });
   });
  
-  $(document).on('click','.expandModal',function(){
-    var tablename = $(this).attr('id').slice(13,)
-    var formData = new FormData();  
-    
-    $.ajax({
-      url: "contentgetRowData/",
-      type:'POST',
-      data:formData,
-      contentType: false,
-      processData: false,
-      mimeType: 'multipart/form-data',
+  $( ".mytable" ).clone().appendTo( ".expandModalbody" );
 
-      success: function(data){ 
-        
-        data= JSON.parse(data)
-          console.log(data)
-          $(`#modal_expandviewbody_${tablename}`).empty()
-          $( `#ApWire_${tablename}` ).clone().prop('id', 'klon' ).appendTo( `#modal_expandviewbody_${tablename}` );
-          // $('#table thead > tr > th:nth-child(1),#table tbody > tr > td:nth-child(1)').remove();
-          var allRows = document.getElementById('klon').rows;
-          for (var i=0; i< allRows.length; i++) {
-            allRows[i].deleteCell(-1); }
-          
-          },
-          error: function(){
-            alert("There was an error");
-          } })
   
-})
-
-$(document).on('click','.expandModal2',function(){
-  var tablename = $(this).attr('id').slice(14,)
-  var formData = new FormData();  
-  
-  $.ajax({
-    url: "contentgetRowData2/",
-    type:'POST',
-    data:formData,
-    contentType: false,
-    processData: false,
-    mimeType: 'multipart/form-data',
-
-    success: function(data){ 
-      
-      data= JSON.parse(data)
-        console.log(data)
-        $(`#modal_expandviewbody2_${tablename}`).empty()
-        $( `#ApNews_${tablename}` ).clone().prop('id', 'klon2' ).appendTo( `#modal_expandviewbody2_${tablename}` );
-        var allRows = document.getElementById('klon2').rows;
-          for (var i=0; i< allRows.length; i++) {
-            allRows[i].deleteCell(-1); }
-        
-        
-        },
-        error: function(){
-          alert("There was an error");
-        }}) 
-
-})
-  
-
 </script>
 

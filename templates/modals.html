@@ -23,6 +23,28 @@
       
       </div>
     </div>
+
+    <div class="modal fade bd-example-modal-lg"  tabindex="" role="dialog" id="modal_expandview_{{key|replaceSpacewithUnderScore }}">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+      
+            <button type="button" class="close closeModel" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+              
+              
+          </div>
+          <div class="modal-body editModel1" id="modal_expandviewbody_{{key|replaceSpacewithUnderScore }}">
+            
+            
+          </div>
+  
+      </div>
+        
+        </div>
+      </div>
+  
     {% endfor %}
 
 {% for key,val in context_dict1.items %}
@@ -47,6 +69,28 @@
         
         </div>
       </div>
+
+      <div class="modal fade bd-example-modal-lg"  tabindex="" role="dialog" id="modal_expandview2_{{key|replaceSpacewithUnderScore }}">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+        
+              <button type="button" class="close closeModel" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+                
+                
+            </div>
+            <div class="modal-body editModel1" id="modal_expandviewbody2_{{key|replaceSpacewithUnderScore }}">
+              
+              
+            </div>
+    
+        </div>
+          
+          </div>
+        </div>
+
       {% endfor %}
 
 
@@ -57,10 +101,14 @@
   
 
 <div class="modal-body">
+  <button type="button" class="close"  data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
 <div class="row justify-content-center">
 <div class="col-md-8">
+  
     <div  class="title">
-        <h2>Add Blog</h2>        
+        <h2>Pitch a Story</h2>        
     </div>
     
     <div class="login-form" >
@@ -104,7 +152,7 @@
 
         
 
-            <button type="submit" id="commit" class="login-submit" name="Add" value="Add">Save Blog</button>
+            <button type="submit" id="commit" class="login-submit" name="Add" value="Add">Save Story</button>
             <a class="ml-3" style="text-decoration:none" href="{% url 'view' %}" name="login" value="Log in">Go Back</a>
         </form>
     </div>
@@ -123,10 +171,13 @@
 <div class="modal-content">
 
 <div class="modal-body">
+  <button type="button" class="close"  data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
 <div class="row justify-content-center">
 <div class="col-md-8">
     <div  class="title">
-        <h2>Add Blog</h2>
+        <h2>Pitch a Story</h2>
     </div>
     <div class="login-form">
         <form method="POST" enctype="multipart/form-data" action="{% url 'createBlog2' %}">
@@ -169,7 +220,7 @@
 
             
 
-            <button type="submit" class="login-submit" name="Add" value="Add">Save Blog</button>
+            <button type="submit" class="login-submit" name="Add" value="Add">Save Story</button>
             <a class="ml-3" style="text-decoration:none" href="{% url 'view' %}" name="login" value="Log in">Go Back</a>
         </form>
     </div>
@@ -280,23 +331,6 @@
 </div>
 </div>
 
-<div class="modal fade blog-modal" id="expandModal" tabindex="" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-          <button type="button" class="close"  data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          
-        
-
-
-          <div class="modal-body" >
-            <div class="modal-contant" id="expandModalbody">
-            </div>
-          </div>
-      </div>
-  </div>
-</div>
 
 
 

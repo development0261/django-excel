@@ -204,10 +204,12 @@ a:hover {
 }
 .table-carousel .owl-nav button.owl-prev {
     left: -70px;
+    top: 50%;
 }
 
 .table-carousel .owl-nav button.owl-next {
     right: -70px;
+    top: 50%;
 }
 
 .login-section{
@@ -292,6 +294,35 @@ a:hover {
 }
 
 
+.select-button{
+    display: flex;
+    align-items: center;
+}
+.custom-select-category{
+    margin-right:5px;
+}
+.select-button a{
+    padding: 6px 16px;
+    border: 1px solid #935cdb;
+}
+/* .list-unstyled{
+    position: relative;
+} */
+/* .list-unstyled::after{
+    content:"\f107";
+    position: absolute;
+    right:0;
+    top: 0;
+} */
+.list-select-wrp{
+    position: relative;
+}
+.downarrow{
+    position: absolute;
+    right:8px;
+    top: 7px;
+    color: #935cdb;
+}
 
 
 /* Model*/

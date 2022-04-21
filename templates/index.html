@@ -85,6 +85,8 @@
                     <div class="title">
                         <h5>{{forloop.counter}}. {{key|namereplace}}</h5>
                     </div>
+                    <div class="select-button">
+
                      <div class="custom-select-category">
                       <div class="list-select-wrp" style="z-index:1">
                         <ul class="list-unstyled" id="wire_cat_ApWire_{{key|replaceSpacewithUnderScore }}"> 
@@ -94,11 +96,15 @@
                           <li value="{{cat.pk}}" class="wire_cat" >{{cat.name}}</li>
                           {% endfor %}
                         </ul>
+                        <div class="downarrow">
+                          <i class="fa fa-angle-down"></i>
+                        </div>
                       </div>
                   </div> 
                   
-                  {% comment %} <a type="button"  data-toggle="modal" data-target="#expandModal"> <i class="fa fa-expand" aria-hidden="true"></i>
-                  </a> {% endcomment %}
+                  <a type="button" class="expandModal" id="modal_expand_{{key|replaceSpacewithUnderScore}}" > <i class="fa fa-expand" aria-hidden="true"></i>
+                  </a> 
+                </div>
 
                 {% comment %} <div class="select_box">
                       <select class="wire_cat box" id="wire_cat_ApWire_{{key|replaceSpacewithUnderScore }}" >
@@ -203,7 +209,7 @@
                   </div>
                   {% if forloop.counter == 1 and user|checkTablePermissioncreate:key  %}
                   <div class="add-row-table">
-                    <a style="cursor: pointer;" class="OpenAddModel" id="OpenAddModel_{{key|replaceSpacewithUnderScore }}">+ Add Row</a>
+                    <a style="cursor: pointer;" class="OpenAddModel" id="OpenAddModel_{{key|replaceSpacewithUnderScore }}">+ Add Stories</a>
                   </div>
                   {%endif%}
 
@@ -259,7 +265,8 @@
                       </div>
                   </div> 
          
-                  
+                  <a type="button" class="expandModal2" id="modal_expand2_{{key|replaceSpacewithUnderScore}}" > <i class="fa fa-expand" aria-hidden="true"></i>
+                  </a> 
                 </div> 
                   <div class="ns-slider-box-table sortablecolumn">
                   
@@ -339,7 +346,7 @@
                   </div>
                   {% if forloop.counter == 1 and user|checkTablePermissioncreate:key  %}
                   <div class="add-row-table">
-                    <a style="cursor: pointer;" class="NewsOpenAddModel" id="NewsOpenAddModel{{key|replaceSpacewithUnderScore }}">+ Add Row</a>
+                    <a style="cursor: pointer;" class="NewsOpenAddModel" id="NewsOpenAddModel{{key|replaceSpacewithUnderScore }}">+ Add Stories</a>
                   </div>
                   {%endif%}
 

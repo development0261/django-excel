@@ -177,8 +177,13 @@ def getRowData(request,id,tableName):
         
     return JsonResponse({'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj,'imgdict':imgdict})
 
+@csrf_exempt
 def contentgetRowData(request):
-    pass
+    return JsonResponse({})
+
+@csrf_exempt
+def contentgetRowData2(request):
+    return JsonResponse({})
 
 def getRowData2(request,id,tableName):
     
