@@ -405,8 +405,9 @@ def printpdf(desc,imagepath,topic,images):
                             rightMargin=72,leftMargin=72,
                             topMargin=72,bottomMargin=18)
     Story=[]
-    im = Image(imagepath, 6*inch, 3.5*inch)
-    Story.append(im)
+    if imagepath:
+        im = Image(imagepath, 6*inch, 3.5*inch)
+        Story.append(im)
     styles=getSampleStyleSheet()
     styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
     Story.append(Spacer(1, 12))
@@ -483,7 +484,7 @@ def buildxml(pk,blogobj):
     if blogobj.image :
         a5 = et.SubElement(m2,'content')
         a5.set("type","image/jpeg")
-        a5.set("src","https://ap.shakticoin.commedia/"+str(blogobj.image)) 
+        a5.set("src","https://shaktidjangoblog-prod.s3.amazonaws.com/"+str(blogobj.image)) 
     a = et.SubElement(m2,"category")
     a.set("label","Global")
     a.set("term","Global")
@@ -649,7 +650,7 @@ def buildxml(pk,blogobj):
     if blogobj.image :
         a5 = et.SubElement(m2,'content')
         a5.set("type","image/jpeg")
-        a5.set("src","https://ap.shakticoin.commedia/"+str(blogobj.image)) 
+        a5.set("src","https://shaktidjangoblog-prod.s3.amazonaws.com/"+str(blogobj.image)) 
     
     
     a = et.SubElement(m2,"category")
@@ -707,11 +708,13 @@ def buildxml(pk,blogobj):
 def downloadpdf(request,pk):
     blogobj = Ap_Wire.objects.get(pk=pk)
     imglist = []
-    
-    for i in moreimages_apwire.objects.filter(post=blogobj):
-        imglist.append(MEDIA_ROOT+"/"+i.image.name)
-    image_data = MEDIA_ROOT+"/"+blogobj.image.name
-    print(image_data)
+    if blogobj.image:
+        image_data = "https://shaktidjangoblog-prod.s3.amazonaws.com"+"/"+blogobj.image.name    
+    else:
+        image_data = None    
+    if moreimages_apwire.objects.filter(post=blogobj):
+        for i in moreimages_apwire.objects.filter(post=blogobj):
+            imglist.append("https://shaktidjangoblog-prod.s3.amazonaws.com"+"/"+i.image.name)
     
     x = blogobj.description.split("\n")
     y = []
@@ -727,18 +730,19 @@ def downloadpdf(request,pk):
         
         i = re.sub('<[^<]*?/?>', ' ', i)
         z.append(i)
-        
     pdf = printpdf(z,image_data,str(blogobj.topic),imglist) 
     return pdf
 
 def downloadpdf2(request,pk):
     blogobj = Ap_News.objects.get(pk=pk)
     imglist = []
-    
-    for i in moreimages_apnews.objects.filter(post=blogobj):
-        imglist.append(MEDIA_ROOT+"/"+i.image.name)
-    image_data = MEDIA_ROOT+"/"+blogobj.image.name
-    print(image_data)
+    if blogobj.image:
+        image_data = "https://shaktidjangoblog-prod.s3.amazonaws.com"+"/"+blogobj.image.name    
+    else:
+        image_data = None    
+    if moreimages_apnews.objects.filter(post=blogobj):
+        for i in moreimages_apnews.objects.filter(post=blogobj):
+            imglist.append("https://shaktidjangoblog-prod.s3.amazonaws.com"+"/"+i.image.name)
     
     x = blogobj.description.split("\n")
     y = []
@@ -976,13 +980,13 @@ def buildxmlall():
         if blogobj.image :
             a5 = et.SubElement(m2,'content')
             a5.set("type","image/jpeg")
-            a5.set("src","https://ap.shakticoin.commedia/"+str(blogobj.image)) 
+            a5.set("src","https://shaktidjangoblog-prod.s3.amazonaws.com/"+str(blogobj.image)) 
 
         if images_obj:
             for i in images_obj:
                 a5 = et.SubElement(m2,'content')
                 a5.set("type","image/jpeg")
-                a5.set("src","https://ap.shakticoin.commedia/"+str(i.image)) 
+                a5.set("src","https://shaktidjangoblog-prod.s3.amazonaws.com/"+str(i.image)) 
         
         # b1 = et.SubElement(m2, "link")
         # b1.set("rel","related")
@@ -1167,13 +1171,13 @@ def buildxmlall2():
         if blogobj.image :
             a5 = et.SubElement(m2,'content')
             a5.set("type","image/jpeg")
-            a5.set("src","https://ap.shakticoin.commedia/"+str(blogobj.image)) 
+            a5.set("src","https://shaktidjangoblog-prod.s3.amazonaws.com/"+str(blogobj.image)) 
 
         if images_obj:
             for i in images_obj:
                 a5 = et.SubElement(m2,'content')
                 a5.set("type","image/jpeg")
-                a5.set("src","https://ap.shakticoin.commedia/"+str(i.image)) 
+                a5.set("src","https://shaktidjangoblog-prod.s3.amazonaws.com/"+str(i.image)) 
         
         # b1 = et.SubElement(m2, "link")
         # b1.set("rel","related")
