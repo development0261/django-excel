@@ -34,7 +34,7 @@
 <body>
   {% if user.is_authenticated %}
   <section class="nav-slider-section">
-    <div class="container">
+    <div class="container-fluid">
       <div style="display:flex;justify-content:end">
         {% comment %} <h4>Hi, {{user.username}}</h4>
         <a class="btn btn-danger" href="{% url 'logout' %}"> Logout</a> {% endcomment %}
@@ -101,8 +101,8 @@
                       </div>
                       
                   </div> 
-                  <a type="button" class="expandModal" id="modal_expand_{{key|replaceSpacewithUnderScore}}" > <i class="fa fa-expand" aria-hidden="true"></i>
-                  </a> 
+                  {% comment %} <a type="button" class="expandModal" id="modal_expand_{{key|replaceSpacewithUnderScore}}" > <i class="fa fa-expand" aria-hidden="true"></i>
+                  </a>  {% endcomment %}
                   
                 </div>
 
@@ -269,8 +269,8 @@
                         </div>
                       </div>
                   </div> 
-                  <a type="button" class="expandModal2" id="modal_expand2_{{key|replaceSpacewithUnderScore}}" > <i class="fa fa-expand" aria-hidden="true"></i>
-                  </a> 
+                  {% comment %} <a type="button" class="expandModal2" id="modal_expand2_{{key|replaceSpacewithUnderScore}}" > <i class="fa fa-expand" aria-hidden="true"></i>
+                  </a>  {% endcomment %}
                 </div> 
                 
          

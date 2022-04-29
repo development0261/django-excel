@@ -203,15 +203,17 @@ a:hover {
     outline: none;
 }
 .table-carousel .owl-nav button.owl-prev {
-    left: -70px;
+    left: -40px;
     top: 50%;
 }
 
 .table-carousel .owl-nav button.owl-next {
-    right: -70px;
+    right: -40px;
     top: 50%;
 }
+body {padding: 0 !important;}
 
+div#ApWireContent {padding: 0 40px;}
 .login-section{
     position: relative;
     padding: 80px 0;
@@ -329,7 +331,10 @@ a:hover {
 .modal-header {
     border-bottom: none;
 }
-
+.table.mytable tbody tr td {
+    display: table-cell;
+    word-break: break-all;
+}
 .table_top_bar {
     display: flex;
     justify-content: space-between;
