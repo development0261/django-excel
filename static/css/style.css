@@ -20,16 +20,17 @@ a:hover {
     text-decoration: none;
 }
 .nav-slider-section {
-    padding: 70px 0 100px 0;
+    padding: 40px 0 40px 0;
 }
 
 .nav-slider-tabs {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 100px;
+}   
+.btn-outline-primary.focus, .btn-outline-primary:focus, .btn.focus, .btn:focus{
+    box-shadow: none !important;
 }
-
 .nav-slider-tabs button {
     border: 1px solid #5928D3;
     color: #000;
@@ -99,7 +100,7 @@ a:hover {
     background: #e8e4f2;
 }
 .ns-slider-box-table {
-    height: 240px;
+    height: 333px;
     margin: 0 10px 10px;
     width: calc(100% - 20px);
     box-shadow: 0 0 10px 0 rgb(0 0 0 / 50%);
@@ -211,9 +212,20 @@ a:hover {
     right: -40px;
     top: 50%;
 }
+.nav-model {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 60px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
 body {padding: 0 !important;}
 
 div#ApWireContent {padding: 0 40px;}
+div#ApNewsContent {
+    padding: 0 40px;
+}
 .login-section{
     position: relative;
     padding: 80px 0;

@@ -60,10 +60,17 @@
       <div class="row"> 
         <div class="col-12">
           <div class="nav-slider-section-inner">
+            <div class="nav-model">
             <div class="nav-slider-tabs">
               <button class="{% if not request.GET.secondTab %} nav-active {% endif %} ApWire" id="ApWire">AP - Wire</button>
               <button class="{% if request.GET.secondTab %} nav-active {% endif %} ApNews" id="ApNews">AP - News</button>
             </div>
+            <div class="button">
+              <button class="btn btn-outline-primary "  data-toggle="modal"  id="Content_brief" data-target="#contentModal">Content Brief</button>
+              {% comment %} <button class="btn btn-outline-primary slider-option before-b-click">Test 1</button>
+              <button class="btn btn-outline-primary slider-option after-b-click d-none">Test 1</button> {% endcomment %}
+            </div>
+          </div>
 
             {% if messages %}
    {% for message in messages %}
@@ -385,11 +392,7 @@
                 
               </div>
             </div>
-            <div class="button">
-              <button class="btn btn-outline-primary "  data-toggle="modal"  id="Content_brief" data-target="#contentModal">Content Brief</button>
-              {% comment %} <button class="btn btn-outline-primary slider-option before-b-click">Test 1</button>
-              <button class="btn btn-outline-primary slider-option after-b-click d-none">Test 1</button> {% endcomment %}
-            </div>
+          
 
           </div>
         </div>
@@ -401,9 +404,11 @@
 
   {% endif %}
 
+  {% include "js/base-script.html" %}
+
 {% include "modals.html" %}
 
-{% include "js/base-script.html" %}
+
 
 {% include "js/script.html" %}
   
