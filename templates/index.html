@@ -32,6 +32,11 @@
     .owl-stage{
       padding-left:0% !important;
     }
+    .disabledAnchor{
+      pointer-events: none !important;
+      cursor: default;
+      color:white;
+    }
   </style>
 </head>
 
@@ -87,11 +92,16 @@
               <div class="table-carousel owl-carousel owl-theme">
                
                {% for key,val in context_dict.items %}
+
+               
                {% comment %} {{UserCustom.accessint}} {% endcomment %}
                
                
                 {% if forloop.counter <= user.accessint %}
                 <div class="ns-slider-box slide" data-slide-index="{{forloop.counter0}}">   
+                  {% if forloop.counter == 6 %}
+                    <h5 id="loaderSubmit" class="d-none"> Loading ... </h5>
+                  {% endif %}
                   <div class="table_top_bar">
                     <div class="title">
                         <h5>{{forloop.counter}}. {{key|namereplace}}</h5>
@@ -135,7 +145,7 @@
                   <div class="ns-slider-box-table sortablecolumn">
                   
                     {% comment %} {{user|validateuser:key}} {% endcomment %}
-                  
+                    
                     <table class="table mytable"  id="ApWire_{{key|replaceSpacewithUnderScore }}">
                       <thead>
                         <tr>
@@ -198,11 +208,11 @@
                             {%endif%} {% endcomment %}
                             
                             {% if user|checkTablePermissionpublish:key and forloop.parentloop.counter == 6 %}
-                            <a class="row-add publishRow" id="publishRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'backblog' v.pk %}><i class="fa fa-backward"></i></a>
+                            <a class="row-add publishRow plane publishRowClick" id="publishRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'backblog' v.pk %}><i class="fa fa-backward"></i></a>
                             {%endif%}
 
                             {% if user|checkTablePermissionpublish:key and forloop.parentloop.counter == 6 %}
-                            <a class="row-add publishRow" id="publishRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'publishBlog' v.pk %}><i class="fa fa-paper-plane"></i></a>
+                            <a class="row-add publishRow plane publishRowClick" id="publishRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"><i class="fa fa-paper-plane"></i></a>
                             {%endif%}
 
                             {% if forloop.parentloop.counter == 7 %}
@@ -340,11 +350,11 @@
                             {%endif%} {% endcomment %}
 
                             {% if user|checkTablePermissionpublish:key and forloop.parentloop.counter == 6 %}
-                            <a class="row-add publishRow" id="publishRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'backblog2' v.pk %}><i class="fa fa-backward"></i></a>
+                            <a class="row-add publishRow plane publishRowClick" id="publishRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'backblog2' v.pk %}><i class="fa fa-backward"></i></a>
                             {%endif%}
 
                             {% if user|checkTablePermissionpublish:key and forloop.parentloop.counter == 6 %}
-                            <a class="row-add publishRow2" id="publishRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'publishBlog2' v.pk %}><i class="fa fa-paper-plane"></i></a>
+                            <a class="row-add publishRow plane2 publishRowClick" id="publishRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'publishBlog2' v.pk %}><i class="fa fa-paper-plane"></i></a>
                             {%endif%}
 
                             {% if forloop.parentloop.counter == 7 %}
@@ -408,11 +418,14 @@
 
 {% include "modals.html" %}
 
-
-
 {% include "js/script.html" %}
   
-
+<script>
+  $(document).on('click','.publishRowClick',function(){
+    $("#loaderSubmit").removeClass('d-none')
+    $('.publishRowClick').addClass('disabledAnchor');
+  })
+</script>
 
 </body>
 

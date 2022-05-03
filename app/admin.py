@@ -128,11 +128,15 @@ class BlogDisplay(ImportExportModelAdmin,admin.ModelAdmin):
 
     list_display = ["topic", "author","date","status",'image_tag',]
     exclude = ('reverted_count',)
+    search_fields = ['status']
+    list_filter = ['status','date' ]
 
 @admin.register(Ap_News)
 class BlogDisplay(ImportExportModelAdmin,admin.ModelAdmin):
     list_display = ("topic", "author","date","status","image")
     exclude = ('reverted_count',)
+    search_fields = ['status' ]
+    list_filter = ['status','date' ]
 
 @admin.register(moreimages_apwire)
 class BlogDisplay(ImportExportModelAdmin,admin.ModelAdmin):
@@ -159,6 +163,4 @@ class selectiondisplay(ImportExportModelAdmin,admin.ModelAdmin):
 @admin.register(category)
 class Display(ImportExportModelAdmin,admin.ModelAdmin):
     list_display = ("name", )
-
-
 

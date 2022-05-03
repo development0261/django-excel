@@ -610,7 +610,7 @@
                     ${
                       tableName == 'Ready_For_Release' ? `
                       <a class="row-add downloadxml" id="downloadxml-${tableName}" href="/downloadxml/${id}/" ><i class="fa fa-file-excel-o"></i></a>
-                      <a class="row-add publishRow" id="publishRow-${id}-${tableName}" href="/publishBlog/${id}/" ><i class="fa fa-paper-plane"></i></a>
+                      <a class="row-add publishRow plane" id="publishRow-${id}-${tableName}" href="/publishBlog/${id}/" ><i class="fa fa-paper-plane"></i></a>
                       `:''
                     }
                 
@@ -688,7 +688,7 @@
                   ${
                     tableName == 'Ready_For_Release' ? `
                     <a class="row-add downloadxml2file2" id="downloadxml2file2-${tableName}" href="/downloadxml2file2/${id}/" ><i class="fa fa-file-excel-o"></i></a>
-                    <a class="row-add publishRow2" id="publishRow2-${id}-${tableName}" href="/publishBlog2/${id}/" ><i class="fa fa-paper-plane"></i></a>
+                    <a class="row-add publishRow plane2" id="publishRow2-${id}-${tableName}" href="/publishBlog2/${id}/" ><i class="fa fa-paper-plane"></i></a>
                     `:''
                   }
                 </div></td>
@@ -845,11 +845,11 @@
                   if (response.access_dict['publish'] ==  true && response.tableIndex == 6){
                     $(`#${row_id} td > div`).append(
                       `
-                      <a class="row-add publishRow" id="publishRow-${pk}-${addedto}" href="/backblog/${pk}/" ><i class="fa fa-backward"></i></a>
+                      <a class="row-add publishRow plane" id="publishRow-${pk}-${addedto}" href="/backblog/${pk}/" ><i class="fa fa-backward"></i></a>
                       `)
                     $(`#${row_id} td > div`).append(
                     `
-                    <a class="row-add publishRow" id="publishRow-${pk}-${addedto}" href="/publishBlog/${pk}/" ><i class="fa fa-paper-plane"></i></a>
+                    <a class="row-add publishRow plane" id="publishRow-${pk}-${addedto}" href="/publishBlog/${pk}/" ><i class="fa fa-paper-plane"></i></a>
                     `
                   )
                   }
@@ -1047,7 +1047,7 @@
                      
                     $(`#${row_id} td > div`).append(
                     `
-                    <a class="row-add publishRow2" id="publishRow2-${pk}-${addedto}" href="/publishBlog2/${pk}/" ><i class="fa fa-paper-plane"></i></a>
+                    <a class="row-add publishRow plane2" id="publishRow2-${pk}-${addedto}" href="/publishBlog2/${pk}/" ><i class="fa fa-paper-plane"></i></a>
                     `
                   )
                   }
