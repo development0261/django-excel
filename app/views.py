@@ -47,24 +47,27 @@ from reportlab.platypus import Image, Frame
 
 def userlogin(request):
     if request.method == 'POST':
-        # print("456")
         username = request.POST.get("username")
         password = request.POST.get("password")
 
         user = authenticate(username=username,password=password)
+        if not User.objects.filter(username=username).exists():
+            messages.warning(request, f'User with username "{username}" does not exist') 
+            return redirect('loginview')
+        elif User.objects.filter(username=username).exists():
+            if user:
+                if user.is_active:
+                    login(request,user)
+                    return redirect('view')
 
-        if user:
-            if user.is_active:
-                # print("123")
-                login(request,user)
-                return redirect('view')
+                else:
+                    messages.error(request, 'user is inactive') 
+                    return redirect('loginview')
 
             else:
-                messages.error(request, 'user is inactive') 
+                messages.warning(request, 'Incorrect Password') 
                 return redirect('loginview')
-
         else:
-            messages.error(request, 'Please check your password!!!') 
             return redirect('loginview')
 
     else:
@@ -96,7 +99,11 @@ def register(request):
                 login(request,user)
                 return redirect('view')
             else:
+                messages.warning(request,"Passwords don't match")
                 return redirect('register')
+        if User.objects.filter(username=username).exists():
+            messages.warning(request,"This user already exists")
+            return redirect('register')
     else:
         return render(request,'register.html',{'registered':registered})
 
@@ -226,6 +233,8 @@ def editBlog(request,pk):
 
         return redirect('view')
     return render(request,'editblog.html')  
+
+
 
 @csrf_exempt
 def editData(request,id,tableName):
@@ -465,9 +474,9 @@ def buildxml(pk,blogobj):
 
     reverted_count=str(blogobj.reverted_count)
     if reverted_count == "None" :
-        uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-0"
+        uid = "urn:publicid:ap.shakticoin:"+str(blogobj.unique_id)+"-0"
     else:
-        uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
+        uid = "urn:publicid:ap.shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
 
     b1 = et.SubElement(m2, "id")
     b1.text = str(uid)
@@ -553,6 +562,7 @@ def buildxml(pk,blogobj):
 
     # response = FileResponse(open(f"{MEDIA_ROOT}/xml/{topic}.pdf", 'rb'),as_attachment=True)
 
+def buildxml2(pk,blogobj):
     root = et.Element('feed')
     root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
     root.set("xmlns:apxh","http://w3.org/1999/xhtml")
@@ -591,9 +601,9 @@ def buildxml(pk,blogobj):
     
     reverted_count=str(blogobj.reverted_count)
     if reverted_count == "None" :
-        uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-0"
+        uid = "urn:publicid:ap.shakticoin:"+str(blogobj.unique_id)+"-0"
     else:
-        uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
+        uid = "urn:publicid:ap.shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
 
     b1 = et.SubElement(m2, "id")
     b1.text = str(uid)
@@ -628,9 +638,9 @@ def buildxml(pk,blogobj):
     
     reverted_count=str(blogobj.reverted_count)
     if reverted_count == "None" :
-        uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-0"
+        uid = "urn:publicid:ap.shakticoin:"+str(blogobj.unique_id)+"-0"
     else:
-        uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
+        uid = "urn:publicid:ap.shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
 
     b1 = et.SubElement(m2, "id")
     b1.text = str(uid)
@@ -701,8 +711,7 @@ def buildxml(pk,blogobj):
     tree = et.ElementTree(root)
     
 
-    tree.write('{}/xml/output_xml_Blog_AP_News_{}.xml'.format(MEDIA_ROOT,blogobj.pk), encoding="utf-8")
-
+    tree.write('{}/xml/output_xml_Blog_AP_News_{}.xml'.format(MEDIA_ROOT,blogobj.pk), encoding="utf-8",xml_declaration=True)
 
 
 def downloadpdf(request,pk):
@@ -780,6 +789,19 @@ def downloadxml(request,pk,stringPath= None):
     else:
         return response
 
+def viewxml(request,pk):
+    blogobj = Ap_Wire.objects.get(pk=pk)
+    buildxml(pk,blogobj)
+    response = open('{}/xml/output_xml_Blog_AP_Wire_{}.xml'.format(MEDIA_ROOT,blogobj.pk), 'r')
+    return HttpResponse(response.read(),content_type="application/xml")
+
+def viewxml2(request,pk):
+    blogobj = Ap_News.objects.get(pk=pk)
+    buildxml2(pk,blogobj)
+    response = open('{}/xml/output_xml_Blog_AP_News_{}.xml'.format(MEDIA_ROOT,blogobj.pk), 'r')
+    return HttpResponse(response.read(),content_type="application/xml")
+
+
 def publishBlog(request,pk):
     blogobj = Ap_Wire.objects.get(pk=pk)
     blogobj.status = "App_Published"
@@ -832,12 +854,13 @@ def downloadxml2file2(request,pk):
 
 
 def buildxmlall():
+    print("BUIDL ALL")
     root = et.Element('feed')
     root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
     root.set("xmlns:apxh","http://w3.org/1999/xhtml")
     root.set("xmlns:ap","http://ap.org/schemas/03/2005/aptypes")
     root.set("xmlns","http://www.w3.org/2005/Atom")
-    root.set("xmlns:apcm","http://www.w3.org/2005/Atom")
+    root.set("xmlns:apcm","http://ap.org/schemas/03/2005/apcm")
     root.set("xml:lang","en-us")
 
     
@@ -871,9 +894,9 @@ def buildxmlall():
         root.append (m2)
         reverted_count=str(blogobj.reverted_count)
         if reverted_count == "None" :
-            uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-0"
+            uid = "urn:publicid:ap.shakticoin:"+str(blogobj.unique_id)+"-0"
         else:
-            uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
+            uid = "urn:publicid:ap.shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
 
         
 
@@ -912,6 +935,9 @@ def buildxmlall():
         elem.text=str(blogobj.topic)
         elem = et.SubElement(elee,"apcm:Characteristics")
         elem.set("MediaType","Text")
+        elem = et.SubElement(elee,'link')
+        elem.set('href','https://ap.shakticoin.com/viewxml/{}'.format(blogobj.pk))
+        elem.set("rel","self")
 
         elee = et.SubElement(m2,"apnm:NewsManagement")
         elem = et.SubElement(elee,"apnm:ManagementId")
@@ -958,9 +984,9 @@ def buildxmlall():
         root.append (m2)
 
         if reverted_count == "None" :
-            uid = "urn:publicid:shakticoin:"+randno+"-0"
+            uid = "urn:publicid:ap.shakticoin.com:"+randno+"-0"
         else:
-            uid = "urn:publicid:shakticoin:"+randno+"-"+reverted_count
+            uid = "urn:publicid:ap.shakticoin.com:"+randno+"-"+reverted_count
 
         b1 = et.SubElement(m2, "id")
         b1.text = str(uid)
@@ -999,12 +1025,12 @@ def buildxmlall():
         elem = et.SubElement(elee,"apcm:HeadLine")
         elem.text=str(blogobj.topic)
         elem = et.SubElement(elee,"apcm:Characteristics")
-        elem.set("MediaType","Text")
+        elem.set("MediaType","Photo")
 
         elee = et.SubElement(m2,"apnm:NewsManagement")
         elem = et.SubElement(elee,"apnm:ManagementId")
         if reverted_count == "None" :
-            elem.text = "urn:publicid:shakticoin:"+randno+"-0"
+            elem.text = "urn:publicid:ap.shakticoin.com:"+randno+"-0"
         else:
             elem.text = "urn:publicid:shakticoin:"+randno+"-"+reverted_count
         elem = et.SubElement(elee,"apnm:ManagementType")
@@ -1021,7 +1047,25 @@ def buildxmlall():
       
     tree = et.ElementTree(root)
     
-    tree.write('{}/xml/output_xml_Blog_AP_Wire.xml'.format(MEDIA_ROOT), encoding="utf-8")
+    tree.write('{}/xml/output_xml_Blog_AP_Wire.xml'.format(MEDIA_ROOT), encoding="utf-8",xml_declaration=True)
+class xmlValue:
+
+    def __init__(self,file):
+        self.data = str(file)
+        self.status_code = 200
+
+    def get(self,file):
+        return self.__str__
+    
+    def __str__(self) -> str:
+        return self.data
+
+def viewxmlall(request):
+    buildxmlall()
+    response = open(f"{MEDIA_ROOT}/xml/output_xml_Blog_AP_Wire.xml", 'rb')
+    return HttpResponse(response.read(),content_type="application/xml")
+
+
 
 def buildxmlall2():
     root = et.Element('feed')
@@ -1029,7 +1073,7 @@ def buildxmlall2():
     root.set("xmlns:apxh","http://w3.org/1999/xhtml")
     root.set("xmlns:ap","http://ap.org/schemas/03/2005/aptypes")
     root.set("xmlns","http://www.w3.org/2005/Atom")
-    root.set("xmlns:apcm","http://www.w3.org/2005/Atom")
+    root.set("xmlns:apcm","http://ap.org/schemas/03/2005/apcm")
     root.set("xml:lang","en-us")
 
     q1 = et.SubElement(root,"title")
@@ -1062,9 +1106,9 @@ def buildxmlall2():
         root.append (m2)
         reverted_count=str(blogobj.reverted_count)
         if reverted_count == "None" :
-            uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-0"
+            uid = "urn:publicid:ap.sahakticoin:"+str(blogobj.unique_id)+"-0"
         else:
-            uid = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
+            uid = "urn:publicid:ap.shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
 
         
 
@@ -1106,6 +1150,10 @@ def buildxmlall2():
         elem.text=str(blogobj.topic)
         elem = et.SubElement(elee,"apcm:Characteristics")
         elem.set("MediaType","Text")
+        elem = et.SubElement(elee,'link')
+        elem.set('href','https://ap.shakticoin.com/viewxml/{}'.format(blogobj.pk))
+        elem.set("rel","self")
+
 
         elee = et.SubElement(m2,"apnm:NewsManagement")
         elem = et.SubElement(elee,"apnm:ManagementId")
@@ -1150,9 +1198,9 @@ def buildxmlall2():
         m2.set("xml:lang","en-us")
         root.append (m2)
         if reverted_count == "None" :
-            uid = "urn:publicid:shakticoin:"+randno+"-0"
+            uid = "urn:publicid:ap.shakticoin.com:"+randno+"-0"
         else:
-            uid = "urn:publicid:shakticoin:"+randno+"-"+reverted_count
+            uid = "urn:publicid:ap.shakticoin.com:"+randno+"-"+reverted_count
 
         b1 = et.SubElement(m2, "id")
         b1.text = str(uid)
@@ -1192,7 +1240,7 @@ def buildxmlall2():
         elem = et.SubElement(elee,"apcm:HeadLine")
         elem.text=str(blogobj.topic)
         elem = et.SubElement(elee,"apcm:Characteristics")
-        elem.set("MediaType","Text")
+        elem.set("MediaType","Photo")
 
         elee = et.SubElement(m2,"apnm:NewsManagement")
         elem = et.SubElement(elee,"apnm:ManagementId")
@@ -1217,10 +1265,6 @@ def buildxmlall2():
 
     tree.write('{}/xml/output_xml_Blog_AP_News.xml'.format(MEDIA_ROOT), encoding="utf-8")
 
-def viewxmlall(request):
-    buildxmlall()
-    response = FileResponse(open(f"{MEDIA_ROOT}/xml/output_xml_Blog_AP_Wire.xml", 'rb')) 
-    return response
 
 
 def viewxmlall2(request):

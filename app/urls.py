@@ -22,6 +22,10 @@ urlpatterns = [
     path('downloadxmlall2file2/',views.downloadxmlall2file2,name='downloadxmlall2file2'),
 
     path('downloadxml/<str:pk>/',views.downloadxml,name='downloadxml'),
+    path('viewxml/<str:pk>/',views.viewxml,name='downloadxml'),
+    path('viewxml2/<str:pk>/',views.viewxml2,name='downloadxml'),
+
+
     
 
     path('deleteBlog/<str:pk>/',views.deleteBlog,name='deleteBlog'),

@@ -588,7 +588,7 @@
                     ${
                       tableName == 'Ready_For_Release' ? `
                       <a class="row-add downloadxml" id="downloadxml-${tableName}" href="/downloadxml/${id}/" ><i class="fa fa-file-excel-o"></i></a>
-                      <a class="row-add publishRow publishRowClick plane" id="publishRow-${id}-${tableName}"  ><i class="fa fa-paper-plane"></i></a>
+                      <a class="row-add publishRow publishRowClick plane" id="publishRow-${id}-${tableName}" href="/publishBlog/${id}/" ><i class="fa fa-paper-plane"></i></a>
                       `:''
                     }
                 
@@ -1177,17 +1177,24 @@ $(document).on('click','.expandModal2',function(){
           if(this.width > 1020 ){
             alert("image should not be less than 1020 pixels width");
 
-  
-            document.getElementById("imagewire").value = ""
-            document.getElementById("imagenews").value = ""
+            
+            const x = document.getElementsByClassName('image');
+            for (var i = 0; i < x.length; i++) {
+              x[i].value = "";
+          }
+
+            
+            
             
            
            }
         };
         img.onerror = function() {  
             alert( "not a valid file: " + file.type);
-            document.getElementsByClassName("image")[0].value = ""
-            document.getElementsByClassName("image")[1].value = ""
+            const x = document.getElementsByClassName('image');
+            for (var i = 0; i < x.length; i++) {
+              x[i].value = "";
+          }
         };
         img.src = _URL.createObjectURL(file);
  
@@ -1205,9 +1212,12 @@ $(document).on('change','.imagemult',function(){
           if(this.width > 1020 ){
             alert("image should not be less than 1020 pixels width");
 
-  
-            document.getElementById("extra_imagewire[]").value = ""
-            document.getElementById("extra_imagenews[]").value = ""
+            const x = document.getElementsByClassName('imagemult');
+            for (var i = 0; i < x.length; i++) {
+              x[i].value = "";
+          }
+            
+            
             
            
            }
@@ -1258,8 +1268,7 @@ $(document).on('click','.wire_cat',function(){
   var tbId = $(this).parent()[0].id.slice(16,)
   var value=  $(this).text();
   console.log(value,tbId)
-
-
+ 
     $(`#ApWire_${tbId} td.category:contains(${value})`).parent().show();
     $(`#ApWire_${tbId} td.category:not(:contains(${value}))`).parent().hide();
     
@@ -1369,9 +1378,6 @@ $(document).on('click','.expandModal2',function(){
 
 
 
-$('.plane').click(function(){
-  window.location.replace("http://localhost:8001/publishBlog/19/");
-});
 
 </script>
 

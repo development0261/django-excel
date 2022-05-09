@@ -77,16 +77,7 @@
             </div>
           </div>
 
-            {% if messages %}
-   {% for message in messages %}
-   <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-       <strong id="g_msg">Message : {{message}} </strong>
-       <button type="button" onclick="parentNode.remove()" class="close" data-dismiss="alert" aria-label="Close">
-           <span aria-hidden="true">&times;</span>
-       </button>
-   </div>
-   {% endfor %}
-   {% endif %} 
+{%include 'base.html'%}
             <!-- First Tab-->
             <div class="ns-slider-box-section" id="ApWireContent">
               <div class="table-carousel owl-carousel owl-theme">
@@ -212,7 +203,7 @@
                             {%endif%}
 
                             {% if user|checkTablePermissionpublish:key and forloop.parentloop.counter == 6 %}
-                            <a class="row-add publishRow plane publishRowClick" id="publishRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"><i class="fa fa-paper-plane"></i></a>
+                            <a class="row-add publishRow plane publishRowClick" id="publishRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href="{% url 'publishBlog' v.pk %}"><i class="fa fa-paper-plane"></i></a>
                             {%endif%}
 
                             {% if forloop.parentloop.counter == 7 %}
