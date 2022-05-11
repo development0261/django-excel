@@ -22,10 +22,10 @@ services:
     environment:
       DATABASE_URL: "postgres://postgres:ShaktiDB123@db:5432/shaktiblog"
       DOMAIN_ALIASES: "localhost, 127.0.0.1, ap.shakticoin.com"
-      DB_HOST: "db"
+      DB_HOST: "shaktiblog-django-database.cqocxpwhlloo.us-east-2.rds.amazonaws.com"
       DB_NAME: "shaktiblog"
       DB_USER: "postgres"
-      DB_PASS: "ShaktiDB123"
+      DB_PASS: "vEuV2p!Su6=Wwxm&"
     volumes:
       - shaktiblog_data:/usr/src/app
     networks:

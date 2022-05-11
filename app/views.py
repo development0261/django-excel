@@ -382,14 +382,14 @@ def viewfunction(request):
     # print(roleint)
 
     if request.user.is_authenticated:
-        apwire_obj = Ap_Wire.objects.all()
-        apwire_ContentPitching_data = apwire_obj.filter(status='Content_Pitching') 
-        apwire_WritingRewrite_data = apwire_obj.filter(status='Writing_Rewrite')
-        apwire_ReviewDraft1_data = apwire_obj.filter(status='Review_Draft_1')
-        apwire_ReviewDraft2_data = apwire_obj.filter(status='Review_Draft_2')
-        apwire_FDNApproval_data = apwire_obj.filter(status='FDN_Approval_1')
-        apwire_ReadyForRelease_data = apwire_obj.filter(status='Ready_For_Release')
-        apwire_APPublished_data = apwire_obj.filter(status='App_Published')
+        
+        apwire_ContentPitching_data = Ap_Wire.objects.filter(status='Content_Pitching') 
+        apwire_WritingRewrite_data = Ap_Wire.objects.filter(status='Writing_Rewrite')
+        apwire_ReviewDraft1_data = Ap_Wire.objects.filter(status='Review_Draft_1')
+        apwire_ReviewDraft2_data = Ap_Wire.objects.filter(status='Review_Draft_2')
+        apwire_FDNApproval_data = Ap_Wire.objects.filter(status='FDN_Approval_1')
+        apwire_ReadyForRelease_data = Ap_Wire.objects.filter(status='Ready_For_Release')
+        apwire_APPublished_data = Ap_Wire.objects.filter(status='App_Published')
         context_dict = {}
         context_dict['Content Pitching'] = apwire_ContentPitching_data
         context_dict['Writing Rewrite'] = apwire_WritingRewrite_data
@@ -399,14 +399,14 @@ def viewfunction(request):
         context_dict['Ready For Release'] = apwire_ReadyForRelease_data
         context_dict['App Published'] = apwire_APPublished_data
 
-        apnews_obj = Ap_Wire.objects.all()
-        apnews_ContentPitching_data = apnews_obj.filter(status='Content_Pitching') 
-        apnews_WritingRewrite_data = apnews_obj.filter(status='Writing_Rewrite')
-        apnews_ReviewDraft1_data = apnews_obj.filter(status='Review_Draft_1')
-        apnews_ReviewDraft2_data = apnews_obj.filter(status='Review_Draft_2')
-        apnews_FDNApproval_data = apnews_obj.filter(status='FDN_Approval_1')
-        apnews_ReadyForRelease_data = apnews_obj.filter(status='Ready_For_Release')
-        apnews_APPublished_data = apnews_obj.filter(status='App_Published')
+        
+        apnews_ContentPitching_data = Ap_News.objects.filter(status='Content_Pitching') 
+        apnews_WritingRewrite_data = Ap_News.objects.filter(status='Writing_Rewrite')
+        apnews_ReviewDraft1_data = Ap_News.objects.filter(status='Review_Draft_1')
+        apnews_ReviewDraft2_data = Ap_News.objects.filter(status='Review_Draft_2')
+        apnews_FDNApproval_data = Ap_News.objects.filter(status='FDN_Approval_1')
+        apnews_ReadyForRelease_data = Ap_News.objects.filter(status='Ready_For_Release')
+        apnews_APPublished_data = Ap_News.objects.filter(status='App_Published')
         context_dict1 = {}
         context_dict1['Content Pitching'] = apnews_ContentPitching_data
         context_dict1['Writing Rewrite'] = apnews_WritingRewrite_data

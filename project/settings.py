@@ -28,6 +28,11 @@ SECRET_KEY = 'django-insecure-=w$9qml=n^3xuhj#u62^$rfw)n0yevb7-vr*vn@t_hg6!tp9-(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]
 ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'app.UserCustom'
@@ -46,6 +51,14 @@ INSTALLED_APPS = [
     'ckeditor',
     'import_export',
     'storages',
+
+
+
+
+
+
+
+    'debug_toolbar',    
  
 ]
 # TIME_ZONE = 'Asia/Singapore'
@@ -81,6 +94,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -122,22 +136,27 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'static')
 ]
 
-# DATABASES = {
-#   'default': {
-#     'ENGINE': 'django.db.backends.postgresql',
-#     'HOST': os.environ.get('DB_HOST','ruby.db.elephantsql.com'),
-#     'NAME': os.environ.get('DB_NAME','shaktiblog'),
-#     'USER': os.environ.get('DB_USER','postgres'),
-#     'PASSWORD': os.environ.get('DB_PASS','ShaktiDB123'),
-#    }
-# }
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db1.sqlite3',
-    }
+  'default': {
+    'ENGINE': 'django.db.backends.postgresql',
+    'HOST': 'shaktiblog-django-database.cqocxpwhlloo.us-east-2.rds.amazonaws.com',
+    'NAME': 'shaktiblog',
+    'USER': 'postgres',
+    'PASSWORD': 'vEuV2p!Su6=Wwxm&',
+   }
 }
+
+# Django debug
+# def show_toolbar(request):
+#     return True
+# SHOW_TOOLBAR_CALLBACK = show_toolbar
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db1.sqlite3',
+#     }
+# }
 
 
 # Password validation
