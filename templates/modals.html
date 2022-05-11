@@ -126,7 +126,7 @@
             </div>
             <div class="field-name">
               
-                <label>Category *</label>
+                <label>Category</label>
                 <div class="select_box">
                   <select id="selectform" class="box" onchange="showCategories(this.value)" name="category"> 
                     <option selected>Select Category</option>
@@ -135,11 +135,24 @@
                     <option value="{{cat.pk}}">{{cat.name}}</option>
                     {% endfor %}
                   </select>
+                </div>
+              </div>
+              <div class="field-name">
+                  <label>Status</label>
+                <div class="select_box">
+                  <select id="selectform" class="box" name="status"> 
+                    
+                    
+                    <option value="Draft">Draft</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Completed">Completed</option>
+                  </select>
+               
                
                 
                 </div>
-
               </div>
+              
             <div class="field-name">
                 <label>Image</label>
                 <input type="file" accept="image/*" id="imagewire"  placeholder="" name="image" class="image" >
@@ -193,7 +206,7 @@
 
             <div class="field-name">
               
-              <label>Category *</label>
+              <label>Category</label>
               <div class="select_box">
                 <select class="box" onchange="showCategories(this.value)" name="category"> 
                   <option selected>Select Category</option>
@@ -202,10 +215,30 @@
                   <option value="{{cat.pk}}">{{cat.name}}</option>
                   {% endfor %}
                 </select>
+              
+
+                
+               
+               
              
               
+                </div>
+              </div>
+              <div class="field-name">
+                <label>Status</label>
+              <div class="select_box">
+                <select id="selectform" class="box" name="status"> 
+                  
+                  
+                  <option value="Draft">Draft</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Completed">Completed</option>
+                </select>
+             
+             
+              
+              </div>
             </div>
-          </div>
 
 
             <div class="field-name">

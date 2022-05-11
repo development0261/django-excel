@@ -1,5 +1,6 @@
 from django import template
 from pkg_resources import register_finder
+import re
 
 register = template.Library()
 
@@ -17,9 +18,20 @@ name_dict = {
 def namereplace(value):
     return name_dict[value]
 
+@register.filter
+def desc_count(value):
+    desc = value.description
+    desc = desc.replace("&nbsp;","")
+    desc = desc.replace("&#39;","")
+    desc = re.sub('<[^<]*?/?>', '', desc)
+    if not desc:
+        return 0
+    else:
+        return len(desc)-2
+
 
 @register.filter
-def replaceSpacewithUnderScore(value):
+def replaceSpacewithUnderScore(value):  
     return str(value).replace(" ","_")
 
 @register.filter

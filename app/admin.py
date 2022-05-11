@@ -164,3 +164,7 @@ class selectiondisplay(ImportExportModelAdmin,admin.ModelAdmin):
 class Display(ImportExportModelAdmin,admin.ModelAdmin):
     list_display = ("name", )
 
+# @admin.register(blog_progress_status)
+# class Display(ImportExportModelAdmin,admin.ModelAdmin):
+#     list_display = ("name", )
+

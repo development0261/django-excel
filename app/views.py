@@ -4,6 +4,7 @@ from multiprocessing import AuthenticationError
 from urllib import request
 from django.shortcuts import render,redirect
 from django.http import HttpResponse, JsonResponse
+from soupsieve import select
 
 # from app.serializers import BlogSerializer
 from .models import *
@@ -159,8 +160,13 @@ def register(request):
 #             return JsonResponse({'topic':tableObj.topic,'author':tableObj.author,'date':formatedDate,'pk':tableObj.pk})
 
 def getRowData(request,id,tableName):
-    
+    current_user = request.user.username
     tableObj = Ap_Wire.objects.get(pk = id)
+    if current_user == tableObj.author.username:
+        current_user_check = True
+    else:
+        current_user_check = False
+    
     date = tableObj.date
     formatedDate = date.strftime('%Y-%m-%d')
     # image = tableObj.image
@@ -176,13 +182,14 @@ def getRowData(request,id,tableName):
         for i in imageobjs:
             count += 1
             imgdict[str(count)]=i.image.url
+    
 
+    blog_progress_status = tableObj.blog_release_status
     if tableObj.category:
         category_name = tableObj.category.name
     else:
         category_name = None
-        
-    return JsonResponse({'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj,'imgdict':imgdict})
+    return JsonResponse({'current_user_check':current_user_check,'category':category_name,'blog_progress_status':blog_progress_status,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj,'imgdict':imgdict})
 
 @csrf_exempt
 def contentgetRowData(request):
@@ -193,8 +200,12 @@ def contentgetRowData2(request):
     return JsonResponse({})
 
 def getRowData2(request,id,tableName):
-    
+    current_user = request.user.username
     tableObj = Ap_News.objects.get(pk = id)
+    if current_user == tableObj.author.username:
+        current_user_check = True
+    else:
+        current_user_check = False
     date = tableObj.date
     formatedDate = date.strftime('%Y-%m-%d')
     imageobj = None
@@ -215,7 +226,7 @@ def getRowData2(request,id,tableName):
     else:
         category_name = None
 
-    return JsonResponse({'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj,'imgdict':imgdict})
+    return JsonResponse({'current_user_check':current_user_check,'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj,'imgdict':imgdict})
 
 def editBlog(request,pk):
     if request.method == 'POST':
@@ -238,10 +249,12 @@ def editBlog(request,pk):
 
 @csrf_exempt
 def editData(request,id,tableName):
-    print(request.POST)
+    current_user = request.user.username
     topic = request.POST['topic']
     description = request.POST['description']
     cat_id = request.POST['category']
+    blog_progress_status = request.POST['status']
+
     tableObj = Ap_Wire.objects.get(pk = id)
     
     if cat_id == "Select Category":
@@ -251,9 +264,19 @@ def editData(request,id,tableName):
         cat_obj= category.objects.get(id=cat_id)
         category_name = cat_obj.name
     
+
+    
     tableObj.description = description
     tableObj.topic = topic
     tableObj.category = cat_obj
+    if current_user == tableObj.author.username:
+        current_user_check = True
+        tableObj.blog_release_status = blog_progress_status
+        
+    else:
+        current_user_check = False
+        blog_progress_status = tableObj.blog_release_status
+    # tableObj.blog_release_status = category.objects.get(id=cat_id)
     tableObj.save()
     
     if 'image' in request.FILES:
@@ -271,16 +294,28 @@ def editData(request,id,tableName):
 
     date = datetime.strptime(str(tableObj.date), '%Y-%m-%d')
     
-    
-
+    # desc  length
+    desc = tableObj.description
+    desc = desc.replace("&nbsp;","")
+    desc = desc.replace("&#39;","")
+    desc = re.sub('<[^<]*?/?>', '', desc)
     formatedDate = date.strftime('%B %d,%Y')
-    return JsonResponse({'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})
+    if not tableObj.description:
+        desc_len = 0
+    else:
+        desc_len = len(desc)-2
+    
+    return JsonResponse({'tablename':tableObj.status,'row_id':tableObj.id,'desc_len':desc_len,'blog_progress_status':blog_progress_status,'current_user_check':current_user_check,'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})
 
 @csrf_exempt
 def editData2(request,id,tableName):
+    current_user = request.user.username
     topic = request.POST['topic']
     description = request.POST['description']
     cat_id = request.POST['category']
+    blog_progress_status = request.POST['status']
+    
+    
     
     if cat_id == "Select Category":
         cat_obj = None
@@ -293,15 +328,25 @@ def editData2(request,id,tableName):
     tableObj.category = cat_obj
     tableObj.description = description
     tableObj.topic = topic
+    if current_user == tableObj.author.username:
+        current_user_check = True
+        tableObj.blog_release_status = blog_progress_status
+        
+    else:
+        current_user_check = False
+        blog_progress_status = tableObj.blog_release_status
+    
     tableObj.save()
     if 'image' in request.FILES:
         image=request.FILES['image']
         tableObj.image = image
         tableObj.save()
+        del request.FILES['image']
 
     count = 0
     if f'image{count}' in request.FILES:    
         moreimages_apnews.objects.filter(post=tableObj).delete()
+        print(request.FILES)
         for i in request.FILES:
             moreimages_apnews.objects.create(post=tableObj,image=request.FILES[f'image{count}'])
             count += 1
@@ -309,9 +354,18 @@ def editData2(request,id,tableName):
 
     date = datetime.strptime(str(tableObj.date), '%Y-%m-%d')
 
+    # desc  length
+    desc = tableObj.description
+    desc = desc.replace("&nbsp;","")
+    desc = desc.replace("&#39;","")
+    desc = re.sub('<[^<]*?/?>', '', desc)
+    if not tableObj.description:
+        desc_len = 0
+    else:
+        desc_len = len(desc)-2
 
     formatedDate = date.strftime('%B %d,%Y')
-    return JsonResponse({'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})
+    return JsonResponse({'desc_len':desc_len,'blog_progress_status':blog_progress_status,'current_user_check':current_user_check,'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})
 
 
 
@@ -328,13 +382,14 @@ def viewfunction(request):
     # print(roleint)
 
     if request.user.is_authenticated:
-        apwire_ContentPitching_data = Ap_Wire.objects.filter(status='Content_Pitching') 
-        apwire_WritingRewrite_data = Ap_Wire.objects.filter(status='Writing_Rewrite')
-        apwire_ReviewDraft1_data = Ap_Wire.objects.filter(status='Review_Draft_1')
-        apwire_ReviewDraft2_data = Ap_Wire.objects.filter(status='Review_Draft_2')
-        apwire_FDNApproval_data = Ap_Wire.objects.filter(status='FDN_Approval_1')
-        apwire_ReadyForRelease_data = Ap_Wire.objects.filter(status='Ready_For_Release')
-        apwire_APPublished_data = Ap_Wire.objects.filter(status='App_Published')
+        apwire_obj = Ap_Wire.objects.all()
+        apwire_ContentPitching_data = apwire_obj.filter(status='Content_Pitching') 
+        apwire_WritingRewrite_data = apwire_obj.filter(status='Writing_Rewrite')
+        apwire_ReviewDraft1_data = apwire_obj.filter(status='Review_Draft_1')
+        apwire_ReviewDraft2_data = apwire_obj.filter(status='Review_Draft_2')
+        apwire_FDNApproval_data = apwire_obj.filter(status='FDN_Approval_1')
+        apwire_ReadyForRelease_data = apwire_obj.filter(status='Ready_For_Release')
+        apwire_APPublished_data = apwire_obj.filter(status='App_Published')
         context_dict = {}
         context_dict['Content Pitching'] = apwire_ContentPitching_data
         context_dict['Writing Rewrite'] = apwire_WritingRewrite_data
@@ -344,14 +399,14 @@ def viewfunction(request):
         context_dict['Ready For Release'] = apwire_ReadyForRelease_data
         context_dict['App Published'] = apwire_APPublished_data
 
-
-        apnews_ContentPitching_data = Ap_News.objects.filter(status='Content_Pitching') 
-        apnews_WritingRewrite_data = Ap_News.objects.filter(status='Writing_Rewrite')
-        apnews_ReviewDraft1_data = Ap_News.objects.filter(status='Review_Draft_1')
-        apnews_ReviewDraft2_data = Ap_News.objects.filter(status='Review_Draft_2')
-        apnews_FDNApproval_data = Ap_News.objects.filter(status='FDN_Approval_1')
-        apnews_ReadyForRelease_data = Ap_News.objects.filter(status='Ready_For_Release')
-        apnews_APPublished_data = Ap_News.objects.filter(status='App_Published')
+        apnews_obj = Ap_Wire.objects.all()
+        apnews_ContentPitching_data = apnews_obj.filter(status='Content_Pitching') 
+        apnews_WritingRewrite_data = apnews_obj.filter(status='Writing_Rewrite')
+        apnews_ReviewDraft1_data = apnews_obj.filter(status='Review_Draft_1')
+        apnews_ReviewDraft2_data = apnews_obj.filter(status='Review_Draft_2')
+        apnews_FDNApproval_data = apnews_obj.filter(status='FDN_Approval_1')
+        apnews_ReadyForRelease_data = apnews_obj.filter(status='Ready_For_Release')
+        apnews_APPublished_data = apnews_obj.filter(status='App_Published')
         context_dict1 = {}
         context_dict1['Content Pitching'] = apnews_ContentPitching_data
         context_dict1['Writing Rewrite'] = apnews_WritingRewrite_data
@@ -361,26 +416,22 @@ def viewfunction(request):
         context_dict1['Ready For Release'] = apnews_ReadyForRelease_data
         context_dict1['App Published'] = apnews_APPublished_data
 
+        
+
         obj = content_brief.objects.all()
         if obj:
             context = obj
         else:
             context = None
-            
-        
-        # desc = desc.replace("&nbsp;","")
-        # desc = desc.replace("&#39;","")
-        # desc = re.sub('<[^<]*?/?>', ' ', desc)
-
-        
-
-
-
-
+    
         permissions.objects.filter(user=request.user)
 
         categories = category.objects.all()
+        
 
+
+
+        
 
         return render(request,'index.html',{'context_dict':context_dict,'context_dict1':context_dict1,'category_dict':categories,'context':context})
     else:
@@ -1312,8 +1363,11 @@ def createBlog(request):
         else:
             cat_obj= category.objects.get(id=cat)
 
+        sel = request.POST['status']
+        
 
-        blog = Ap_Wire.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description'],status="Content_Pitching",category=cat_obj)
+
+        blog = Ap_Wire.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description'],status="Content_Pitching",category=cat_obj,blog_release_status=sel)
         if 'image' in request.FILES:
             image=request.FILES['image']
             blog.image = image
@@ -1337,9 +1391,12 @@ def createBlog2(request):
             cat_obj = None
         else:
             cat_obj= category.objects.get(id=cat)
+
+        sel = request.POST['status']
+        
         
 
-        blog = Ap_News.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description2'],status="Content_Pitching",category=cat_obj)
+        blog = Ap_News.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description2'],status="Content_Pitching",category=cat_obj,blog_release_status=sel)
         if 'image' in request.FILES:
             image=request.FILES['image']
             blog.image = image
@@ -1367,6 +1424,11 @@ def dropData(request,dropid,removedfrom,addedto):
         blog = Ap_Wire.objects.get(pk=dropid)
         blog.status= addedto
         blog.save()
+        desc = blog.description
+        desc = desc.replace("&nbsp;","")
+        desc = desc.replace("&#39;","")
+        desc = re.sub('<[^<]*?/?>', '', desc)
+        description_count = len(desc)-2
         roles = [
             'Content_Pitching',
             'Writing_Rewrite',
@@ -1398,7 +1460,7 @@ def dropData(request,dropid,removedfrom,addedto):
 
 
 
-        return JsonResponse({'msg':'success','access_dict':access_dict,'tableIndex':index+1})
+        return JsonResponse({'msg':'success','access_dict':access_dict,'tableIndex':index+1,'description_count':description_count})
 
 
 @csrf_exempt

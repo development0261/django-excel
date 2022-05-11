@@ -1,4 +1,5 @@
 from datetime import date
+from unittest.util import _MAX_LENGTH
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -10,6 +11,12 @@ ROLE = [
         ('Editor', 'Editor'),
         ('Publisher', 'Publisher'),
         ('Approver', 'Approver')
+    ]
+
+STAT = [
+        ('Draft', 'Draft'),
+        ('In progress', 'In progress'),
+        ('Completed', 'Completed'),
     ]
 
 tables_choice = [
@@ -76,6 +83,12 @@ class category(models.Model):
     class Meta:
       verbose_name_plural = "Category"
 
+# class blog_progress_status(models.Model):
+#     name = models.CharField(choices=STAT,max_length=100,default="In progress")
+#     class Meta:
+#       verbose_name_plural = "Status"
+
+
 class Ap_Wire(models.Model):
     topic = models.CharField(max_length=200)
     author = models.ForeignKey(UserCustom,on_delete=models.CASCADE)
@@ -88,6 +101,8 @@ class Ap_Wire(models.Model):
     updated = models.DateTimeField(auto_now=True)
     reverted_count = models.IntegerField(default=1)
     category = models.ForeignKey(category,null=True,blank=True ,on_delete=models.CASCADE)
+    # blog_release_status = models.ForeignKey(blog_progress_status,on_delete=models.CASCADE)
+    blog_release_status = models.CharField(max_length=30,choices=STAT,default="In progress")
 
     class Meta:
         verbose_name_plural = "AP-Wire"
@@ -111,6 +126,8 @@ class Ap_News(models.Model):
     updated = models.DateTimeField(auto_now=True)
     reverted_count = models.IntegerField(default=1)
     category = models.ForeignKey(category,null=True,blank=True ,on_delete=models.CASCADE)
+    blog_release_status = models.CharField(max_length=30,choices=STAT,default="In progress")
+    # blog_release_status = models.ForeignKey(blog_progress_status,on_delete=models.CASCADE)
 
     class Meta:
       verbose_name_plural = "AP-News"

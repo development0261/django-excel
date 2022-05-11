@@ -198,25 +198,11 @@
               url: "getRowData/"+id+"/"+tableName+"/",
               success: function(data){ 
                   console.log(data)
-                                    
-                  // $(`#${keys[2]}_${keys[1]}`).children('td').remove()
-                  // $(`#${keys[2]}_${keys[1]}`).append(
-                  //   `
                   
-                      
-                      
-                  //     <td><input type="text" value="${data.title}" id="title_${tableName}_${id}" ></td>
-                  //     <td><input type="text" value="${data.author}" id="author_${tableName}_${id}"></td>
-                  //     <td><input type="date" value="${data.date}" id="date_${tableName}_${id}"></td>
-                  //     <td>
-                  //       <div class="new-row-control">
-                  //         <button class="row-add addEditRow" id="addEditRow-${id}-${tableName}"><i class="fa fa-check"></i></button>
-                          
-                  //       </div>
-                  //     </td>
-                  //   `
                 
                   $(`#editmodalbody_${tableName}`).empty()
+                
+                if (data.current_user_check == true){
                   $(`#editmodalbody_${tableName}`).append(`
                   
                   <div class="row justify-content-center">
@@ -243,6 +229,8 @@
                                             <option selected>Select Category</option>
 
                                             
+
+                                            
                                             ${
                                               cat_array.map((item,index)=>{
                                                 return(
@@ -251,6 +239,83 @@
                                               })
                                             }
                                           </select>
+
+                                          <label>Status</label>
+                                          <div class="select_box">
+                                            <select id="status_${tableName}_${data.pk}" class="box" name="status"> 
+                                             
+                                              
+                                              <option value="Draft">Draft</option>
+                                              <option value="In Progress">In Progress</option>
+                                              <option value="Completed">Completed</option>
+                                            </select>
+                                        </div> 
+                                        
+                                    </div>
+            
+                                      <div class="field-name">
+                                        <label>Image</label>
+
+                                        <input type="file" placeholder="" accept="image/*"  name="image" id="image_${tableName}_${data.pk}" class="image" >
+                                      </div>
+
+                                      <div class="field-name">
+                                        <label>Extra Images (Upload Mulitple)</label>
+                                        <input type="file" accept="image/*" multiple="multiple" id="images_${tableName}_${data.pk}" placeholder="" name="images[]" class="images" >
+                                      </div>
+                          
+                                    
+
+                                   
+             
+               
+                                      <button type="button" class="login-submit addEditRow" id="addEditRow-${data.pk}-${tableName}" name="Add" value="Add">Save Blog</button>
+                                      
+                                      <a  style="text-decoration:none;cursor:pointer" class="ml-3 closeModel" data-dismiss="modal" >Close</a>
+                                  </form>
+                              </div>
+                          </div>
+                  `
+                 
+                 )}
+                 else{
+                  $(`#editmodalbody_${tableName}`).append(`
+                  
+                  <div class="row justify-content-center">
+                          <div class="col-md-8">
+                              <div  class="title">
+                                  <h2>Edit Blog</h2>
+                              </div>
+                              <div class="login-form">
+                                  <form method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                      <div class="field-name">
+                                          <label>Title</label>
+                                          <input type="text" placeholder="" value="${data.topic}" name="topic" id="title_${tableName}_${data.pk}">
+                                      </div>
+                                      <div class="field-name">
+                                          <label>Description*</label>
+                                      <textarea name="description" rows="10" cols="55" id="description_${tableName}_${data.pk}">${data.content}</textarea>
+                                      </div>
+                                      <div class="field-name">   
+                                       
+                                        <label>Category</label>
+                                        <div class="select_box">
+                                          <select class="box" id="category_${tableName}_${data.pk}" onchange="showCategories(this.value)" name="category"> 
+                                            <option selected>Select Category</option>
+
+                                            
+
+                                            
+                                            ${
+                                              cat_array.map((item,index)=>{
+                                                return(
+                                                  `<option value="${item[1]}" ${data.category == item[0]?`selected`:''}>${item[0]}</option>`
+                                                )
+                                              })
+                                            }
+                                          </select>
+
                                         </div> 
                                         
                                     </div>
@@ -280,6 +345,9 @@
                   `
                  
                  )
+                 }
+                
+                  
                  CKEDITOR.replace(`description_${tableName}_${data.pk}`);
                  
                  
@@ -325,7 +393,10 @@
                     //     </td>
                     //   `
                     $(`#editmodalbody2_${tableName}`).empty()
-                    $(`#editmodalbody2_${tableName}`).append(`
+
+                    if (data.current_user_check == true){
+                      $(`#editmodalbody2_${tableName}`).append(`
+                    
                     <div class="row justify-content-center">
                             <div class="col-md-8">
                                 <div  class="title">
@@ -358,6 +429,16 @@
                                               })
                                             }
                                           </select>
+
+                                          <label>Status</label>
+                                          <div class="select_box">
+                                            <select id="status_${tableName}_${data.pk}" class="box" name="status"> 
+                                              
+                                              
+                                              <option value="Draft">Draft</option>
+                                              <option value="In Progress">In Progress</option>
+                                              <option value="Completed">Completed</option>
+                                            </select>
                                         </div> 
                                           
                                       </div>
@@ -377,7 +458,62 @@
                                     </form>
                                 </div>
                             </div>
+                    `)}
+                    else{
+                      $(`#editmodalbody2_${tableName}`).append(`
+                    
+                    <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <div  class="title">
+                                    <h2>Edit Blog</h2>
+                                </div>
+                                <div class="login-form">
+                                    <form method="POST">
+                                      {% csrf_token %}
+                                        <div class="field-name">
+                                            <label>Title</label>
+                                            <input type="text" placeholder="" value="${data.topic}" name="topic" id="News_title_${tableName}_${data.pk}">
+                                        </div>
+                                        <div class="field-name">
+                                            <label>Description*</label>
+                                        <textarea name="description" rows="10" cols="55" id="News_description_${tableName}_${data.pk}">${data.content}</textarea>
+                                        </div>
+                                        <div class="field-name">   
+                                       
+                                          <label>Category</label>
+                                          <div class="select_box">
+                                          <select class="box" id="category_${tableName}_${data.pk}" onchange="showCategories(this.value)" name="category"> 
+                                            <option selected>Select Category</option>
+
+                                            
+                                            ${
+                                              cat_array.map((item,index)=>{
+                                                return(
+                                                  `<option value="${item[1]}" ${data.category == item[0]?`selected`:''}>${item[0]}</option>`
+                                                )
+                                              })
+                                            }
+                                          </select>
+
+                                      </div>
+                                      <div class="field-name">
+                                        <label>Image</label>
+                                        <input type="file" placeholder="" accept="image/*"  name="image" id="image_${tableName}_${data.pk}" class="image">
+                                      </div>
+
+                                      <div class="field-name">
+                                        <label>Extra Images (Upload Mulitple)</label>
+                                        <input type="file" accept="image/*" multiple="multiple" id="images_${tableName}_${data.pk}" placeholder="" name="images[]" class="images" >
+                                      </div>
+                
+                 
+                                        <button type="button" class="login-submit addEditRow2" id="News_addEditRow2-${data.pk}-${tableName}" name="Add" value="Add">Save Blog</button>
+                                        <a  style="text-decoration:none;cursor:pointer" class="ml-3 closeModel2" data-dismiss="modal" >Close</a>
+                                    </form>
+                                </div>
+                            </div>
                     `)
+                    }
                     CKEDITOR.replace(`News_description_${tableName}_${data.pk}`);
                  
                     $(`#editmodal2_${tableName}`).modal('show')
@@ -545,13 +681,25 @@
           count = count + 1
         }
         var category = $("#category_"+tableName+"_"+id).val()
+        
+        var status = $("#status_"+tableName+"_"+id).val()
+        
+        
                 
         formData.append('category',category)
         
         formData.append('topic', title);
-        formData.append('description', description);
         formData.append('image', image);
         formData.append('images', images);
+        formData.append('description', description);
+        formData.append('status', status);
+
+        
+        
+        
+        
+        
+        
         
         // console.log(image)
         // console.log("here")
@@ -565,21 +713,27 @@
           mimeType: 'multipart/form-data',
 
           success: function(data){ 
-            console.log(data)
+
             data= JSON.parse(data)
               console.log(data)
+            if(data.category == null){
+              var category_temp = ""
+            }else{
+              category_temp = data.category
+            }
               
             
-            
+            console.log(keys)
               $(`#${keys[2]}_${keys[1]}`).children('td').remove()
               $(`#${keys[2]}_${keys[1]}`).append(
                 `
-
+                
                   <td>${data.topic}</td>
                   <td>${data.author}</td>
-                  <td>${data.category}</td>
-
+                  <td>${category_temp}</td>
                   <td>${data.date}</td>
+                  <td>${data.blog_progress_status}</td>
+                  <td>${data.desc_len}</td>
                   
                   <td> <div class="new-row-control">
                     <a class="row-add viewRow" id="viewRow-${id}-${tableName}"  ><i class="fa fa-eye"></i></a>
@@ -638,11 +792,13 @@
           len = len -1
           count = count + 1
         }
+      var status = $("#status_"+tableName+"_"+id).val()
       formData.append('topic', title);
       formData.append('description', description);
       formData.append('image', image);
       formData.append('images', images);
       formData.append('category',category)
+      formData.append('status', status);
       console.log(description)
       $.ajax({
         url: "editData2/"+id+"/"+tableName+"/",
@@ -653,16 +809,28 @@
         mimeType: 'multipart/form-data',
 
         success: function(data){ 
-            console.log(data)
+            
+
             data= JSON.parse(data)
-            $(`#${keys[2]}_${keys[1]}`).children('td').remove()
-            $(`#${keys[2]}_${keys[1]}`).append(
+            console.log(data)
+            if(data.category == null){
+              var category_temp = ""
+            }else{
+              category_temp = data.category
+            }
+            
+
+            
+            $(`#Wire_${keys[2]}_${keys[1]}`).children('td').remove()
+            $(`#Wire_${keys[2]}_${keys[1]}`).append(
               `
 
                 <td>${data.topic}</td>
                 <td>${data.author}</td>
-                <td>${data.category}</td>
+                <td>${category_temp}</td>
                 <td>${data.date}</td>
+                <td>${data.blog_progress_status}</td>
+                <td>${data.desc_len}</td>
                 
                 <td> <div class="new-row-control">
                   <a class="row-add viewRow2" id="viewRow2-${id}-${tableName}"  ><i class="fa fa-eye"></i></a>
@@ -674,6 +842,7 @@
                     <a class="row-add publishRow plane2 publishRowClick" id="publishRow2-${id}-${tableName}" href="/publishBlog2/${id}/" ><i class="fa fa-paper-plane"></i></a>
                     `:''
                   }
+                  
                 </div></td>
               `
             ) 
@@ -699,10 +868,6 @@
         zIndex: 99999,
         revert: true,
         stop: function (e, t) {
-          console.log("STP")
-          console.log(e)
-          console.log(t)
-          console.log($(this))
           
           
   
@@ -735,6 +900,7 @@
     
           dropidArray = ui.item[0].id.split("_")
           dropid = dropidArray[dropidArray.length - 1]
+          
           addedto = addedTo.attr('id').slice(7,)
           var idCounter = 0
           $("table.mytable").each(function(){
@@ -745,8 +911,7 @@
               }
               idCounter = idCounter + 1 
           })
-          
-          console.log("idcounter:"+idCounter) 
+
           
           
 
@@ -754,13 +919,9 @@
           dropidArray.pop()
           console.log(dropidArray)
           removedfrom = dropidArray.join('_')
-          
-     
-          console.log(addedto)
-          console.log(removedfrom)
 
           isSuperuser = "{{user.is_superuser}}"
-          console.log(isSuperuser)
+
           
           if($(`#tableBody_${removedfrom} tr`).length == 0){
               $(`#tableBody_${removedfrom}`).addClass('test')
@@ -779,16 +940,12 @@
                 
                 
                 
-                  
+                $(`#${row_id}`).attr("id",`${addedto}_${dropid}`);
+                row_id = addedto + '_' + dropid
                 
-                  $(`#${row_id} td > div > a.deleteRow`).remove()
-                  $(`#${row_id} td > div > a.editRow`).remove()
-                  $(`#${row_id} td > div > a.publishRow`).remove()
-                  $(`#${row_id} td > div > a.viewRow`).remove()
-                  $(`#${row_id} td > div > a.downloadpdf`).remove()
-                  $(`#${row_id} td > div > a.downloadxml`).remove()
+                  $(`#${row_id} td > div`).empty()
                   
-                  if (response.access_dict['view'] ==  true ){
+                  if (response.access_dict['view'] ==  true){
                     $(`#${row_id} td > div`).append(
                     `
                     <a class="row-add viewRow" id="viewRow-${pk}-${addedto}"  ><i class="fa fa-eye"></i></a>
@@ -796,16 +953,21 @@
                   )
                   }
 
-                  if (response.access_dict['edit'] ==  true ){
+                  if (response.access_dict['edit'] ==  true && response.tableIndex <= 5 ){
                     
                     $(`#${row_id} td > div`).append(
                     `
                     <a class="row-add editRow" id="editRow-${pk}-${addedto}"  ><i class="fa fa-edit"></i></a>
+                    
                     `
                   )
                   }
 
-                  if (response.access_dict['to_delete'] ==  true ){
+                  
+
+                  
+
+                  if (response.access_dict['to_delete'] ==  true && response.tableIndex <= 5 ){
                     
                     $(`#${row_id} td > div`).append(
                     `
@@ -816,14 +978,7 @@
                   
                   
 
-                  if (response.access_dict['view'] ==  true && response.tableIndex >= 6 ){
-                    $(`#${row_id} td > div`).append(
-                    `
-                    <a class="row-add downloadxml" id="downloadxml-${addedto}" href="/downloadxml/${pk}/" ><i class="fa fa-file-excel-o"></i></a>
-                    
-                    `
-                  )
-                  }
+                  
 
                   if (response.access_dict['publish'] ==  true && response.tableIndex == 6){
                     $(`#${row_id} td > div`).append(
@@ -849,41 +1004,7 @@
 
                   
                   
-                  if (response.access_dict['view'] ==  true && response.tableIndex <= 5 && removedfrom == "Ready_For_Release" && addedto == "FDN_Approval_1" ){
-                    $(`#${row_id} td > div > a.downloadxml`).remove()
-                  }
-
-                  if (response.tableIndex==7){
-                  $(`#${row_id} td > div > a.editRow`).remove()
-                  $(`#${row_id} td > div > a.deleteRow`).remove()
                   
-                  
-
-                  }
-                  
-                  if (addedto  == "Ready_For_Release" && removedfrom == "App_Published"){
-                    $(`#${row_id} td > div > a.editRow`).remove()
-                    $(`#${row_id} td > div > a.deleteRow`).remove()
-                    $(`#${row_id} td > div > a.downloadxml`).remove()
-                   
-                  }
-
-                  if (removedfrom  == "Ready_For_Release" && addedto == "App_Published"){
-                    $(`#${row_id} td > div > a.downloadxml`).remove()
-                    $(`#${row_id} td > div`).append(
-                      `
-                      <a class="row-add downloadpdf" id="downloadpdf-${addedto}" href="/downloadpdf/${pk}/" ><i class="fa fa-file-powerpoint-o"></i></a>
-                      
-                      `)
-                   
-                  }
-                  
-                
-                  if (removedfrom  == "FDN_Approval_1" && addedto == "Ready_For_Release"){
-                    $(`#${row_id} td > div > a.editRow`).css("display", "none");
-                    $(`#${row_id} td > div > a.deleteRow`).css("display", "none");
-                    $(`#${row_id} td > div > a.downloadxml`).css("display", "none");
-                  }
                  
 
                   
@@ -914,6 +1035,8 @@
         items: ">*:not(.sort-disabled)",
         cursor: "move",
         zIndex: 99999,
+        placeholder: "sortable-placeholder",
+        dropOnEmpty: true,
         revert: true,
         stop: function (e, t) {
           
@@ -979,18 +1102,14 @@
                 console.log(response)
                 var primaryKeyArray = row_id.split("_")
                 var pk = primaryKeyArray[primaryKeyArray.length - 1]
-                var row_td_content = $(`#${row_id} td:last-child`).html()
+                var row_td_content = $(`#Wire_${row_id} td:last-child`).html()
 
-                $(`#${row_id} td > div > a.deleteRow2`).remove()
-                  $(`#${row_id} td > div > a.editRow2`).remove()
-                  $(`#${row_id} td > div > a.publishRow2`).remove()
-                  $(`#${row_id} td > div > a.viewRow2`).remove()
-                  $(`#${row_id} td > div > a.downloadpdf2`).remove()
-                  $(`#${row_id} td > div > a.downloadxml2file2`).remove()
+                $(`#Wire_${row_id} td > div`).empty()
                   
+                
                   
                   if (response.access_dict['view'] ==  true ){
-                    $(`#${row_id} td > div`).append(
+                    $(`#Wire_${row_id} td > div`).append(
                     `
                     <a class="row-add viewRow2" id="viewRow2-${pk}-${addedto}"  ><i class="fa fa-eye"></i></a>
                     `
@@ -999,7 +1118,7 @@
 
                   if (response.access_dict['edit'] ==  true ){
                     
-                    $(`#${row_id} td > div`).append(
+                    $(`#Wire_${row_id} td > div`).append(
                     `
                     <a class="row-add editRow2" id="editRow2-${pk}-${addedto}"  ><i class="fa fa-edit"></i></a>
                     `
@@ -1008,7 +1127,7 @@
 
                   if (response.access_dict['to_delete'] ==  true ){
                     
-                    $(`#${row_id} td > div`).append(
+                    $(`#Wire_${row_id} td > div`).append(
                     `
                     <a class="row-add deleteRow2" id="deleteRow2-${pk}-${addedto}" href="/deleteBlog2/${pk}/" ><i class="fa fa-trash"></i></a>
                     `
@@ -1018,7 +1137,7 @@
                   
 
                   if (response.access_dict['view'] ==  true && response.tableIndex >= 6 ){
-                    $(`#${row_id} td > div`).append(
+                    $(`#Wire_${row_id} td > div`).append(
                     `
                     <a class="row-add downloadxml2file2" id="downloadxml2file2-${addedto}" href="/downloadxml2file2/${pk}/" ><i class="fa fa-file-excel-o"></i></a>
                     
@@ -1028,7 +1147,7 @@
 
                   if (response.access_dict['publish'] ==  true && response.tableIndex == 6){
                      
-                    $(`#${row_id} td > div`).append(
+                    $(`#Wire_${row_id} td > div`).append(
                     `
                     <a class="row-add publishRow plane2 publishRowClick" id="publishRow2-${pk}-${addedto}" href="/publishBlog2/${pk}/" ><i class="fa fa-paper-plane"></i></a>
                     `
@@ -1036,7 +1155,7 @@
                   }
 
                   if (response.access_dict['view'] ==  true && response.tableIndex == 7 ){
-                    $(`#${row_id} td > div`).append(
+                    $(`#Wire_${row_id} td > div`).append(
                     `
                     <a class="row-add downloadxml2file2" id="downloadpdf2-${addedto}" href="/downloadpdf2/${pk}/" ><i class="fa fa-file-powerpoint-o"></i></a>
                     
@@ -1046,52 +1165,8 @@
 
                   
                   
-                  if (response.access_dict['view'] ==  true && response.tableIndex <= 5 && removedfrom == "Ready_For_Release" && addedto == "FDN_Approval_1" ){
-                    $(`#${row_id} td > div > a.downloadxml2file2`).remove()
-                  }
-
-                  if (response.tableIndex==7){
-                  $(`#${row_id} td > div > a.editRow2`).remove()
-                  $(`#${row_id} td > div > a.deleteRow2`).remove()
-
-                
-                      
-                  if (response.tableIndex==6){
-                    $(`#${row_id} td > div > a.editRow`).remove()
-                    $(`#${row_id} td > div > a.deleteRow`).remove()
-                    $(`#${row_id} td > div > a.downloadpdf`).remove()
-                  $(`#${row_id} td > div > a.downloadxml`).remove()
-                  
-
-                  }
-
-                  if (addedto  == "Ready_For_Release" && removedfrom == "App_Published"){
-                    $(`#${row_id} td > div > a.editRow2`).remove()
-                    $(`#${row_id} td > div > a.deleteRow2`).remove()
-                    $(`#${row_id} td > div > a.downloadxml2file2`).remove()
-                   
-                  }
-
-                  if (removedfrom  == "Ready_For_Release" && addedto == "App_Published"){
-                    $(`#${row_id} td > div > a.downloadxml2`).remove()
-                    $(`#${row_id} td > div`).append(
-                      `
-                      <a class="row-add downloadpdf" id="downloadpdf-${addedto}" href="/downloadpdf/${pk}/" ><i class="fa fa-file-powerpoint-o"></i></a>
-                      
-                      `)
-                   
-                  }
-
-                  if (removedfrom  == "FDN_Approval_1" && addedto == "Ready_For_Release"){
-                    $(`#${row_id} td > div > a.editRow2`).remove()
-                    $(`#${row_id} td > div > a.deleteRow2`).remove()
-                    $(`#${row_id} td > div > a.downloadxml2file2`).remove()
-                  }
                   
                   
-
-                  }
-
                 
 
               }

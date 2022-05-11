@@ -133,7 +133,8 @@
                   
 
 
-                  <div class="ns-slider-box-table sortablecolumn">
+                  <div class="ns-slider-box-table sortablecolumn" >
+                    
                   
                     {% comment %} {{user|validateuser:key}} {% endcomment %}
                     
@@ -145,7 +146,10 @@
                           <th id="column-header-3">Author</th>
                           <th id="column-header-4">Category </th>
                           <th id="column-header-5">Date</th>
-                          <th id="column-header-6">Action</th>
+                          <th id="column-header-6">Status</th>
+                          <th id="column-header-7">Word Count</th>
+                          <th id="column-header-8">Action</th>
+                          
                           
                         </tr>
                       </thead>
@@ -174,6 +178,8 @@
                           <td>{{v.author}}</td>
                           <td class="category" >{{v.category.name}}</td>
                           <td>{{v.date}}</td>
+                          <td>{{v.blog_release_status}}</td>
+                          <td>{{v|desc_count}}</td>
                           <td> <div class="new-row-control">
                             
                             
@@ -185,6 +191,8 @@
                             {% if user|checkTablePermissionedit:key and forloop.parentloop.counter <= 5 %}
                               <a class="row-add editRow" id="editRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
                             {% endif %}
+
+                            
 
                             
 
@@ -210,14 +218,17 @@
                             {% comment %} <a class="row-add downloadxml" id="downloadxml-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxml' v.pk %}><i class="fa fa-file-excel-o"></i></a> {% endcomment %}
                             <a class="row-add downloadpdf" id="downloadpdf-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadpdf' v.pk %}><i class="fa fa-file-powerpoint-o"></i></a>
                             {% comment %} <a class="row-add downloadxmlfile2" id="downloadxmlfile2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxmlfile2' v.pk %}><i class="fa fa-file-excel-o"></i></a> {% endcomment %}
-
                             {%endif%}
 
+                            
+                              
+                            
                           
 
                         {% endfor %}
                       </tbody>
                     </table>
+                  
                   </div>
                   {% if forloop.counter == 1 and user|checkTablePermissioncreate:key  %}
                   <div class="add-row-table">
@@ -291,7 +302,7 @@
                   <div class="ns-slider-box-table sortablecolumn">
                   
                     {% comment %} {{user|validateuser:key}} {% endcomment %}
-                  
+                    
                     <table class="table mytable"  id="ApNews_{{key|replaceSpacewithUnderScore }}">
                       <thead>
                         <tr>
@@ -300,7 +311,10 @@
                           <th id="column-header-3">Author</th>
                           <th id="column-header-4">Category </th>
                           <th id="column-header-5">Date</th>
-                          <th id="column-header-6">Action</th>
+                          <th id="column-header-6">Status</th>
+                          <th id="column-header-7">Word Count</th>
+                          <th id="column-header-8">Action</th>
+                          
                         </tr>
                       </thead>
                       <tbody id="News_tableBody_{{key|replaceSpacewithUnderScore }}" class="
@@ -310,19 +324,24 @@
                           connectedSortable2
                       
                       {% endif %}
-
+                      {% if val|length < 1 %}
+                      test
+                      {% endif %}
                       " >
                   
                           </tr>
                         {% for v in val %}
                         
-                        <tr id="{{key|replaceSpacewithUnderScore }}_{{v.pk}}">
+                        <tr id="Wire_{{key|replaceSpacewithUnderScore }}_{{v.pk}}">
                           <th>{{forloop.counter}}</th>
                           <td>{{v.topic}}</td>
                           <td>{{v.author}}</td>
+                          
                           <td class="category2">{{v.category.name}}</td>
 
                           <td>{{v.date}}</td>
+                          <td>{{v.blog_release_status}}</td>
+                          <td>{{v|desc_count}}</td>
                           <td> <div class="new-row-control">
                             {% if user|checkTablePermissionview:key %}
                             <a class="row-add viewRow2" id="viewRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-eye"></i></a>
@@ -353,8 +372,12 @@
                             <a class="row-add downloadpdf2" id="downloadpdf2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadpdf2' v.pk %}><i class="fa fa-file-powerpoint-o"></i></a>
                             {% comment %} <a class="row-add downloadxmlfile2" id="downloadxmlfile2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxmlfile2' v.pk %}><i class="fa fa-file-excel-o"></i></a> {% endcomment %}
 
-                            {%endif%}
+                            
 
+                            {%endif%}
+                            
+                              
+                            
 
                             
                             
@@ -363,6 +386,7 @@
                      
                       </tbody>
                     </table>
+                  
                   </div>
                   {% if forloop.counter == 1 and user|checkTablePermissioncreate:key  %}
                   <div class="add-row-table">
