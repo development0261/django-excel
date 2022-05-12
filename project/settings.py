@@ -121,15 +121,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-# DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.postgresql',
-#        'NAME': 'loxjjdoa',
-#        'USER': 'loxjjdoa',
-#        'PASSWORD': 'SslATw6WWH_-Z0b6On_9zWLAfJp6OiGj',
-#        'HOST': 'ziggy.db.elephantsql.com',
-#    }
-# }
+
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [

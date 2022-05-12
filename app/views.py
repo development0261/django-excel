@@ -429,7 +429,7 @@ def viewfunction(request):
         categories = category.objects.all()
         
 
-
+        
 
         
 
