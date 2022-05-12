@@ -140,7 +140,7 @@ DATABASES = {
 
 # Django debug
 # def show_toolbar(request):
-#     return True
+#     return True 
 # SHOW_TOOLBAR_CALLBACK = show_toolbar
 
 # DATABASES = {
