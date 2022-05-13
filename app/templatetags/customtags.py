@@ -24,10 +24,11 @@ def desc_count(value):
     desc = desc.replace("&nbsp;","")
     desc = desc.replace("&#39;","")
     desc = re.sub('<[^<]*?/?>', '', desc)
+    splitdesc = desc.split()
     if not desc:
         return 0
     else:
-        return len(desc)-2
+        return len(splitdesc)
 
 
 @register.filter

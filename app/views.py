@@ -299,11 +299,12 @@ def editData(request,id,tableName):
     desc = desc.replace("&nbsp;","")
     desc = desc.replace("&#39;","")
     desc = re.sub('<[^<]*?/?>', '', desc)
+    splitdesc = desc.split()
     formatedDate = date.strftime('%B %d,%Y')
     if not tableObj.description:
         desc_len = 0
     else:
-        desc_len = len(desc)-2
+        desc_len = len(splitdesc)
     
     return JsonResponse({'tablename':tableObj.status,'row_id':tableObj.id,'desc_len':desc_len,'blog_progress_status':blog_progress_status,'current_user_check':current_user_check,'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})
 
@@ -359,10 +360,11 @@ def editData2(request,id,tableName):
     desc = desc.replace("&nbsp;","")
     desc = desc.replace("&#39;","")
     desc = re.sub('<[^<]*?/?>', '', desc)
+    splitdesc = desc.split()
     if not tableObj.description:
         desc_len = 0
     else:
-        desc_len = len(desc)-2
+        desc_len = len(splitdesc)
 
     formatedDate = date.strftime('%B %d,%Y')
     return JsonResponse({'desc_len':desc_len,'blog_progress_status':blog_progress_status,'current_user_check':current_user_check,'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})
@@ -1428,7 +1430,8 @@ def dropData(request,dropid,removedfrom,addedto):
         desc = desc.replace("&nbsp;","")
         desc = desc.replace("&#39;","")
         desc = re.sub('<[^<]*?/?>', '', desc)
-        description_count = len(desc)-2
+        splitdesc = desc.split()
+        description_count = len(splitdesc)-2
         roles = [
             'Content_Pitching',
             'Writing_Rewrite',
@@ -1474,7 +1477,12 @@ def dropData2(request,dropid,removedfrom,addedto):
         blog.status= addedto
         blog.save()
 
-        blog.save()
+        desc = blog.description
+        desc = desc.replace("&nbsp;","")
+        desc = desc.replace("&#39;","")
+        desc = re.sub('<[^<]*?/?>', '', desc)
+        splitdesc = desc.split()
+        description_count = len(splitdesc)-2
         roles = [
             'Content_Pitching',
             'Writing_Rewrite',
@@ -1504,7 +1512,7 @@ def dropData2(request,dropid,removedfrom,addedto):
 
 
 
-        return JsonResponse({'msg':'success','access_dict':access_dict,'tableIndex':index+1})
+        return JsonResponse({'msg':'success','access_dict':access_dict,'tableIndex':index+1,'description_count':description_count})
 
 def deleteBlog(request,pk):
     blogobj = Ap_Wire.objects.filter(pk=pk)
