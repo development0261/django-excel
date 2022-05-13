@@ -54,22 +54,22 @@ def userlogin(request):
         user = authenticate(username=username,password=password)
         if not User.objects.filter(username=username).exists():
             messages.warning(request, f'User with username "{username}" does not exist') 
-            return redirect('loginview')
+            return redirect('viewApwire')
         elif User.objects.filter(username=username).exists():
             if user:
                 if user.is_active:
                     login(request,user)
-                    return redirect('view')
+                    return redirect('viewAPwire')
 
                 else:
                     messages.error(request, 'user is inactive') 
-                    return redirect('loginview')
+                    return redirect('viewApwire')
 
             else:
                 messages.warning(request, 'Incorrect Password') 
-                return redirect('loginview')
+                return redirect('viewApwire')
         else:
-            return redirect('loginview')
+            return redirect('viewApwire')
 
     else:
         return render(request,'login.html')
@@ -98,7 +98,7 @@ def register(request):
             if password == confirmpassword:
                 user = User.objects.create_user(username=username,password=password)
                 login(request,user)
-                return redirect('view')
+                return redirect('viewAPwire')
             else:
                 messages.warning(request,"Passwords don't match")
                 return redirect('register')
@@ -242,7 +242,7 @@ def editBlog(request,pk):
         
         
 
-        return redirect('view')
+        return redirect('viewAPwire')
     return render(request,'editblog.html')  
 
 
@@ -371,7 +371,7 @@ def editData2(request,id,tableName):
 
 
 
-def viewfunction(request):
+def viewfunction_APwire(request):
     # qs1 = models.apwire_ContentPitching.objects.get(id=1)
     # context_dict= {}
     # for i in qs1:
@@ -402,21 +402,7 @@ def viewfunction(request):
         context_dict['App Published'] = apwire_APPublished_data
 
         
-        apnews_ContentPitching_data = Ap_News.objects.filter(status='Content_Pitching') 
-        apnews_WritingRewrite_data = Ap_News.objects.filter(status='Writing_Rewrite')
-        apnews_ReviewDraft1_data = Ap_News.objects.filter(status='Review_Draft_1')
-        apnews_ReviewDraft2_data = Ap_News.objects.filter(status='Review_Draft_2')
-        apnews_FDNApproval_data = Ap_News.objects.filter(status='FDN_Approval_1')
-        apnews_ReadyForRelease_data = Ap_News.objects.filter(status='Ready_For_Release')
-        apnews_APPublished_data = Ap_News.objects.filter(status='App_Published')
-        context_dict1 = {}
-        context_dict1['Content Pitching'] = apnews_ContentPitching_data
-        context_dict1['Writing Rewrite'] = apnews_WritingRewrite_data
-        context_dict1['Review Draft 1'] = apnews_ReviewDraft1_data
-        context_dict1['Review Draft 2'] = apnews_ReviewDraft2_data
-        context_dict1['FDN Approval 1'] = apnews_FDNApproval_data
-        context_dict1['Ready For Release'] = apnews_ReadyForRelease_data
-        context_dict1['App Published'] = apnews_APPublished_data
+        
 
         
 
@@ -435,11 +421,41 @@ def viewfunction(request):
 
         
 
-        return render(request,'index.html',{'context_dict':context_dict,'context_dict1':context_dict1,'category_dict':categories,'context':context})
+        return render(request,'index.html',{'context_dict':context_dict,'category_dict':categories,'context':context})
     else:
         return redirect('loginview')
 
+def viewfunction_APnews(request):
+    if request.user.is_authenticated:
+        apnews_ContentPitching_data = Ap_News.objects.filter(status='Content_Pitching') 
+        apnews_WritingRewrite_data = Ap_News.objects.filter(status='Writing_Rewrite')
+        apnews_ReviewDraft1_data = Ap_News.objects.filter(status='Review_Draft_1')
+        apnews_ReviewDraft2_data = Ap_News.objects.filter(status='Review_Draft_2')
+        apnews_FDNApproval_data = Ap_News.objects.filter(status='FDN_Approval_1')
+        apnews_ReadyForRelease_data = Ap_News.objects.filter(status='Ready_For_Release')
+        apnews_APPublished_data = Ap_News.objects.filter(status='App_Published')
+        context_dict1 = {}
+        context_dict1['Content Pitching'] = apnews_ContentPitching_data
+        context_dict1['Writing Rewrite'] = apnews_WritingRewrite_data
+        context_dict1['Review Draft 1'] = apnews_ReviewDraft1_data
+        context_dict1['Review Draft 2'] = apnews_ReviewDraft2_data
+        context_dict1['FDN Approval 1'] = apnews_FDNApproval_data
+        context_dict1['Ready For Release'] = apnews_ReadyForRelease_data
+        context_dict1['App Published'] = apnews_APPublished_data
 
+        obj = content_brief.objects.all()
+        if obj:
+            context = obj
+        else:
+            context = None
+
+        permissions.objects.filter(user=request.user)
+
+        categories = category.objects.all()
+
+        return render(request,'index.html',{'context_dict1':context_dict1,'category_dict':categories,'context':context})
+    else:
+        return redirect('loginview')
 
 
 
@@ -875,7 +891,7 @@ def backblog(request,pk):
     messages.success(request,"Your blog {} was reverted back to Content Pitching".format(blogobj.topic))
 
 
-    return redirect('view')
+    return redirect('viewAPwire')
 
 def backblog2(request,pk):
     blogobj = Ap_News.objects.get(pk=pk)
@@ -886,7 +902,7 @@ def backblog2(request,pk):
     messages.success(request,"Your blog {} was reverted back to Content Pitching".format(blogobj.topic))
 
 
-    return redirect('view')
+    return redirect('viewAPnews')
 
 def downloadxml2file2(request,pk):
     blogobj = Ap_News.objects.get(pk=pk)
@@ -1381,7 +1397,7 @@ def createBlog(request):
             for i in files:                
                 moreimages_apwire.objects.create(post=blog,image=i)
 
-        return redirect('view')
+        return redirect('viewAPwire')
 
     return render(request,'createBlog.html')
 
@@ -1409,7 +1425,7 @@ def createBlog2(request):
             for i in files:                
                 moreimages_apnews.objects.create(post=blog,image=i)
             
-        return redirect('/?secondTab=True')
+        return redirect('viewAPnews')
 
     return render(request,'createBlog.html')
 
@@ -1519,14 +1535,14 @@ def deleteBlog(request,pk):
     name=Ap_Wire.objects.get(pk=pk).topic
     blogobj.delete()
     messages.info(request,"Blog {} has been deleted".format(name))
-    return redirect('view')
+    return redirect('viewAPwire')
 
 def deleteBlog2(request,pk):
     blogobj = Ap_News.objects.filter(pk=pk)
     name=Ap_News.objects.get(pk=pk).topic
     blogobj.delete()
     messages.info(request,"Blog {} has been deleted".format(name))
-    return redirect('view')
+    return redirect('viewAPnews')
 
 def logout_view(request):
     logout(request)
@@ -1541,9 +1557,9 @@ def addimagewire(req,pk):
             image=request.POST['image']
             moreimages_apwire.objects.create(post = blogobj,image=image)
         
-        return redirect('view')
+        return redirect('viewAPwire')
 
-    return redirect('view')
+    return redirect('viewAPwire')
 
 
 # Publisher: All steps - view/ edit/ move/ upload

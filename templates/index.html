@@ -67,8 +67,10 @@
           <div class="nav-slider-section-inner">
             <div class="nav-model">
             <div class="nav-slider-tabs">
-              <button class="{% if not request.GET.secondTab %} nav-active {% endif %} ApWire" id="ApWire">AP - Wire</button>
-              <button class="{% if request.GET.secondTab %} nav-active {% endif %} ApNews" id="ApNews">AP - News</button>
+              {% comment %} <button class="{% if not request.GET.secondTab %} nav-active {% endif %} ApWire" id="ApWire">AP - Wire</button>{% endcomment %}
+              <button hidden="hidden" class="ApNews" id="ApNews">AP - News</button>
+              <button onclick="location.href='{% url 'viewAPwire' %}'" type="button" class="ApWire" id="ApWire">AP - Wire</button>
+              <button onclick="location.href='{% url 'viewAPnews' %}'" type="button" class="ApNews" id="ApNews1">AP - News</button>
             </div>
             <div class="button">
               <button class="btn btn-outline-primary "  data-toggle="modal"  id="Content_brief" data-target="#contentModal">Content Brief</button>
@@ -332,7 +334,7 @@
                           </tr>
                         {% for v in val %}
                         
-                        <tr id="Wire_{{key|replaceSpacewithUnderScore }}_{{v.pk}}">
+                        <tr id="News_{{key|replaceSpacewithUnderScore }}_{{v.pk}}">
                           <th>{{forloop.counter}}</th>
                           <td>{{v.topic}}</td>
                           <td>{{v.author}}</td>

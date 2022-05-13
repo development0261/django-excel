@@ -45,12 +45,24 @@
    link.click();
    link.remove();
 } 
+{% url 'viewAPnews' as ap_news %}
+{% url 'viewAPwire' as ap_wire %}
+
       $(document).ready(function(){
-        {% if request.GET.secondTab %}
+        
+        {% if request.path == ap_wire %}
+        
+          
+          $("#ApWire").addClass('nav-active')
+          
+        {% endif %}
+
+        {% if request.path == ap_news %}
         
           $("#ApNews").trigger('click')
+          $("#ApNews1").addClass('nav-active')
+          
         {% endif %}
-        
 
         {% if request.GET.filepath %}
         var filepath = "{{request.GET.filepath}}"
@@ -807,10 +819,10 @@
         contentType: false,
         processData: false,
         mimeType: 'multipart/form-data',
-
+        
         success: function(data){ 
             
-
+          
             data= JSON.parse(data)
             console.log(data)
             if(data.category == null){
@@ -819,12 +831,12 @@
               category_temp = data.category
             }
             
-
+            console.log(keys)
             
-            $(`#Wire_${keys[2]}_${keys[1]}`).children('td').remove()
-            $(`#Wire_${keys[2]}_${keys[1]}`).append(
+            $(`#News_${keys[2]}_${keys[1]}`).children('td').remove()
+            $(`#News_${keys[2]}_${keys[1]}`).append(
               `
-
+            
                 <td>${data.topic}</td>
                 <td>${data.author}</td>
                 <td>${category_temp}</td>
@@ -983,7 +995,7 @@
                   if (response.access_dict['publish'] ==  true && response.tableIndex == 6){
                     $(`#${row_id} td > div`).append(
                       `
-                      <a class="row-add publishRow plane publishRowClick" id="publishRow-${pk}-${addedto}" href="/backblog/${pk}/" ><i class="fa fa-backward"></i></a>
+                      <a class="row-add backblog plane backblogClick" id="backblog-${pk}-${addedto}" href="/backblog/${pk}/" ><i class="fa fa-backward"></i></a>
                       `)
                     $(`#${row_id} td > div`).append(
                     `
@@ -1102,32 +1114,35 @@
                 console.log(response)
                 var primaryKeyArray = row_id.split("_")
                 var pk = primaryKeyArray[primaryKeyArray.length - 1]
-                var row_td_content = $(`#Wire_${row_id} td:last-child`).html()
+                var row_td_content = $(`#${row_id} td:last-child`).html()
+                
+                $(`#News_${row_id}`).attr("id",`News_${addedto}_${dropid}`);
+                row_id = addedto + '_' + dropid
 
-                $(`#Wire_${row_id} td > div`).empty()
+                $(`#${row_id} td > div`).empty()
                   
                 
                   
                   if (response.access_dict['view'] ==  true ){
-                    $(`#Wire_${row_id} td > div`).append(
+                    $(`#${row_id} td > div`).append(
                     `
                     <a class="row-add viewRow2" id="viewRow2-${pk}-${addedto}"  ><i class="fa fa-eye"></i></a>
                     `
                   )
                   }
 
-                  if (response.access_dict['edit'] ==  true ){
+                  if (response.access_dict['edit'] ==  true && response.tableIndex <= 5){
                     
-                    $(`#Wire_${row_id} td > div`).append(
+                    $(`#${row_id} td > div`).append(
                     `
                     <a class="row-add editRow2" id="editRow2-${pk}-${addedto}"  ><i class="fa fa-edit"></i></a>
                     `
                   )
                   }
 
-                  if (response.access_dict['to_delete'] ==  true ){
+                  if (response.access_dict['to_delete'] ==  true && response.tableIndex <= 5){
                     
-                    $(`#Wire_${row_id} td > div`).append(
+                    $(`#${row_id} td > div`).append(
                     `
                     <a class="row-add deleteRow2" id="deleteRow2-${pk}-${addedto}" href="/deleteBlog2/${pk}/" ><i class="fa fa-trash"></i></a>
                     `
@@ -1136,26 +1151,29 @@
                   
                   
 
-                  if (response.access_dict['view'] ==  true && response.tableIndex >= 6 ){
-                    $(`#Wire_${row_id} td > div`).append(
-                    `
-                    <a class="row-add downloadxml2file2" id="downloadxml2file2-${addedto}" href="/downloadxml2file2/${pk}/" ><i class="fa fa-file-excel-o"></i></a>
+                  // if (response.access_dict['view'] ==  true && response.tableIndex >= 6 ){
+                  //   $(`#${row_id} td > div`).append(
+                  //   `
+                  //   <a class="row-add downloadxml2file2" id="downloadxml2file2-${addedto}" href="/downloadxml2file2/${pk}/" ><i class="fa fa-file-excel-o"></i></a>
                     
-                    `
-                  )
-                  }
+                  //   `
+                  // )
+                  // }
 
                   if (response.access_dict['publish'] ==  true && response.tableIndex == 6){
-                     
-                    $(`#Wire_${row_id} td > div`).append(
+                    $(`#${row_id} td > div`).append(
+                      `
+                      <a class="row-add backblog plane backblogClick" id="backblog-${pk}-${addedto}" href="/backblog/${pk}/" ><i class="fa fa-backward"></i></a>
+                      `)
+                    $(`#${row_id} td > div`).append(
                     `
                     <a class="row-add publishRow plane2 publishRowClick" id="publishRow2-${pk}-${addedto}" href="/publishBlog2/${pk}/" ><i class="fa fa-paper-plane"></i></a>
                     `
                   )
                   }
-
+                  
                   if (response.access_dict['view'] ==  true && response.tableIndex == 7 ){
-                    $(`#Wire_${row_id} td > div`).append(
+                    $(`#${row_id} td > div`).append(
                     `
                     <a class="row-add downloadxml2file2" id="downloadpdf2-${addedto}" href="/downloadpdf2/${pk}/" ><i class="fa fa-file-powerpoint-o"></i></a>
                     
