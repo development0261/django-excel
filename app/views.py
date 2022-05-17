@@ -466,7 +466,7 @@ def publishBlog2(request,pk):
     blogobj.published_on = datetime.today().date()
     blogobj.save()
 
-    messages.success(request,"Your blog {} for AP Wire is Published".format(blogobj.topic))
+    messages.success(request,"Your blog {} for AP News is Published".format(blogobj.topic))
 
     filepath = downloadxml(request,pk,stringPath=True)
     return redirect('/?filepath={}'.format(filepath))
