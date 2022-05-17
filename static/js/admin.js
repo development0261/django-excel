@@ -4,10 +4,11 @@ script.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(script);
 
 setTimeout(function(){
+    
     $(document).on('click','#id_status',function(){
         var e = document.getElementById("id_status");
         var status = e.value; 
-    
+        
         if (status != "Content_Pitching"){
             $(".field-create").css('display','none');
         }else{
