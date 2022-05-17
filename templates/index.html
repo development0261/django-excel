@@ -69,8 +69,8 @@
             <div class="nav-slider-tabs">
               {% comment %} <button class="{% if not request.GET.secondTab %} nav-active {% endif %} ApWire" id="ApWire">AP - Wire</button>{% endcomment %}
               <button hidden="hidden" class="ApNews" id="ApNews">AP - News</button>
-              <button onclick="location.href='{% url 'viewAPwire' %}'" type="button" class="ApWire" id="ApWire">AP - Wire</button>
-              <button onclick="location.href='{% url 'viewAPnews' %}'" type="button" class="ApNews" id="ApNews1">AP - News</button>
+              <button class="{% if not request.GET.secondTab %} nav-active {% endif %} ApWire" id="ApWire">AP - Wire</button>
+              <button class="{% if request.GET.secondTab %} nav-active {% endif %} ApNews" id="ApNews">AP - News</button>
             </div>
             <div class="button">
               <button class="btn btn-outline-primary "  data-toggle="modal"  id="Content_brief" data-target="#contentModal">Content Brief</button>
@@ -188,6 +188,9 @@
                             
                             {% if user|checkTablePermissionview:key %}
                             <a class="row-add viewRow" id="viewRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-eye"></i></a>
+                            {% if forloop.parentloop.counter == 7 %}
+                              <a class="row-add" href={% url 'downloadxml' v.pk %} ><i class="fa fa-external-link" aria-hidden="true"></i></a>
+                            {% endif %}
                             {% endif %}
 
                             {% if user|checkTablePermissionedit:key and forloop.parentloop.counter <= 5 %}
@@ -347,6 +350,9 @@
                           <td> <div class="new-row-control">
                             {% if user|checkTablePermissionview:key %}
                             <a class="row-add viewRow2" id="viewRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-eye"></i></a>
+                            {% if forloop.parentloop.counter == 7 %}
+                              <a class="row-add" href={% url 'downloadxml2' v.pk %} ><i class="fa fa-external-link" aria-hidden="true"></i></a>
+                            {% endif %}
                             {% endif %}
 
                             {% if user|checkTablePermissionedit:key and forloop.parentloop.counter <= 5 %}

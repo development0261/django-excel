@@ -3,8 +3,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('',views.viewfunction_APwire,name='viewAPwire'),
-    path('viewApnews',views.viewfunction_APnews,name='viewAPnews'),
+    path('',views.viewfunction,name='viewfunction'),
+    # path('viewApnews',views.viewfunction_APnews,name='viewAPnews'),
     path('login',views.userlogin,name='loginview'),
     # path('logfail',views.logfail,name='logfail'),
     path('register',views.register,name='register'),
@@ -24,7 +24,7 @@ urlpatterns = [
 
     path('downloadxml/<str:pk>/',views.downloadxml,name='downloadxml'),
     path('viewxml/<str:pk>/',views.viewxml,name='downloadxml'),
-    path('viewxml2/<str:pk>/',views.viewxml2,name='downloadxml'),
+    path('viewxml2/<str:pk>/',views.viewxml2,name='downloadxml2'),
 
 
     

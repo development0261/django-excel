@@ -46,23 +46,29 @@
    link.remove();
 } 
 {% url 'viewAPnews' as ap_news %}
-{% url 'viewAPwire' as ap_wire %}
+{% url 'viewfunction' as ap_wire %}
 
-      $(document).ready(function(){
-        
-        {% if request.path == ap_wire %}
-        
-          
-          $("#ApWire").addClass('nav-active')
-          
-        {% endif %}
 
-        {% if request.path == ap_news %}
+$(document).ready(function(){
+  {% if request.GET.secondTab %}
+  
+    $("#ApNews").trigger('click')
+   {% endif %}
+      // $(document).ready(function(){
         
-          $("#ApNews").trigger('click')
-          $("#ApNews1").addClass('nav-active')
+      //   {% if request.path == ap_wire %}
+        
           
-        {% endif %}
+      //     $("#ApWire").addClass('nav-active')
+          
+      //   {% endif %}
+
+      //   {% if request.path == ap_news %}
+        
+      //     $("#ApNews").trigger('click')
+      //     $("#ApNews1").addClass('nav-active')
+          
+      //   {% endif %}
 
         {% if request.GET.filepath %}
         var filepath = "{{request.GET.filepath}}"
@@ -1007,7 +1013,7 @@
                   if (response.access_dict['view'] ==  true && response.tableIndex == 7 ){
                     
                     $(`#${row_id} td > div`).append(
-                    `
+                    `<a class="row-add" href="/viewxml2/${pk}/" ><i class="fa fa-external-link" aria-hidden="true"></i></a>
                     <a class="row-add downloadxml" id="downloadpdf-${addedto}" href="/downloadpdf/${pk}/" ><i class="fa fa-file-powerpoint-o"></i></a>
                     
                     `
@@ -1116,11 +1122,13 @@
                 var pk = primaryKeyArray[primaryKeyArray.length - 1]
                 var row_td_content = $(`#${row_id} td:last-child`).html()
                 
-                $(`#News_${row_id}`).attr("id",`News_${addedto}_${dropid}`);
+              
+                $(`#${row_id}`).attr("id",`${addedto}_${dropid}`);
                 row_id = addedto + '_' + dropid
 
                 $(`#${row_id} td > div`).empty()
-                  
+                
+                
                 
                   
                   if (response.access_dict['view'] ==  true ){
@@ -1171,14 +1179,21 @@
                     `
                   )
                   }
+
+                  
                   
                   if (response.access_dict['view'] ==  true && response.tableIndex == 7 ){
+                    
+                    
                     $(`#${row_id} td > div`).append(
                     `
-                    <a class="row-add downloadxml2file2" id="downloadpdf2-${addedto}" href="/downloadpdf2/${pk}/" ><i class="fa fa-file-powerpoint-o"></i></a>
+                    <a class="row-add" href="/viewxml2/${pk}/" ><i class="fa fa-external-link" aria-hidden="true"></i></a>
+                    <a class="row-add downloadpdf2" id="downloadpdf2-${addedto}" href="/downloadpdf2/${pk}/" ><i class="fa fa-file-powerpoint-o"></i></a>
                     
                     `
                   )
+                 
+                  
                   }
 
                   

@@ -1,3 +1,4 @@
+import os
 import random,string    
 from itertools import count
 from multiprocessing import AuthenticationError
@@ -45,6 +46,20 @@ from reportlab.lib.units import cm
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import Image, Frame
 
+def xmlfolder_exist():
+    xmlfolder_exist = os.path.exists(MEDIA_ROOT+"/xml")
+    print(xmlfolder_exist)
+    
+    if not xmlfolder_exist:
+        os.makedirs(MEDIA_ROOT+"/xml")
+
+def pdffolder_exist():
+    pdffolder_exist = os.path.exists(MEDIA_ROOT+"/pdf")
+    print(pdffolder_exist)
+    
+    if not pdffolder_exist:
+        os.makedirs(MEDIA_ROOT+"/pdf")
+
 
 def userlogin(request):
     if request.method == 'POST':
@@ -54,22 +69,22 @@ def userlogin(request):
         user = authenticate(username=username,password=password)
         if not User.objects.filter(username=username).exists():
             messages.warning(request, f'User with username "{username}" does not exist') 
-            return redirect('viewApwire')
+            return redirect('viewfunction')
         elif User.objects.filter(username=username).exists():
             if user:
                 if user.is_active:
                     login(request,user)
-                    return redirect('viewAPwire')
+                    return redirect('viewfunction')
 
                 else:
                     messages.error(request, 'user is inactive') 
-                    return redirect('viewApwire')
+                    return redirect('viewfunction')
 
             else:
                 messages.warning(request, 'Incorrect Password') 
-                return redirect('viewApwire')
+                return redirect('viewfunction')
         else:
-            return redirect('viewApwire')
+            return redirect('viewfunction')
 
     else:
         return render(request,'login.html')
@@ -98,7 +113,7 @@ def register(request):
             if password == confirmpassword:
                 user = User.objects.create_user(username=username,password=password)
                 login(request,user)
-                return redirect('viewAPwire')
+                return redirect('viewfunction')
             else:
                 messages.warning(request,"Passwords don't match")
                 return redirect('register')
@@ -242,7 +257,7 @@ def editBlog(request,pk):
         
         
 
-        return redirect('viewAPwire')
+        return redirect('viewfunction')
     return render(request,'editblog.html')  
 
 
@@ -371,7 +386,7 @@ def editData2(request,id,tableName):
 
 
 
-def viewfunction_APwire(request):
+def viewfunction(request):
     # qs1 = models.apwire_ContentPitching.objects.get(id=1)
     # context_dict= {}
     # for i in qs1:
@@ -401,6 +416,22 @@ def viewfunction_APwire(request):
         context_dict['Ready For Release'] = apwire_ReadyForRelease_data
         context_dict['App Published'] = apwire_APPublished_data
 
+        apnews_ContentPitching_data = Ap_News.objects.filter(status='Content_Pitching') 
+        apnews_WritingRewrite_data = Ap_News.objects.filter(status='Writing_Rewrite')
+        apnews_ReviewDraft1_data = Ap_News.objects.filter(status='Review_Draft_1')
+        apnews_ReviewDraft2_data = Ap_News.objects.filter(status='Review_Draft_2')
+        apnews_FDNApproval_data = Ap_News.objects.filter(status='FDN_Approval_1')
+        apnews_ReadyForRelease_data = Ap_News.objects.filter(status='Ready_For_Release')
+        apnews_APPublished_data = Ap_News.objects.filter(status='App_Published')
+        context_dict1 = {}
+        context_dict1['Content Pitching'] = apnews_ContentPitching_data
+        context_dict1['Writing Rewrite'] = apnews_WritingRewrite_data
+        context_dict1['Review Draft 1'] = apnews_ReviewDraft1_data
+        context_dict1['Review Draft 2'] = apnews_ReviewDraft2_data
+        context_dict1['FDN Approval 1'] = apnews_FDNApproval_data
+        context_dict1['Ready For Release'] = apnews_ReadyForRelease_data
+        context_dict1['App Published'] = apnews_APPublished_data
+
         
         
 
@@ -421,39 +452,7 @@ def viewfunction_APwire(request):
 
         
 
-        return render(request,'index.html',{'context_dict':context_dict,'category_dict':categories,'context':context})
-    else:
-        return redirect('loginview')
-
-def viewfunction_APnews(request):
-    if request.user.is_authenticated:
-        apnews_ContentPitching_data = Ap_News.objects.filter(status='Content_Pitching') 
-        apnews_WritingRewrite_data = Ap_News.objects.filter(status='Writing_Rewrite')
-        apnews_ReviewDraft1_data = Ap_News.objects.filter(status='Review_Draft_1')
-        apnews_ReviewDraft2_data = Ap_News.objects.filter(status='Review_Draft_2')
-        apnews_FDNApproval_data = Ap_News.objects.filter(status='FDN_Approval_1')
-        apnews_ReadyForRelease_data = Ap_News.objects.filter(status='Ready_For_Release')
-        apnews_APPublished_data = Ap_News.objects.filter(status='App_Published')
-        context_dict1 = {}
-        context_dict1['Content Pitching'] = apnews_ContentPitching_data
-        context_dict1['Writing Rewrite'] = apnews_WritingRewrite_data
-        context_dict1['Review Draft 1'] = apnews_ReviewDraft1_data
-        context_dict1['Review Draft 2'] = apnews_ReviewDraft2_data
-        context_dict1['FDN Approval 1'] = apnews_FDNApproval_data
-        context_dict1['Ready For Release'] = apnews_ReadyForRelease_data
-        context_dict1['App Published'] = apnews_APPublished_data
-
-        obj = content_brief.objects.all()
-        if obj:
-            context = obj
-        else:
-            context = None
-
-        permissions.objects.filter(user=request.user)
-
-        categories = category.objects.all()
-
-        return render(request,'index.html',{'context_dict1':context_dict1,'category_dict':categories,'context':context})
+        return render(request,'index.html',{'context_dict1':context_dict1,'context_dict':context_dict,'category_dict':categories,'context':context})
     else:
         return redirect('loginview')
 
@@ -491,6 +490,7 @@ def printpdf(desc,imagepath,topic,images):
     Story.append(Spacer(1, 12))
     # Create return address
     ptext = topic
+    topic = topic.replace("/", "").replace("<", "").replace(">", "").replace(":", "").replace("\"", "").replace("|", "").replace("?", "").replace("*", "")
     Story.append(Paragraph(ptext, styles["Title"]))       
     Story.append(Spacer(1, 12))
     Story.append(Spacer(1, 12))
@@ -505,7 +505,9 @@ def printpdf(desc,imagepath,topic,images):
         im = Image(i, 6*inch, 3.5*inch)
         Story.append(im)
     print(images)
+    pdffolder_exist()
     x=doc.build(Story)
+    
     response = FileResponse(open(f"{MEDIA_ROOT}/pdf/{topic}.pdf", 'rb'),as_attachment=True)
     return response
 
@@ -627,6 +629,7 @@ def buildxml(pk,blogobj):
 
     tree2 = et.ElementTree(root)
 
+    xmlfolder_exist()
     tree.write('{}/xml/output_xml_Blog_AP_Wire_{}.xml'.format(MEDIA_ROOT,blogobj.pk), encoding="utf-8")
 
     # response = FileResponse(open(f"{MEDIA_ROOT}/xml/{topic}.pdf", 'rb'),as_attachment=True)
@@ -714,8 +717,7 @@ def buildxml2(pk,blogobj):
     b1 = et.SubElement(m2, "id")
     b1.text = str(uid)
 
-    b1 = et.SubElement(m2, "id")
-    b1.text = str(uid)
+   
     b5 = et.SubElement(m2, "published")
     updated = str(blogobj.published_on)
     utz = updated[:10]+"T"+updated[11:19]+"Z"
@@ -779,7 +781,7 @@ def buildxml2(pk,blogobj):
 
     tree = et.ElementTree(root)
     
-
+    xmlfolder_exist()
     tree.write('{}/xml/output_xml_Blog_AP_News_{}.xml'.format(MEDIA_ROOT,blogobj.pk), encoding="utf-8",xml_declaration=True)
 
 
@@ -853,6 +855,8 @@ def downloadxml(request,pk,stringPath= None):
     response = HttpResponse(myfile, content_type='application/xml')
     response['Content-Disposition'] = "attachment; filename=output_xml_Blog_AP_Wire_{}_{}.xml".format(blogobj.pk,blogobj.topic)
     
+   
+
     if stringPath:
         return '/media/xml/output_xml_Blog_AP_Wire_{}.xml'.format(blogobj.pk)
     else:
@@ -891,7 +895,7 @@ def backblog(request,pk):
     messages.success(request,"Your blog {} was reverted back to Content Pitching".format(blogobj.topic))
 
 
-    return redirect('viewAPwire')
+    return redirect('viewfunction')
 
 def backblog2(request,pk):
     blogobj = Ap_News.objects.get(pk=pk)
@@ -902,7 +906,7 @@ def backblog2(request,pk):
     messages.success(request,"Your blog {} was reverted back to Content Pitching".format(blogobj.topic))
 
 
-    return redirect('viewAPnews')
+    return redirect('/?secondTab=True')
 
 def downloadxml2file2(request,pk):
     blogobj = Ap_News.objects.get(pk=pk)
@@ -923,7 +927,6 @@ def downloadxml2file2(request,pk):
 
 
 def buildxmlall():
-    print("BUIDL ALL")
     root = et.Element('feed')
     root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
     root.set("xmlns:apxh","http://w3.org/1999/xhtml")
@@ -1115,8 +1118,9 @@ def buildxmlall():
     
       
     tree = et.ElementTree(root)
-    
+    xmlfolder_exist()
     tree.write('{}/xml/output_xml_Blog_AP_Wire.xml'.format(MEDIA_ROOT), encoding="utf-8",xml_declaration=True)
+
 class xmlValue:
 
     def __init__(self,file):
@@ -1331,7 +1335,7 @@ def buildxmlall2():
     
 
 
-
+    xmlfolder_exist()
     tree.write('{}/xml/output_xml_Blog_AP_News.xml'.format(MEDIA_ROOT), encoding="utf-8")
 
 
@@ -1397,7 +1401,7 @@ def createBlog(request):
             for i in files:                
                 moreimages_apwire.objects.create(post=blog,image=i)
 
-        return redirect('viewAPwire')
+        return redirect('viewfunction')
 
     return render(request,'createBlog.html')
 
@@ -1425,7 +1429,7 @@ def createBlog2(request):
             for i in files:                
                 moreimages_apnews.objects.create(post=blog,image=i)
             
-        return redirect('viewAPnews')
+        return redirect('/?secondTab=True')
 
     return render(request,'createBlog.html')
 
@@ -1535,14 +1539,14 @@ def deleteBlog(request,pk):
     name=Ap_Wire.objects.get(pk=pk).topic
     blogobj.delete()
     messages.info(request,"Blog {} has been deleted".format(name))
-    return redirect('viewAPwire')
+    return redirect('viewfunction')
 
 def deleteBlog2(request,pk):
     blogobj = Ap_News.objects.filter(pk=pk)
     name=Ap_News.objects.get(pk=pk).topic
     blogobj.delete()
     messages.info(request,"Blog {} has been deleted".format(name))
-    return redirect('viewAPnews')
+    return redirect('/?secondTab=True')
 
 def logout_view(request):
     logout(request)
@@ -1557,9 +1561,9 @@ def addimagewire(req,pk):
             image=request.POST['image']
             moreimages_apwire.objects.create(post = blogobj,image=image)
         
-        return redirect('viewAPwire')
+        return redirect('viewfunction')
 
-    return redirect('viewAPwire')
+    return redirect('viewfunction')
 
 
 # Publisher: All steps - view/ edit/ move/ upload
