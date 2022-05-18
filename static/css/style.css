@@ -469,6 +469,12 @@ body {
 }
 .content-brief-slider .carousel-inner {width: 85%; margin: 0 auto;}
 
+.colorclass {
+    background: #5928d3 !important;
+    color: #fff;
+    border-bottom: 1px solid #D1C4F3;
+}
+
 /* Responcive */
 @media screen and (max-width: 1024px){
     .table-carousel .owl-nav button.owl-prev {

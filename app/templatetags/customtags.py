@@ -85,3 +85,16 @@ def checkTablePermissionpublish(obj, tableName):
     if permissions.objects.filter(user__in = [obj],status=tableName).exists():
         return permissions.objects.filter(user = obj,status=tableName).first().publish
 
+
+@register.filter
+def checkDraftStatus(date1,date2):
+    from datetime import datetime,timedelta
+    print("-------------------------------")
+    print(type(date1))
+    print(type(date2))
+    date2 = datetime.strptime(date2,'%Y-%m-%d')
+    delta = date2.date() - date1
+    if delta.days > 2:
+        return True
+    else:
+        return False

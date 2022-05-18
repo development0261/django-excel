@@ -171,20 +171,42 @@
                       " >
                       
                         {% for v in val %}
-                        <tr id="{{key|replaceSpacewithUnderScore }}_{{v.pk}}">
+                        <tr id="{{key|replaceSpacewithUnderScore }}_{{v.pk}}"
+                          class = "
+                          {% if forloop.parentloop.counter == 2 %}
+                          {% now "Y-m-d" as todays_date %}
+                          {% if v.date|checkDraftStatus:todays_date %}
+                          colorclass
+                          {% endif %}
+                      {% endif %}
                           
+
+                         ">
                           
+                          <th>{{forloop.counter}}
                           
-                          <th>{{forloop.counter}}</th>
+                          </th>
                           <td>{{v.topic}}</td>
                           <td>{{v.author}}</td>
                           <td class="category" >{{v.category.name}}</td>
                           <td>{{v.date}}</td>
                           <td>{{v.blog_release_status}}</td>
                           <td>{{v|desc_count}}</td>
+                          
+                          {% comment %} {% if v.date < twodays.date %}
+                          <script>
+                            
+                            tr_elem = "{{key|replaceSpacewithUnderScore}}__{{v.pk}}"
+                            console.log(tr_elem)
+                            var here = document.getElementById(tr_elem);
+                            console.log(here)
+                            
+                          </script>
+                          
+                          {%endif%} {% endcomment %}
                           <td> <div class="new-row-control">
                             
-                            
+                          
                             
                             {% if user|checkTablePermissionview:key %}
                             <a class="row-add viewRow" id="viewRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-eye"></i></a>

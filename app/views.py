@@ -447,13 +447,16 @@ def viewfunction(request):
 
         categories = category.objects.all()
         
+        
+
+        
+
 
         
 
         
 
         return render(request,'index.html',{'context_dict1':context_dict1,'context_dict':context_dict,'category_dict':categories,'context':context})
-    else:
         return redirect('loginview')
 
 
