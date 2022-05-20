@@ -60,6 +60,7 @@ a:hover {
     background: #E8E4F2;
     position: sticky;
     top: 0;
+    z-index: 99;
 }
 
 
@@ -474,6 +475,32 @@ body {
     color: #fff;
     border-bottom: 1px solid #D1C4F3;
 }
+
+.loader {
+    height: 40px;
+    width:40px;
+    border-radius: 50%;
+    border: 5px solid #5928D3;
+    border-top-color: #cfcfcf;
+    box-sizing: border-box;
+    background: transparent;
+    animation: loading 2s linear infinite;
+    margin: 0 auto !important;
+  }
+  
+  @keyframes loading {
+    0% {
+      transform: rotate(0deg);
+    }
+    0% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .colorclass * {
+    color: #fff !important;
+}
+
 
 /* Responcive */
 @media screen and (max-width: 1024px){

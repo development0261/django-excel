@@ -321,7 +321,24 @@ def editData(request,id,tableName):
     else:
         desc_len = len(splitdesc)
     
-    return JsonResponse({'tablename':tableObj.status,'row_id':tableObj.id,'desc_len':desc_len,'blog_progress_status':blog_progress_status,'current_user_check':current_user_check,'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})
+    temp = str(tableObj.updated)
+    year_dict = {
+        "01":"Jan",
+        "02":"Feb",
+        "03":"Mar",
+        "04":"Apr",
+        "05":"May",
+        "06":"Jun",
+        "07":"Jul",
+        "08":"Aug",
+        "09":"Sep",
+        "10":"Oct",
+        "11":"Nov",
+        "12":"Dec"
+    }
+    month = year_dict[temp[5:7]]
+    datetimevalue = temp[8:10]+" "+month+" "+temp[2:4]+" "+"-"+" "+temp[11:16]
+    return JsonResponse({'datetimevalue':datetimevalue,'updated':tableObj.updated,'tablename':tableObj.status,'row_id':tableObj.id,'desc_len':desc_len,'blog_progress_status':blog_progress_status,'current_user_check':current_user_check,'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})
 
 @csrf_exempt
 def editData2(request,id,tableName):
@@ -381,8 +398,25 @@ def editData2(request,id,tableName):
     else:
         desc_len = len(splitdesc)
 
+    temp = str(tableObj.updated)
+    year_dict = {
+        "01":"Jan",
+        "02":"Feb",
+        "03":"Mar",
+        "04":"Apr",
+        "05":"May",
+        "06":"Jun",
+        "07":"Jul",
+        "08":"Aug",
+        "09":"Sep",
+        "10":"Oct",
+        "11":"Nov",
+        "12":"Dec"
+    }
+    month = year_dict[temp[5:7]]
+    datetimevalue = temp[8:10]+" "+month+" "+temp[2:4]+" "+"-"+" "+temp[11:16]
     formatedDate = date.strftime('%B %d,%Y')
-    return JsonResponse({'desc_len':desc_len,'blog_progress_status':blog_progress_status,'current_user_check':current_user_check,'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})
+    return JsonResponse({'datetimevalue':datetimevalue,'updated':tableObj.updated,'desc_len':desc_len,'blog_progress_status':blog_progress_status,'current_user_check':current_user_check,'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})
 
 
 

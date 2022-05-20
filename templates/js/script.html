@@ -749,7 +749,7 @@ $(document).ready(function(){
                   <td>${data.topic}</td>
                   <td>${data.author}</td>
                   <td>${category_temp}</td>
-                  <td>${data.date}</td>
+                  <td>${data.datetimevalue}</td>
                   <td>${data.blog_progress_status}</td>
                   <td>${data.desc_len}</td>
                   
@@ -839,14 +839,15 @@ $(document).ready(function(){
             
             console.log(keys)
             
-            $(`#News_${keys[2]}_${keys[1]}`).children('td').remove()
-            $(`#News_${keys[2]}_${keys[1]}`).append(
+            
+            $(`#${keys[2]}_${keys[1]}`).children('td').remove()
+            $(`#${keys[2]}_${keys[1]}`).append(
               `
             
                 <td>${data.topic}</td>
                 <td>${data.author}</td>
                 <td>${category_temp}</td>
-                <td>${data.date}</td>
+                <td>${data.datetimevalue}</td>
                 <td>${data.blog_progress_status}</td>
                 <td>${data.desc_len}</td>
                 

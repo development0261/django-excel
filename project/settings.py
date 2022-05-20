@@ -204,6 +204,7 @@ AWS_SECRET_ACCESS_KEY = "vGW+cNbHvvGfmz0i2MtKEApKWYQbJ+qVi3Df7zHk"
 AWS_STORAGE_BUCKET_NAME = "shaktidjangoblog-prod"
 AWS_QUERYSTRING_AUTH = False
 
+DATETIME_FORMAT = '%Y%m%d-%H:%m'
 # import os
 # import boto3
 # from boto3.s3.transfer import S3Transfer

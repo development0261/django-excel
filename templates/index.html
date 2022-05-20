@@ -93,7 +93,7 @@
                 {% if forloop.counter <= user.accessint %}
                 <div class="ns-slider-box slide" data-slide-index="{{forloop.counter0}}">   
                   {% if forloop.counter == 6 %}
-                    <h5 id="loaderSubmit" class="d-none"> Loading ... </h5>
+                    <h5 id="loaderSubmit" class="d-none loader"> </h5>
                   {% endif %}
                   <div class="table_top_bar">
                     <div class="title">
@@ -143,7 +143,7 @@
                     <table class="table mytable"  id="ApWire_{{key|replaceSpacewithUnderScore }}">
                       <thead>
                         <tr>
-                          <th id="column-header-1">#</th>
+                          <th id="column-header-1">Id</th>
                           <th id="column-header-2">Title</th>
                           <th id="column-header-3">Author</th>
                           <th id="column-header-4">Category </th>
@@ -183,13 +183,25 @@
 
                          ">
                           
-                          <th>{{forloop.counter}}
-                          
-                          </th>
+                         {% if v.pk <= 9 %}
+                         <th>000{{v.pk}}</th>
+                         {% endif%}
+                         {% if v.pk >= 10 and v.pk <= 99%}
+                         <th>00{{v.pk}}</th>
+                         {% endif%}
+                         {% if v.pk >= 100 and v.pk <= 999%}
+                         <th>0{{v.pk}}</th>
+                         {% endif%}
+                         {% if v.pk >= 1000 and v.pk <= 9999%}
+                         <th{{v.pk}}</th>
+                         {% endif%}
+                         {% if v.pk >= 10000%}
+                         <th>{{v.pk}}</th>
+                         {% endif%}
                           <td>{{v.topic}}</td>
                           <td>{{v.author}}</td>
                           <td class="category" >{{v.category.name}}</td>
-                          <td>{{v.date}}</td>
+                          <td>{{v.updated|date:"d M y - H:i"}}</td>
                           <td>{{v.blog_release_status}}</td>
                           <td>{{v|desc_count}}</td>
                           
@@ -300,6 +312,9 @@
 
 
                 <div class="ns-slider-box slide" data-slide-index="{{forloop.counter0}}">   
+                  {% if forloop.counter == 6 %}
+                    <h5 id="loaderSubmit2" class="d-none loader"> </h5>
+                  {% endif %}
                   <div class="table_top_bar">
                     <div class="title">
                         <h5>{{forloop.counter}}. {{ key|namereplace}}</h5>
@@ -333,7 +348,7 @@
                     <table class="table mytable"  id="ApNews_{{key|replaceSpacewithUnderScore }}">
                       <thead>
                         <tr>
-                          <th id="column-header-1">#</th>
+                          <th id="column-header-1">Id</th>
                           <th id="column-header-2">Title</th>
                           <th id="column-header-3">Author</th>
                           <th id="column-header-4">Category </th>
@@ -356,17 +371,43 @@
                       {% endif %}
                       " >
                   
-                          </tr>
+                          
                         {% for v in val %}
                         
-                        <tr id="News_{{key|replaceSpacewithUnderScore }}_{{v.pk}}">
-                          <th>{{forloop.counter}}</th>
+                        <tr id="{{key|replaceSpacewithUnderScore }}_{{v.pk}}"
+                          class = "
+                          {% if forloop.parentloop.counter == 2 %}
+                          {% now "Y-m-d" as todays_date %}
+                          {% if v.date|checkDraftStatus:todays_date %}
+                          colorclass
+                          {% endif %}
+                      {% endif %}
+                          
+
+                         ">
+                        
+                        
+                          {% if v.pk <= 9 %}
+                         <th>000{{v.pk}}</th>
+                         {% endif%}
+                         {% if v.pk >= 10 and v.pk <= 99%}
+                         <th>00{{v.pk}}</th>
+                         {% endif%}
+                         {% if v.pk >= 100 and v.pk <= 999%}
+                         <th>0{{v.pk}}</th>
+                         {% endif%}
+                         {% if v.pk >= 1000 and v.pk <= 9999%}
+                         <th>{{v.pk}}</th>
+                         {% endif%}
+                         {% if v.pk >= 10000%}
+                         <th>{{v.pk}}</th>
+                         {% endif%}
                           <td>{{v.topic}}</td>
                           <td>{{v.author}}</td>
                           
                           <td class="category2">{{v.category.name}}</td>
 
-                          <td>{{v.date}}</td>
+                          <td>{{v.updated|date:"d M y - H:i"}}</td>
                           <td>{{v.blog_release_status}}</td>
                           <td>{{v|desc_count}}</td>
                           <td> <div class="new-row-control">
@@ -390,11 +431,11 @@
                             {%endif%} {% endcomment %}
 
                             {% if user|checkTablePermissionpublish:key and forloop.parentloop.counter == 6 %}
-                            <a class="row-add publishRow plane publishRowClick" id="publishRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'backblog2' v.pk %}><i class="fa fa-backward"></i></a>
+                            <a class="row-add publishRow plane publishRow2Click" id="backblog-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'backblog2' v.pk %}><i class="fa fa-backward"></i></a>
                             {%endif%}
 
                             {% if user|checkTablePermissionpublish:key and forloop.parentloop.counter == 6 %}
-                            <a class="row-add publishRow plane2 publishRowClick" id="publishRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'publishBlog2' v.pk %}><i class="fa fa-paper-plane"></i></a>
+                            <a class="row-add publishRow plane2 publishRow2Click" id="publishRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'publishBlog2' v.pk %}><i class="fa fa-paper-plane"></i></a>
                             {%endif%}
 
                             {% if forloop.parentloop.counter == 7 %}
@@ -469,6 +510,11 @@
   $(document).on('click','.publishRowClick',function(){
     $("#loaderSubmit").removeClass('d-none')
     $('.publishRowClick').addClass('disabledAnchor');
+  })
+
+  $(document).on('click','.publishRow2Click',function(){
+    $("#loaderSubmit2").removeClass('d-none')
+    $('.publishRow2Click').addClass('disabledAnchor');
   })
 </script>
 
