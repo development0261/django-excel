@@ -573,7 +573,9 @@ def buildxml(pk,blogobj):
     a6 = et.SubElement(root,'rights')
     a6.text = "Copyright 2022 ShaktiCoin"
     a7 = et.SubElement(root,'updated')
-    a7.text = str(blogobj.updated)
+    updated = str(blogobj.updated)
+    utz = updated[:10]+"T"+updated[11:]
+    a7.text = str(utz)
 
 
     m2 = et.Element('entry')
@@ -590,11 +592,11 @@ def buildxml(pk,blogobj):
     b1.text = str(uid)
     b5 = et.SubElement(m2, "published")
     updated = str(blogobj.published_on)
-    utz = updated[:10]+"T"+updated[11:19]+"Z"
+    utz = updated[:10]+"T"+updated[11:]
     b5.text = str(utz)
     b6 = et.SubElement(m2, "updated")
     updated = str(blogobj.updated)
-    utz = updated[:10]+"T"+updated[11:25]+"Z"
+    utz = updated[:10]+"T"+updated[11:]
     b6.text = str(utz)
     b2 = et.SubElement(m2, "title")
     b2.text = str(blogobj.topic)
@@ -697,7 +699,9 @@ def buildxml2(pk,blogobj):
     a4 = et.SubElement(root,"title")
     a4.text = "American Heart Association News"
     a7 = et.SubElement(root,'updated')
-    a7.text = "2022-03-25T14:02:18.6328006Z"
+    updated = str(blogobj.updated)
+    utz = updated[:10]+"T"+updated[11:]
+    a7.text = str(utz)
     a6 = et.SubElement(root,'rights')
     a6.text = "Copyright 2022 American Heart Association News"
     
@@ -718,11 +722,11 @@ def buildxml2(pk,blogobj):
     b1.text = str(uid)
     b5 = et.SubElement(m2, "published")
     updated = str(blogobj.published_on)
-    utz = updated[:10]+"T"+updated[11:19]+"Z"
+    utz = updated[:10]+"T"+updated[11:]
     b5.text = str(utz)
     b6 = et.SubElement(m2, "updated")
     updated = str(blogobj.updated)
-    utz = updated[:10]+"T"+updated[11:25]+"Z"
+    utz = updated[:10]+"T"+updated[11:]
     b6.text = str(utz)
     b2 = et.SubElement(m2, "title")
     b2.text = str(blogobj.topic)
@@ -757,11 +761,11 @@ def buildxml2(pk,blogobj):
    
     b5 = et.SubElement(m2, "published")
     updated = str(blogobj.published_on)
-    utz = updated[:10]+"T"+updated[11:19]+"Z"
+    utz = updated[:10]+"T"+updated[11:]
     b5.text = str(utz)
     b6 = et.SubElement(m2, "updated")
     updated = str(blogobj.updated)
-    utz = updated[:10]+"T"+updated[11:25]+"Z"
+    utz = updated[:10]+"T"+updated[11:]
     b6.text = str(utz)
     b2 = et.SubElement(m2, "title")
     b2.text = str(blogobj.topic)
@@ -990,7 +994,7 @@ def buildxmlall():
     a6 = et.SubElement(root,'rights')
     a6.text = "Copyright 2022 ShaktiCoin"
     a7 = et.SubElement(root,'updated')
-    a7.text = "2022-03-19T01:58:31Z"
+    a7.text = "2022-03-19T01:58:31+00:00"
 
     m2 = et.Element('entry')
     root.append (m2)
@@ -1203,7 +1207,7 @@ def buildxmlall2():
     a4 = et.SubElement(root,"title")
     a4.text = "American Heart Association News"
     a7 = et.SubElement(root,'updated')
-    a7.text = "2022-03-25T14:02:18.6328006Z"
+    a7.text = "2022-03-25T14:02:18.6328006+00:00"
     a6 = et.SubElement(root,'rights')
     a6.text = "Copyright 2022 American Heart Association News"
     
