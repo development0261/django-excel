@@ -549,6 +549,7 @@ def printpdf(desc,imagepath,topic,images):
     return response
 
 def buildxml(pk,blogobj):
+    randno = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
     root = et.Element('feed')
     root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
     root.set("xmlns:apxh","http://w3.org/1999/xhtml")
@@ -584,9 +585,9 @@ def buildxml(pk,blogobj):
 
     reverted_count=str(blogobj.reverted_count)
     if reverted_count == "None" :
-        uid = "urn:publicid:ap.shakticoin:"+str(blogobj.unique_id)+"-0"
+        uid = "urn:publicid:ap.shakticoin:"+str(randno)+"-0"
     else:
-        uid = "urn:publicid:ap.shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
+        uid = "urn:publicid:ap.shakticoin:"+str(randno)+"-"+reverted_count
 
     b1 = et.SubElement(m2, "id")
     b1.text = str(uid)
@@ -624,9 +625,9 @@ def buildxml(pk,blogobj):
     elee = et.SubElement(m2,"apnm:NewsManagement")
     elem = et.SubElement(elee,"apnm:ManagementId")
     if reverted_count == "None" :
-        elem.text = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-0"
+        elem.text = "urn:publicid:shakticoin:"+str(randno)+"-0"
     else:
-        elem.text = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
+        elem.text = "urn:publicid:shakticoin:"+str(randno)+"-"+reverted_count
     elem = et.SubElement(elee,"apnm:ManagementType")
     elem.text="Change"
     elem = et.SubElement(elee,"apnm:ManagementSequenceNumber")
@@ -674,6 +675,7 @@ def buildxml(pk,blogobj):
     # response = FileResponse(open(f"{MEDIA_ROOT}/xml/{topic}.pdf", 'rb'),as_attachment=True)
 
 def buildxml2(pk,blogobj):
+    randno = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
     root = et.Element('feed')
     root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
     root.set("xmlns:apxh","http://w3.org/1999/xhtml")
@@ -742,7 +744,7 @@ def buildxml2(pk,blogobj):
 
     a11 = et.SubElement(m2,'link')
     a11.set("rel","alternate")
-    a11.set("href","urn:publicid:www.heart.org:2B6EF1D3FB2C4D8A8D158233FE8C5AD6-2")
+    a11.set("href",f"urn:publicid:www.heart.org:{randno}-2")
 
     m2 = et.Element('entry')
     m2.set("xml:lang","en-us")
@@ -751,9 +753,9 @@ def buildxml2(pk,blogobj):
     
     reverted_count=str(blogobj.reverted_count)
     if reverted_count == "None" :
-        uid = "urn:publicid:ap.shakticoin:"+str(blogobj.unique_id)+"-0"
+        uid = "urn:publicid:ap.shakticoin:"+str(randno)+"-0"
     else:
-        uid = "urn:publicid:ap.shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
+        uid = "urn:publicid:ap.shakticoin:"+str(randno)+"-"+reverted_count
 
     b1 = et.SubElement(m2, "id")
     b1.text = str(uid)
@@ -818,7 +820,18 @@ def buildxml2(pk,blogobj):
             ele1.text=str(obj.text)
     print(z)
     
-
+    elee = et.SubElement(m2,"apnm:NewsManagement")
+    elem = et.SubElement(elee,"apnm:ManagementId")
+    if reverted_count == "None" :
+        elem.text = "urn:publicid:shakticoin:"+str(randno)+"-0"
+    else:
+        elem.text = "urn:publicid:shakticoin:"+str(randno)+"-"+reverted_count
+    elem = et.SubElement(elee,"apnm:ManagementType")
+    elem.text="Change"
+    elem = et.SubElement(elee,"apnm:ManagementSequenceNumber")
+    elem.text="3"
+    elem = et.SubElement(elee,"apnm:PublishingStatus")
+    elem.text="Usable"
 
     tree = et.ElementTree(root)
     
