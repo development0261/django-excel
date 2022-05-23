@@ -1006,8 +1006,21 @@ def buildxmlall():
 
     a6 = et.SubElement(root,'rights')
     a6.text = "Copyright 2022 ShaktiCoin"
+
+    # current time and timezone
+    now = str(datetime.now())
+    now_format = now
+    now_format = now[:10]+"T"+now[11:]
+
+    from django.utils.timezone import get_current_timezone
+    current_tz = get_current_timezone()
+
+
+    if str(current_tz) == "UTC":
+        tz_format = "00:00"
+
     a7 = et.SubElement(root,'updated')
-    a7.text = "2022-03-19T01:58:31+00:00"
+    a7.text = now_format+"+"+tz_format
 
     m2 = et.Element('entry')
     root.append (m2)
@@ -1219,8 +1232,21 @@ def buildxmlall2():
     a2.text = "https://www.heart.org"
     a4 = et.SubElement(root,"title")
     a4.text = "American Heart Association News"
+
+    # current time and timezone
+    now = str(datetime.now())
+    now_format = now
+    now_format = now[:10]+"T"+now[11:]
+
+    from django.utils.timezone import get_current_timezone
+    current_tz = get_current_timezone()
+
+
+    if str(current_tz) == "UTC":
+        tz_format = "00:00"
+
     a7 = et.SubElement(root,'updated')
-    a7.text = "2022-03-25T14:02:18.6328006+00:00"
+    a7.text = now_format + "+" + tz_format
     a6 = et.SubElement(root,'rights')
     a6.text = "Copyright 2022 American Heart Association News"
     
