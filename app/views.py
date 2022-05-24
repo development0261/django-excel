@@ -569,7 +569,7 @@ def buildxml(pk,blogobj):
     a4 = et.SubElement(root,"title")
     a4.text = "ShaktiCoin"
     a5 = et.SubElement(root,'link')
-    a5.set("href","https://shakticoin.com/post-sitemap.xml")
+    a5.set("href","https://ap.shakticoin.com/post-sitemap.xml")
     a5.set("rel","self")
     a6 = et.SubElement(root,'rights')
     a6.text = "Copyright 2022 ShaktiCoin"
@@ -1063,6 +1063,11 @@ def buildxmlall():
         else:
             b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+reverted_count)
 
+        topic_replacedwithunderscore = str(blogobj.topic).replace(" ","_")
+        b1 = et.SubElement(m2, "link")
+        b1.set("rel","alternate")
+        b1.set('href','https://ap.shakticoin.com/en/blog/{}'.format(topic_replacedwithunderscore))
+
         n1 = et.Element('content')
         n1.set("type","xhtml")
         m2.append (n1)
@@ -1075,8 +1080,7 @@ def buildxmlall():
         elem = et.SubElement(elee,"apcm:Characteristics")
         elem.set("MediaType","Text")
         elem = et.SubElement(elee,'link')
-        topic_replacedwithunderscore = str(blogobj.topic).replace(" ","_")
-        elem.set('href','https://shakticoin.com/en/blog/{}'.format(topic_replacedwithunderscore))
+        elem.set('href','https://ap.shakticoin.com/viewxml/{}'.format(blogobj.pk))
         elem.set("rel","self")
 
         elee = et.SubElement(m2,"apnm:NewsManagement")
@@ -1293,6 +1297,11 @@ def buildxmlall2():
         else:
             b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+reverted_count)
 
+        topic_replacedwithunderscore = str(blogobj.topic).replace(" ","_")
+        b1 = et.SubElement(m2, "link")
+        b1.set("rel","alternate")
+        b1.set('href','https://ap.shakticoin.com/en/blog/{}'.format(topic_replacedwithunderscore))
+
         n1 = et.Element('content')
         n1.set("type","xhtml")
         m2.append (n1)
@@ -1305,8 +1314,7 @@ def buildxmlall2():
         elem = et.SubElement(elee,"apcm:Characteristics")
         elem.set("MediaType","Text")
         elem = et.SubElement(elee,'link')
-        topic_replacedwithunderscore = str(blogobj.topic).replace(" ","_")
-        elem.set('href','https://shakticoin.com/en/blog/{}'.format(topic_replacedwithunderscore))
+        elem.set('href','https://ap.shakticoin.com/viewxml/{}'.format(blogobj.pk))
         elem.set("rel","self")
 
 
