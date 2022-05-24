@@ -173,15 +173,17 @@
                         {% for v in val %}
                         <tr id="{{key|replaceSpacewithUnderScore }}_{{v.pk}}"
                           class = "
-                          {% if forloop.parentloop.counter == 2 %}
-                          {% now "Y-m-d" as todays_date %}
-                          {% if v.date|checkDraftStatus:todays_date %}
-                          colorclass
-                          {% endif %}
+                          {% if forloop.parentloop.counter == 2 and v.blog_release_status == "Draft" %}
+
+                            {% now "Y-m-d" as todays_date %}
+                            {% if v.date|checkDraftStatus:todays_date %}
+                            colorclass
+                            {% endif %}
                       {% endif %}
                           
 
                          ">
+                         
                           
                          {% if v.pk <= 9 %}
                          <th>000{{v.pk}}</th>
@@ -376,7 +378,7 @@
                         
                         <tr id="{{key|replaceSpacewithUnderScore }}_{{v.pk}}"
                           class = "
-                          {% if forloop.parentloop.counter == 2 %}
+                          {% if forloop.parentloop.counter == 2 and v.blog_release_status == "Draft" %}
                           {% now "Y-m-d" as todays_date %}
                           {% if v.date|checkDraftStatus:todays_date %}
                           colorclass

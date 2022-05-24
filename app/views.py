@@ -552,10 +552,10 @@ def buildxml(pk,blogobj):
     randno = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
     root = et.Element('feed')
     root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
-    root.set("xmlns:apxh","http://w3.org/1999/xhtml")
+    root.set("xmlns:apxh","http://www.org/1999/xhtml")
     root.set("xmlns:ap","http://ap.org/schemas/03/2005/aptypes")
     root.set("xmlns","http://www.w3.org/2005/Atom")
-    root.set("xmlns:apcm","http://www.w3.org/2005/Atom")
+    root.set("xmlns:apcm","http://ap.org/schemas/03/2005/apcm")
     root.set("xml:lang","en-us")
 
     m1 = et.Element('author')
@@ -563,13 +563,13 @@ def buildxml(pk,blogobj):
     a1= et.SubElement(m1,"name")
     a1.text = "ShaktiCoin"
     a2= et.SubElement(m1,"uri")
-    a2.text = "https://ap.shakticoin.com/"
+    a2.text = "https://shakticoin.com/"
     a3 = et.SubElement(root,"id")
     a3.text = "shakticoin123"
     a4 = et.SubElement(root,"title")
     a4.text = "ShaktiCoin"
     a5 = et.SubElement(root,'link')
-    a5.set("href","https://ap.shakticoin.compost-sitemap.xml")
+    a5.set("href","https://shakticoin.com/post-sitemap.xml")
     a5.set("rel","self")
     a6 = et.SubElement(root,'rights')
     a6.text = "Copyright 2022 ShaktiCoin"
@@ -678,10 +678,10 @@ def buildxml2(pk,blogobj):
     randno = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
     root = et.Element('feed')
     root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
-    root.set("xmlns:apxh","http://w3.org/1999/xhtml")
+    root.set("xmlns:apxh","http://www.org/1999/xhtml")
     root.set("xmlns:ap","http://ap.org/schemas/03/2005/aptypes")
     root.set("xmlns","http://www.w3.org/2005/Atom")
-    root.set("xmlns:apcm","http://www.w3.org/2005/Atom")
+    root.set("xmlns:apcm","http://ap.org/schemas/03/2005/apcm")
     root.set("xml:lang","en-us")
 
     q1 = et.SubElement(root,"title")
@@ -983,7 +983,7 @@ def downloadxml2file2(request,pk):
 def buildxmlall():
     root = et.Element('feed')
     root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
-    root.set("xmlns:apxh","http://w3.org/1999/xhtml")
+    root.set("xmlns:apxh","http://www.org/1999/xhtml")
     root.set("xmlns:ap","http://ap.org/schemas/03/2005/aptypes")
     root.set("xmlns","http://www.w3.org/2005/Atom")
     root.set("xmlns:apcm","http://ap.org/schemas/03/2005/apcm")
@@ -996,7 +996,7 @@ def buildxmlall():
     a1= et.SubElement(m1,"name")
     a1.text = "ShaktiCoin"
     a2= et.SubElement(m1,"uri")
-    a2.text = "https://ap.shakticoin.com/"
+    a2.text = "https://shakticoin.com/"
     a3 = et.SubElement(root,"id")
     a3.text = "shakticoin123"
     a4 = et.SubElement(root,"title")
@@ -1075,7 +1075,8 @@ def buildxmlall():
         elem = et.SubElement(elee,"apcm:Characteristics")
         elem.set("MediaType","Text")
         elem = et.SubElement(elee,'link')
-        elem.set('href','https://ap.shakticoin.com/viewxml/{}'.format(blogobj.pk))
+        topic_replacedwithunderscore = str(blogobj.topic).replace(" ","_")
+        elem.set('href','https://shakticoin.com/en/blog/{}'.format(topic_replacedwithunderscore))
         elem.set("rel","self")
 
         elee = et.SubElement(m2,"apnm:NewsManagement")
@@ -1210,7 +1211,7 @@ def viewxmlall(request):
 def buildxmlall2():
     root = et.Element('feed')
     root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
-    root.set("xmlns:apxh","http://w3.org/1999/xhtml")
+    root.set("xmlns:apxh","http://www.org/1999/xhtml")
     root.set("xmlns:ap","http://ap.org/schemas/03/2005/aptypes")
     root.set("xmlns","http://www.w3.org/2005/Atom")
     root.set("xmlns:apcm","http://ap.org/schemas/03/2005/apcm")
@@ -1304,7 +1305,8 @@ def buildxmlall2():
         elem = et.SubElement(elee,"apcm:Characteristics")
         elem.set("MediaType","Text")
         elem = et.SubElement(elee,'link')
-        elem.set('href','https://ap.shakticoin.com/viewxml/{}'.format(blogobj.pk))
+        topic_replacedwithunderscore = str(blogobj.topic).replace(" ","_")
+        elem.set('href','https://shakticoin.com/en/blog/{}'.format(topic_replacedwithunderscore))
         elem.set("rel","self")
 
 
