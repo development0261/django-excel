@@ -1284,7 +1284,7 @@ $(document).on('click','.expandModal2',function(){
         img = new Image();
         img.onload = function() {
           if(this.width > 1020 ){
-            alert("image should not be less than 1020 pixels width");
+            alert("image should not be more than 1020 pixels width");
 
             
             const x = document.getElementsByClassName('image');
@@ -1319,7 +1319,7 @@ $(document).on('change','.imagemult',function(){
         img = new Image();
         img.onload = function() {
           if(this.width > 1020 ){
-            alert("image should not be less than 1020 pixels width");
+            alert("image should not be more than 1020 pixels width");
 
             const x = document.getElementsByClassName('imagemult');
             for (var i = 0; i < x.length; i++) {
