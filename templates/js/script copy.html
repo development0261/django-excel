@@ -1,0 +1,1492 @@
+
+    {% load static %}
+  {% load customtags %}
+
+
+<script>
+    var cat_array  = [
+    {% for cat in category_dict %}
+    ["{{cat.name}}","{{cat.pk}}"],
+    {% endfor%}
+    ]
+  console.log(cat_array)
+     CKEDITOR.config.toolbar = [
+    ['Link','Unlink','Bold','Italic','Underline']
+ ] ;
+ {% comment %} 
+  ClassicEditor
+          .create( document.querySelector( '.editor' ) )
+          .then( editor => {
+                  console.log( editor );
+          } )
+          .catch( error => {
+                  console.error( error );
+          } ); {% endcomment %}
+
+ 
+{% comment %} 
+ CKEDITOR.editorConfig = function( config ) {
+	config.toolbar = [
+		{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline'] },
+		{ name: 'links', items: [ 'Link', 'Unlink' ] },
+	],
+  config.removebuttons = ['insert']
+}; {% endcomment %}
+    CKEDITOR.replace( 'description');
+    CKEDITOR.replace( 'description2' );
+    function downloadURI(uri, name) 
+{
+   var link = document.createElement("a");
+   // If you don't know the name or want to use
+   // the webserver default set name = ''
+   link.setAttribute('download', name);
+   link.href = uri;
+   document.body.appendChild(link);
+   link.click();
+   link.remove();
+} 
+{% url 'viewAPnews' as ap_news %}
+{% url 'viewfunction' as ap_wire %}
+
+
+$(document).ready(function(){
+  {% if request.GET.secondTab %}
+  
+    $("#ApNews").trigger('click')
+   {% endif %}
+      // $(document).ready(function(){
+        
+      //   {% if request.path == ap_wire %}
+        
+          
+      //     $("#ApWire").addClass('nav-active')
+          
+      //   {% endif %}
+
+      //   {% if request.path == ap_news %}
+        
+      //     $("#ApNews").trigger('click')
+      //     $("#ApNews1").addClass('nav-active')
+          
+      //   {% endif %}
+
+        {% if request.GET.filepath %}
+        var filepath = "{{request.GET.filepath}}"
+        downloadURI(filepath,"BlogXML")
+        {% endif %}
+    
+      })
+     
+
+      $(document).on('click','.addRow',function(){
+          var id = $(this).attr('id').slice(7,)
+          console.log(id)
+          var title = $("#title_"+id).val()
+          var author = $("#author_"+id).val()
+          var date = $("#date_"+id).val()
+          
+
+          if(title == "" || author == "" || date == ""){
+            alert("Please fill all the values")
+          }else{
+            
+            $.ajax({
+                url : "saveTableRow/"+id+"/", // Url of backend (can be python, php, etc..)
+                type: "POST", // data type (can be get, post, put, delete)
+                data : {'title':title,'author':author,'date':date}, // data in json format
+          
+                success: function(response, textStatus, jqXHR) {
+                  console.log(response);
+
+                  $(`#tableBody_${id} tr:last`).remove();
+                  var totalRows = $(`#tableBody_${id} tr`).length;
+                  $(`#tableBody_${id}`).append(
+                    `
+                        <tr id="${id}_${response.pk}">
+                          <th>${totalRows+1}</th>
+                          <td>${response.title}</td>
+                          <td>${response.author}</td>
+                          <td>${response.date}</td>
+                          <td> <div class="new-row-control">
+                            <button class="row-add editRow" id="editRow-${response.pk}-${id}"><i class="fa fa-edit"></i></button>
+                            
+                            <button class="row-remove"><i class="fa fa-arrows"></i></button>
+                          </div></td>
+                        </tr>
+                    `
+
+                  )
+                  $(`#tableBody_${id}`).append(
+                    `
+                    <tr>
+                          <th>
+                            <div class="new-row-control">
+                              <button class="row-add addRow" id="addRow_${id}"><i class="fa fa-check"></i></button>
+                              <button class="row-remove"><i class="fa fa-times"></i></button>
+                            </div>
+                          </th>
+                          <td><input type="text" id="title_${id}" ></td>
+                          <td><input type="text" id="author_${id}"></td>
+                          <td><input type="date" id="date_${id}"></td>
+                        </tr>
+                    `
+                  )
+                  
+                },
+            
+             });
+          }
+          
+      })
+
+      $(document).on('click','.addRow2',function(){
+        var id = $(this).attr('id').slice(7,)
+        console.log(id)
+        var title = $("#title_"+id).val()
+        var author = $("#author_"+id).val()
+        var date = $("#date_"+id).val()
+
+        if(title == "" || author == "" || date == ""){
+          alert("Please fill all the values")
+        }else{
+          $.ajax({
+              url : "saveTableRow2/"+id+"/", // Url of backend (can be python, php, etc..)
+              type: "POST", // data type (can be get, post, put, delete)
+              data : {'title':title,'author':author,'date':date}, // data in json format
+        
+              success: function(response, textStatus, jqXHR) {
+                console.log(response);
+
+                $(`#tableBody_${id} tr:last`).remove();
+                var totalRows = $(`#tableBody_${id} tr`).length;
+                $(`#tableBody_${id}`).append(
+                  `
+                      <tr id="${id}_${response.pk}">
+                        <th>${totalRows+1}</th>
+                        <td>${response.title}</td>
+                        <td>${response.author}</td>
+                        <td>${response.date}</td>
+                        <td> <div class="new-row-control">
+                          <button class="row-add editRow2" id="editRow2-${response.pk}-${id}"><i class="fa fa-edit"></i></button>
+                          <button class="row-remove"><i class="fa fa-arrows"></i></button>
+                        </div></td>
+                      </tr>
+                  `
+
+                )
+                $(`#tableBody_${id}`).append(
+                  `
+                  <tr>
+                        <th>
+                          <div class="new-row-control">
+                            <button class="row-add addRow2" id="addRow2_${id}"><i class="fa fa-check"></i></button>
+                            <button class="row-remove"><i class="fa fa-times"></i></button>
+                          </div>
+                        </th>
+                        <td><input type="text" id="title_${id}" ></td>
+                        <td><input type="text" id="author_${id}"></td>
+                        <td><input type="date" id="date_${id}"></td>
+                      </tr>
+                  `
+                )
+                
+              },
+          
+           });
+        }
+        
+    })
+
+      {% comment %} id="editRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" {% endcomment %}
+      
+      
+
+
+
+        $(document).on('click','.editRow',function(){
+          console.log("editrow")
+            var keys = $(this).attr('id').split('-')
+         
+            
+            var id = keys[1]
+            
+            var tableName = keys[2]
+          
+            $.ajax({
+              url: "getRowData/"+id+"/"+tableName+"/",
+              success: function(data){ 
+                  console.log(data)
+                  
+                
+                  $(`#editmodalbody_${tableName}`).empty()
+                
+                if (data.current_user_check == true){
+                  $(`#editmodalbody_${tableName}`).append(`
+                  
+                  <div class="row justify-content-center">
+                          <div class="col-md-8">
+                              <div  class="title">
+                                  <h2>Edit Blog</h2>
+                              </div>
+                              <div class="login-form">
+                                  <form method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                      <div class="field-name">
+                                          <label>Title</label>
+                                          <input type="text" placeholder="" value="${data.topic}" name="topic" id="title_${tableName}_${data.pk}">
+                                      </div>
+                                      <div class="field-name">
+                                          <label>Description*</label>
+                                      <textarea name="description" rows="10" cols="55" id="description_${tableName}_${data.pk}">${data.content}</textarea>
+                                      </div>
+                                      <div class="field-name">   
+                                       
+                                        <label>Category</label>
+                                        <div class="select_box">
+                                          <select class="box" id="category_${tableName}_${data.pk}" onchange="showCategories(this.value)" name="category"> 
+                                            <option selected>Select Category</option>
+
+                                            
+
+                                            
+                                            ${
+                                              cat_array.map((item,index)=>{
+                                                return(
+                                                  `<option value="${item[1]}" ${data.category == item[0]?`selected`:''}>${item[0]}</option>`
+                                                )
+                                              })
+                                            }
+                                          </select>
+
+                                          <label>Status</label>
+                                          <div class="select_box">
+                                            <select id="status_${tableName}_${data.pk}" class="box" name="status"> 
+                                             
+                                              
+                                              <option value="Draft">Draft</option>
+                                              <option value="In Progress">In Progress</option>
+                                              <option value="Completed">Completed</option>
+                                            </select>
+                                        </div> 
+                                        
+                                    </div>
+            
+                                      <div class="field-name">
+                                        <label>Image</label>
+
+                                        <input type="file" placeholder="" accept="image/*"  name="image" id="image_${tableName}_${data.pk}" class="image" >
+                                      </div>
+
+                                      <div class="field-name">
+                                        <label>Extra Images (Upload Mulitple)</label>
+                                        <input type="file" accept="image/*" multiple="multiple" id="images_${tableName}_${data.pk}" placeholder="" name="images[]" class="images" >
+                                      </div>
+                          
+                                    
+
+                                   
+             
+               
+                                      <button type="button" class="login-submit addEditRow" id="addEditRow-${data.pk}-${tableName}" name="Add" value="Add">Save Blog</button>
+                                      
+                                      <a  style="text-decoration:none;cursor:pointer" class="ml-3 closeModel" data-dismiss="modal" >Close</a>
+                                  </form>
+                              </div>
+                          </div>
+                  `
+                 
+                 )}
+                 else{
+                  $(`#editmodalbody_${tableName}`).append(`
+                  
+                  <div class="row justify-content-center">
+                          <div class="col-md-8">
+                              <div  class="title">
+                                  <h2>Edit Blog</h2>
+                              </div>
+                              <div class="login-form">
+                                  <form method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                      <div class="field-name">
+                                          <label>Title</label>
+                                          <input type="text" placeholder="" value="${data.topic}" name="topic" id="title_${tableName}_${data.pk}">
+                                      </div>
+                                      <div class="field-name">
+                                          <label>Description*</label>
+                                      <textarea name="description" rows="10" cols="55" id="description_${tableName}_${data.pk}">${data.content}</textarea>
+                                      </div>
+                                      <div class="field-name">   
+                                       
+                                        <label>Category</label>
+                                        <div class="select_box">
+                                          <select class="box" id="category_${tableName}_${data.pk}" onchange="showCategories(this.value)" name="category"> 
+                                            <option selected>Select Category</option>
+
+                                            
+
+                                            
+                                            ${
+                                              cat_array.map((item,index)=>{
+                                                return(
+                                                  `<option value="${item[1]}" ${data.category == item[0]?`selected`:''}>${item[0]}</option>`
+                                                )
+                                              })
+                                            }
+                                          </select>
+
+                                        </div> 
+                                        
+                                    </div>
+            
+                                      <div class="field-name">
+                                        <label>Image</label>
+
+                                        <input type="file" placeholder="" accept="image/*"  name="image" id="image_${tableName}_${data.pk}" class="image" >
+                                      </div>
+
+                                      <div class="field-name">
+                                        <label>Extra Images (Upload Mulitple)</label>
+                                        <input type="file" accept="image/*" multiple="multiple" id="images_${tableName}_${data.pk}" placeholder="" name="images[]" class="images" >
+                                      </div>
+                          
+                                    
+
+                                   
+             
+               
+                                      <button type="button" class="login-submit addEditRow" id="addEditRow-${data.pk}-${tableName}" name="Add" value="Add">Save Blog</button>
+                                      
+                                      <a  style="text-decoration:none;cursor:pointer" class="ml-3 closeModel" data-dismiss="modal" >Close</a>
+                                  </form>
+                              </div>
+                          </div>
+                  `
+                 
+                 )
+                 }
+                
+                  
+                 CKEDITOR.replace(`description_${tableName}_${data.pk}`);
+                 
+                 
+                  $(`#editmodal_${tableName}`).modal('show')
+              },
+              error: function(){
+                alert("There was an error");
+              }
+            });
+  
+          });
+          
+
+          $(document).on('click','.editRow2',function(){
+            
+            console.log("editrow2")
+              var keys = $(this).attr('id').split('-')
+           
+              
+              var id = keys[1]
+              
+              var tableName = keys[2]
+            
+              $.ajax({
+                url: "getRowData2/"+id+"/"+tableName+"/",
+                success: function(data){ 
+                  
+                    console.log(data)
+                    // $(`#${keys[2]}_${keys[1]}`).children('td').remove()
+                    // $(`#${keys[2]}_${keys[1]}`).append(
+                    //   `
+                    
+                        
+                        
+                    //     <td><input type="text" value="${data.title}" id="title_${tableName}_${id}" ></td>
+                    //     <td><input type="text" value="${data.author}" id="author_${tableName}_${id}"></td>
+                    //     <td><input type="date" value="${data.date}" id="date_${tableName}_${id}"></td>
+                    //     <td>
+                    //       <div class="new-row-control">
+                    //         <button class="row-add addEditRow" id="addEditRow-${id}-${tableName}"><i class="fa fa-check"></i></button>
+                            
+                    //       </div>
+                    //     </td>
+                    //   `
+                    $(`#editmodalbody2_${tableName}`).empty()
+
+                    if (data.current_user_check == true){
+                      $(`#editmodalbody2_${tableName}`).append(`
+                    
+                    <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <div  class="title">
+                                    <h2>Edit Blog</h2>
+                                </div>
+                                <div class="login-form">
+                                    <form method="POST">
+                                      {% csrf_token %}
+                                        <div class="field-name">
+                                            <label>Title</label>
+                                            <input type="text" placeholder="" value="${data.topic}" name="topic" id="News_title_${tableName}_${data.pk}">
+                                        </div>
+                                        <div class="field-name">
+                                            <label>Description*</label>
+                                        <textarea name="description" rows="10" cols="55" id="News_description_${tableName}_${data.pk}">${data.content}</textarea>
+                                        </div>
+                                        <div class="field-name">   
+                                       
+                                          <label>Category</label>
+                                          <div class="select_box">
+                                          <select class="box" id="category_${tableName}_${data.pk}" onchange="showCategories(this.value)" name="category"> 
+                                            <option selected>Select Category</option>
+
+                                            
+                                            ${
+                                              cat_array.map((item,index)=>{
+                                                return(
+                                                  `<option value="${item[1]}" ${data.category == item[0]?`selected`:''}>${item[0]}</option>`
+                                                )
+                                              })
+                                            }
+                                          </select>
+
+                                          <label>Status</label>
+                                          <div class="select_box">
+                                            <select id="status_${tableName}_${data.pk}" class="box" name="status"> 
+                                              
+                                              
+                                              <option value="Draft">Draft</option>
+                                              <option value="In Progress">In Progress</option>
+                                              <option value="Completed">Completed</option>
+                                            </select>
+                                        </div> 
+                                          
+                                      </div>
+                                      <div class="field-name">
+                                        <label>Image</label>
+                                        <input type="file" placeholder="" accept="image/*"  name="image" id="image_${tableName}_${data.pk}" class="image">
+                                      </div>
+
+                                      <div class="field-name">
+                                        <label>Extra Images (Upload Mulitple)</label>
+                                        <input type="file" accept="image/*" multiple="multiple" id="images_${tableName}_${data.pk}" placeholder="" name="images[]" class="images" >
+                                      </div>
+                
+                 
+                                        <button type="button" class="login-submit addEditRow2" id="News_addEditRow2-${data.pk}-${tableName}" name="Add" value="Add">Save Blog</button>
+                                        <a  style="text-decoration:none;cursor:pointer" class="ml-3 closeModel2" data-dismiss="modal" >Close</a>
+                                    </form>
+                                </div>
+                            </div>
+                    `)}
+                    else{
+                      $(`#editmodalbody2_${tableName}`).append(`
+                    
+                    <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <div  class="title">
+                                    <h2>Edit Blog</h2>
+                                </div>
+                                <div class="login-form">
+                                    <form method="POST">
+                                      {% csrf_token %}
+                                        <div class="field-name">
+                                            <label>Title</label>
+                                            <input type="text" placeholder="" value="${data.topic}" name="topic" id="News_title_${tableName}_${data.pk}">
+                                        </div>
+                                        <div class="field-name">
+                                            <label>Description*</label>
+                                        <textarea name="description" rows="10" cols="55" id="News_description_${tableName}_${data.pk}">${data.content}</textarea>
+                                        </div>
+                                        <div class="field-name">   
+                                       
+                                          <label>Category</label>
+                                          <div class="select_box">
+                                          <select class="box" id="category_${tableName}_${data.pk}" onchange="showCategories(this.value)" name="category"> 
+                                            <option selected>Select Category</option>
+
+                                            
+                                            ${
+                                              cat_array.map((item,index)=>{
+                                                return(
+                                                  `<option value="${item[1]}" ${data.category == item[0]?`selected`:''}>${item[0]}</option>`
+                                                )
+                                              })
+                                            }
+                                          </select>
+
+                                      </div>
+                                      <div class="field-name">
+                                        <label>Image</label>
+                                        <input type="file" placeholder="" accept="image/*"  name="image" id="image_${tableName}_${data.pk}" class="image">
+                                      </div>
+
+                                      <div class="field-name">
+                                        <label>Extra Images (Upload Mulitple)</label>
+                                        <input type="file" accept="image/*" multiple="multiple" id="images_${tableName}_${data.pk}" placeholder="" name="images[]" class="images" >
+                                      </div>
+                
+                 
+                                        <button type="button" class="login-submit addEditRow2" id="News_addEditRow2-${data.pk}-${tableName}" name="Add" value="Add">Save Blog</button>
+                                        <a  style="text-decoration:none;cursor:pointer" class="ml-3 closeModel2" data-dismiss="modal" >Close</a>
+                                    </form>
+                                </div>
+                            </div>
+                    `)
+                    }
+                    CKEDITOR.replace(`News_description_${tableName}_${data.pk}`);
+                 
+                    $(`#editmodal2_${tableName}`).modal('show')
+                },
+                error: function(){
+                  alert("There was an error");
+                }
+              });
+    
+            });
+
+        $(document).on('click','.viewRow',function(){
+          console.log("viewrow")
+          var keys = $(this).attr('id').split('-')
+          
+   
+       
+          
+          var id = keys[1]
+          
+          var tableName = keys[2]
+     
+          $.ajax({
+            url: "viewgetRowData/"+id+"/"+tableName+"/",
+            success: function(data){ 
+                console.log(data)
+                console.log("....")
+                
+                var images = data.imgdict
+                
+                for (let k in images) {
+                  console.log(images[k])
+              }
+              $(`#viewmodalBody`).empty()
+                $(`#viewmodalBody`).append(`
+                                            ${
+                                              data.image ? ` <div class="post-image">
+                                                <img src="${data.image}">
+                                            </div>`:``
+                                            }
+                                           
+                                            <h2 class="post-title" id="title_${tableName}_${data.pk}">${data.topic}</h2>
+                                            <div class="auth-date">
+                                                <h6 id="author_${tableName}_${data.pk}">Author:- <a href="#">${data.author}</a></h6>
+                                                <h6 id="category_${tableName}_${data.pk}">Category:- <a href="#">${data.category}</a></h6>
+                                                <h6 id="date_${tableName}_${data.pk}">Date:- <a href="#">${data.date}</a></h6>
+                                            </div>
+                                            <p id="desc_${tableName}_${data.pk}">${data.content}</p>
+                                            
+                                   
+                `)
+                
+                for (let k in images) {
+                $(`#viewmodalBody`).append(
+                  images.length != 0 ?  
+                ` 
+                
+                 <div class="post-image">
+                  <img src="${images[k]}">
+              </div>
+
+              <br> 
+     
+                
+                `:``)}
+                $(`#viewModal`).modal('show')
+            },
+            error: function(){
+              alert("There was an error");
+            }
+          });
+        })
+
+        
+          
+
+        $(document).on('click','.viewRow2',function(){
+          console.log("viewrow2")
+          var keys = $(this).attr('id').split('-')
+       
+          
+          var id = keys[1]
+          
+          var tableName = keys[2]
+     
+          $.ajax({
+            url: "viewgetRowData2/"+id+"/"+tableName+"/",
+            success: function(data){ 
+              var images = data.imgdict
+                console.log(data)
+                $(`#viewmodalBody2`).empty()
+                  
+               
+
+                $(`#viewmodalBody2`).append(`
+                
+                ${
+                  data.image ? ` <div class="post-image">
+                    <img src="${data.image}">
+                </div>`:``
+                }
+                                            <h2 class="post-title" id="title_${tableName}_${data.pk}">${data.topic}</h2>
+                                            <div class="auth-date">
+                                                <h6 id="author_${tableName}_${data.pk}">Author:- <a href="#">${data.author}</a></h6>
+                                                <h6 id="category_${tableName}_${data.pk}">Category:- <a href="#">${data.category}</a></h6>
+                                                <h6 id="date_${tableName}_${data.pk}">Date:- <a href="#">${data.date}</a></h6>
+                                            </div>
+                                            <p id="date_${tableName}_${data.pk}">${data.content}</p>
+                                            
+                                   
+                `)
+                for (let k in images) {
+                  $(`#viewmodalBody2`).append(
+                    images.length != 0 ?  
+                  ` 
+                  
+                   <div class="post-image">
+                    <img src="${images[k]}">
+                </div>
+  
+                <br> 
+       
+                  
+                  `:``)}
+                $(`#viewModal2`).modal('show')
+            },
+            error: function(){
+              alert("There was an error");
+            }
+          });
+
+         
+
+
+        })
+     
+      
+      
+
+      $('#modalId').on('click', 'button.close', function (eventObject) {
+          $('#modalId').modal('hide');
+       }); 
+
+
+      $(document).on('click','.addEditRow',function(){
+        
+        var keys = $(this).attr('id').split('-')
+        var id = keys[1]
+        var tableName = keys[2] 
+        var title = $("#title_"+tableName+"_"+id).val()
+        var description = CKEDITOR.instances[`description_${tableName}_${id}`].getData( )
+        
+        var image = $("#image_"+tableName+"_"+id).prop('files')[0];
+    
+        var images = $("#images_"+tableName+"_"+id).prop('files');
+        var len = images.length
+        var count = 0
+        var formData = new FormData();
+        while (len>0){
+          
+          var img = $("#images_"+tableName+"_"+id).prop('files')[count];
+          var name = "image"+count.toString()
+          formData.append(name, img);
+          len = len -1
+          count = count + 1
+        }
+        var category = $("#category_"+tableName+"_"+id).val()
+        
+        var status = $("#status_"+tableName+"_"+id).val()
+        
+        
+                
+        formData.append('category',category)
+        
+        formData.append('topic', title);
+        formData.append('image', image);
+        formData.append('images', images);
+        formData.append('description', description);
+        formData.append('status', status);
+
+        
+        
+        
+        
+        
+        
+        
+        // console.log(image)
+        // console.log("here")
+        // console.log(images)
+        $.ajax({
+          url: "editData/"+id+"/"+tableName+"/",
+          type:'POST',
+          data:formData,
+          contentType: false,
+          processData: false,
+          mimeType: 'multipart/form-data',
+
+          success: function(data){ 
+
+            data= JSON.parse(data)
+              console.log(data)
+            if(data.category == null){
+              var category_temp = ""
+            }else{
+              category_temp = data.category
+            }
+              
+            
+            console.log(keys)
+              $(`#${keys[2]}_${keys[1]}`).children('td').remove()
+              $(`#${keys[2]}_${keys[1]}`).append(
+                `
+                
+                  <td>${data.topic}</td>
+                  <td>${data.author}</td>
+                  <td>${category_temp}</td>
+                  <td>${data.datetimevalue}</td>
+                  <td>${data.blog_progress_status}</td>
+                  <td>${data.desc_len}</td>
+                  
+                  <td> <div class="new-row-control">
+                    <a class="row-add viewRow" id="viewRow-${id}-${tableName}"  ><i class="fa fa-eye"></i></a>
+                    <a class="row-add editRow" id="editRow-${id}-${tableName}"><i class="fa fa-edit"></i></a>
+                    <a class="row-add deleteRow" id="deleteRow-${id}-${tableName}" href="/deleteBlog/${id}/" ><i class="fa fa-trash"></i></a>
+                    ${
+                      tableName == 'Ready_For_Release' ? `
+                      <a class="row-add downloadxml" id="downloadxml-${tableName}" href="/downloadxml/${id}/" ><i class="fa fa-file-excel-o"></i></a>
+                      <a class="row-add publishRow publishRowClick plane" id="publishRow-${id}-${tableName}" href="/publishBlog/${id}/" ><i class="fa fa-paper-plane"></i></a>
+                      `:''
+                    }
+                
+                    
+                  </div></td>
+                `
+              ) 
+              
+                
+              
+              $(`#editmodal_${tableName}`).modal('hide')
+          },
+          error: function(){  
+            alert("There was an error");
+          }
+        });
+
+
+     })
+
+     
+
+     $(document).on('click','.addEditRow2',function(){
+        
+      var keys = $(this).attr('id').split('-')
+      var id = keys[1]
+      var tableName = keys[2] 
+      
+      
+      console.log(id)
+      console.log(keys)
+      var title = $("#News_title_"+tableName+"_"+id).val()
+      
+      var description = CKEDITOR.instances[`News_description_${tableName}_${id}`].getData()
+      var image = $("#image_"+tableName+"_"+id).prop('files')[0];
+      var images = $("#images_"+tableName+"_"+id).prop('files')[0];
+      var category = $("#category_"+tableName+"_"+id).val()
+      var images = $("#images_"+tableName+"_"+id).prop('files');
+        var len = images.length
+        var count = 0
+        var formData = new FormData();
+        while (len>0){
+          
+          var img = $("#images_"+tableName+"_"+id).prop('files')[count];
+          var name = "image"+count.toString()
+          formData.append(name, img);
+          len = len -1
+          count = count + 1
+        }
+      var status = $("#status_"+tableName+"_"+id).val()
+      formData.append('topic', title);
+      formData.append('description', description);
+      formData.append('image', image);
+      formData.append('images', images);
+      formData.append('category',category)
+      formData.append('status', status);
+      console.log(description)
+      $.ajax({
+        url: "editData2/"+id+"/"+tableName+"/",
+        type:'POST',
+        data:formData,
+        contentType: false,
+        processData: false,
+        mimeType: 'multipart/form-data',
+        
+        success: function(data){ 
+            
+          
+            data= JSON.parse(data)
+            console.log(data)
+            if(data.category == null){
+              var category_temp = ""
+            }else{
+              category_temp = data.category
+            }
+            
+            console.log(keys)
+            
+            
+            $(`#${keys[2]}_${keys[1]}`).children('td').remove()
+            $(`#${keys[2]}_${keys[1]}`).append(
+              `
+            
+                <td>${data.topic}</td>
+                <td>${data.author}</td>
+                <td>${category_temp}</td>
+                <td>${data.datetimevalue}</td>
+                <td>${data.blog_progress_status}</td>
+                <td>${data.desc_len}</td>
+                
+                <td> <div class="new-row-control">
+                  <a class="row-add viewRow2" id="viewRow2-${id}-${tableName}"  ><i class="fa fa-eye"></i></a>
+                  <a class="row-add editRow2" id="editRow2-${id}-${tableName}"><i class="fa fa-edit"></i></a>
+                  <a class="row-add deleteRow2" id="deleteRow2-${id}-${tableName}" href="/deleteBlog2/${id}/" ><i class="fa fa-trash"></i></a>
+                  ${
+                    tableName == 'Ready_For_Release' ? `
+                    <a class="row-add downloadxml2file2" id="downloadxml2file2-${tableName}" href="/downloadxml2file2/${id}/" ><i class="fa fa-file-excel-o"></i></a>
+                    <a class="row-add publishRow plane2 publishRowClick" id="publishRow2-${id}-${tableName}" href="/publishBlog2/${id}/" ><i class="fa fa-paper-plane"></i></a>
+                    `:''
+                  }
+                  
+                </div></td>
+              `
+            ) 
+            $(`#editmodal2_${tableName}`).modal('hide')
+        },
+        error: function(){
+          alert("There was an error");
+        }
+      });
+   })
+    
+   
+
+
+
+
+    $(document).ready(function() {
+      $("tbody.connectedSortable").sortable({
+        connectWith: ".connectedSortable",
+        helper: "clone",
+        items: ">*:not(.sort-disabled)",
+        cursor: "move",
+        zIndex: 99999,
+        revert: true,
+        stop: function (e, t) {
+          
+          
+  
+          if($(t.item).closest('tbody').find('tr').length >0){
+                 $(t.item).closest('tbody').removeClass('test');
+          }
+      },
+    
+      helper: function (e, tr) {
+          var $originals = tr.children();
+          var $helper = tr.clone();
+          $helper.children().each(function (index) {
+              // Set helper cell sizes to match the original sizes
+              $(this).width($originals.eq(index).width());
+          });
+          $helper.css("background-color", "rgb(223, 240, 249)");
+          return $helper;
+      },
+      receive: function(event, ui) {
+        /* here you can access the dragged row via ui.item
+           ui.item has been removed from the other table, and added to "this" table
+        */
+        console.log($(this))
+        var row_id = ui.item[0].id
+        
+         var addedTo = $(this).closest("table.mytable")
+          
+          
+          dataa=ui.item[0]
+    
+          dropidArray = ui.item[0].id.split("_")
+          dropid = dropidArray[dropidArray.length - 1]
+          
+          addedto = addedTo.attr('id').slice(7,)
+          var idCounter = 0
+          $("table.mytable").each(function(){
+            console.log($(this).attr('id'))
+            console.log(addedTo.attr('id'))
+              if($(this).attr('id') == addedTo.attr('id')){
+                  return false;
+              }
+              idCounter = idCounter + 1 
+          })
+
+          
+          
+
+
+          dropidArray.pop()
+          console.log(dropidArray)
+          removedfrom = dropidArray.join('_')
+
+          isSuperuser = "{{user.is_superuser}}"
+
+          
+          if($(`#tableBody_${removedfrom} tr`).length == 0){
+              $(`#tableBody_${removedfrom}`).addClass('test')
+          }
+
+       
+            $.ajax({
+              url : "draganddrop/"+dropid+"/"+removedfrom+"/"+addedto+"/", // Url of backend (can be python, php, etc..)
+              type: "POST", // data type (can be get, post, put, delete)
+              data : {},
+              success:function(response){
+                var primaryKeyArray = row_id.split("_")
+                var pk = primaryKeyArray[primaryKeyArray.length - 1]
+                var row_td_content = $(`#${row_id} td:last-child`).html()
+                console.log(row_td_content)
+                
+                
+                
+                $(`#${row_id}`).attr("id",`${addedto}_${dropid}`);
+                row_id = addedto + '_' + dropid
+                
+                  $(`#${row_id} td > div`).empty()
+                  
+                  if (response.access_dict['view'] ==  true){
+                    $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add viewRow" id="viewRow-${pk}-${addedto}"  ><i class="fa fa-eye"></i></a>
+                    `
+                  )
+                  }
+
+                  if (response.access_dict['edit'] ==  true && response.tableIndex <= 5 ){
+                    
+                    $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add editRow" id="editRow-${pk}-${addedto}"  ><i class="fa fa-edit"></i></a>
+                    
+                    `
+                  )
+                  }
+
+                  
+
+                  
+
+                  if (response.access_dict['to_delete'] ==  true && response.tableIndex <= 5 ){
+                    
+                    $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add deleteRow" id="deleteRow-${pk}-${addedto}" href="/deleteBlog/${pk}/" ><i class="fa fa-trash"></i></a>
+                    `
+                  )
+                  }
+                  
+                  
+
+                  
+
+                  if (response.access_dict['publish'] ==  true && response.tableIndex == 6){
+                    $(`#${row_id} td > div`).append(
+                      `
+                      <a class="row-add backblog plane backblogClick" id="backblog-${pk}-${addedto}" href="/backblog/${pk}/" ><i class="fa fa-backward"></i></a>
+                      `)
+                    $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add publishRow plane publishRowClick"  id="publishRow-${pk}-${addedto}" href="/publishBlog/${pk}/" ><i class="fa fa-paper-plane"></i></a>
+                    `
+                  )
+                  }
+
+                  if (response.access_dict['view'] ==  true && response.tableIndex == 7 ){
+                    
+                    $(`#${row_id} td > div`).append(
+                    `<a class="row-add" href="/viewxml2/${pk}/" ><i class="fa fa-external-link" aria-hidden="true"></i></a>
+                    <a class="row-add downloadxml" id="downloadpdf-${addedto}" href="/downloadpdf/${pk}/" ><i class="fa fa-file-powerpoint-o"></i></a>
+                    
+                    `
+                  )
+                  }
+
+                  
+                  
+                  
+                 
+
+                  
+
+                  
+                
+
+                
+
+
+              }
+            }) 
+         
+
+         
+          
+      }
+      }
+      );
+
+      
+    });
+
+    $(document).ready(function() {
+      $("tbody.connectedSortable2").sortable({
+        connectWith: ".connectedSortable2",
+        helper: "clone",
+        items: ">*:not(.sort-disabled)",
+        cursor: "move",
+        zIndex: 99999,
+        placeholder: "sortable-placeholder",
+        dropOnEmpty: true,
+        revert: true,
+        stop: function (e, t) {
+          
+          if($(t.item).closest('tbody').find('tr').length >0){
+                 $(t.item).closest('tbody').removeClass('test');
+          }
+      },
+    
+      helper: function (e, tr) {
+          var $originals = tr.children();
+          var $helper = tr.clone();
+          $helper.children().each(function (index) {
+              // Set helper cell sizes to match the original sizes
+              $(this).width($originals.eq(index).width());
+          });
+          $helper.css("background-color", "rgb(223, 240, 249)");
+          return $helper;
+      },
+        // items: ">*:not(.sort-disabled)",
+        receive: function(event, ui) {
+          /* here you can access the dragged row via ui.item
+             ui.item has been removed from the other table, and added to "this" table
+          */
+          console.log($(this))
+          var row_id = ui.item[0].id
+           var addedTo = $(this).closest("table.mytable")
+            
+            
+            dataa=ui.item[0]
+      
+            dropidArray = ui.item[0].id.split("_")
+            dropid = dropidArray[dropidArray.length - 1]
+            addedto = addedTo.attr('id').slice(7,)
+            var idCounter = 0
+            {% comment %} $("table.mytable").each(function(){
+              console.log($(this).attr('id'))
+              console.log(addedTo.attr('id'))
+                if($(this).attr('id') == addedTo.attr('id')){
+                    return false;
+                }
+                idCounter = idCounter + 1 
+            })
+            
+            console.log("idcounter:"+idCounter) {% endcomment %}
+            
+
+
+            dropidArray.pop()
+            console.log(dropidArray)
+            removedfrom = dropidArray.join('_')
+            
+       
+            console.log(addedto)
+            console.log(removedfrom)
+            if($(`#News_tableBody_${removedfrom} tr`).length == 0){
+              $(`#News_tableBody_${removedfrom}`).addClass('test')
+          }
+            $.ajax({
+              url : "draganddrop2/"+dropid+"/"+removedfrom+"/"+addedto+"/", // Url of backend (can be python, php, etc..)
+              type: "POST", // data type (can be get, post, put, delete)
+              data : {},
+              success:function(response){
+                console.log(response)
+                var primaryKeyArray = row_id.split("_")
+                var pk = primaryKeyArray[primaryKeyArray.length - 1]
+                var row_td_content = $(`#${row_id} td:last-child`).html()
+                
+              
+                $(`#${row_id}`).attr("id",`${addedto}_${dropid}`);
+                row_id = addedto + '_' + dropid
+
+                $(`#${row_id} td > div`).empty()
+                
+                
+                
+                  
+                  if (response.access_dict['view'] ==  true ){
+                    $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add viewRow2" id="viewRow2-${pk}-${addedto}"  ><i class="fa fa-eye"></i></a>
+                    `
+                  )
+                  }
+
+                  if (response.access_dict['edit'] ==  true && response.tableIndex <= 5){
+                    
+                    $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add editRow2" id="editRow2-${pk}-${addedto}"  ><i class="fa fa-edit"></i></a>
+                    `
+                  )
+                  }
+
+                  if (response.access_dict['to_delete'] ==  true && response.tableIndex <= 5){
+                    
+                    $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add deleteRow2" id="deleteRow2-${pk}-${addedto}" href="/deleteBlog2/${pk}/" ><i class="fa fa-trash"></i></a>
+                    `
+                  )
+                  }
+                  
+                  
+
+                  // if (response.access_dict['view'] ==  true && response.tableIndex >= 6 ){
+                  //   $(`#${row_id} td > div`).append(
+                  //   `
+                  //   <a class="row-add downloadxml2file2" id="downloadxml2file2-${addedto}" href="/downloadxml2file2/${pk}/" ><i class="fa fa-file-excel-o"></i></a>
+                    
+                  //   `
+                  // )
+                  // }
+
+                  if (response.access_dict['publish'] ==  true && response.tableIndex == 6){
+                    $(`#${row_id} td > div`).append(
+                      `
+                      <a class="row-add backblog2 plane backblog2Click" id="backblog2-${pk}-${addedto}" href="/backblog2/${pk}/" ><i class="fa fa-backward"></i></a>
+                      `)
+                    $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add publishRow plane2 publishRowClick" id="publishRow2-${pk}-${addedto}" href="/publishBlog2/${pk}/" ><i class="fa fa-paper-plane"></i></a>
+                    `
+                  )
+                  }
+
+                  
+                  
+                  if (response.access_dict['view'] ==  true && response.tableIndex == 7 ){
+                    
+                    
+                    $(`#${row_id} td > div`).append(
+                    `
+                    <a class="row-add" href="/viewxml2/${pk}/" ><i class="fa fa-external-link" aria-hidden="true"></i></a>
+                    <a class="row-add downloadpdf2" id="downloadpdf2-${addedto}" href="/downloadpdf2/${pk}/" ><i class="fa fa-file-powerpoint-o"></i></a>
+                    
+                    `
+                  )
+                 
+                  
+                  }
+
+                  
+                  
+                  
+                  
+                
+
+              }
+            }) 
+            
+        }
+      }
+      );
+
+      
+    });
+
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script>
+    $(document).on('click','.OpenAddModel',function(){
+      var id = $(this).attr('id').slice(13,)
+      $(`#modal_${id}`).modal('show')
+    })
+
+  $(document).on('click','.NewsOpenAddModel',function(){
+    var id = $(this).attr('id').slice(17,)
+    
+    $(`#modal_News_Content_Pitching`).modal('show')
+    
+  })
+
+$(document).on('click','.expandModal',function(){
+  
+    var id = $(this).attr('id').slice(13,)
+    
+    $(`#modal_expandview_${id}`).modal('show')
+    
+  })
+
+$(document).on('click','.expandModal2',function(){
+  
+  var id = $(this).attr('id').slice(14,)
+  
+  $(`#modal_expandview2_${id}`).modal('show')
+  
+})
+
+
+
+ 
+
+  $(document).on('click','#ApWire',function(){
+    $("#ApWireContent").addClass('d-block')
+    $("#ApWireContent").removeClass('d-none')
+
+
+    $("#ApNewsContent").removeClass('d-block')
+    $("#ApNewsContent").addClass('d-none')
+
+
+  })
+
+  $(document).on('click','#ApNews',function(){
+    $("#ApWireContent").addClass('d-none')
+    $("#ApWireContent").removeClass('d-block')
+
+
+    $("#ApNewsContent").removeClass('d-none')
+    $("#ApNewsContent").addClass('d-block')
+
+
+  })
+
+
+
+  var _URL = window.URL || window.webkitURL;
+
+  $(document).on('change','.image',function(){
+    var file, img;
+
+
+    if ((file = this.files[0])) {
+        img = new Image();
+        img.onload = function() {
+          if(this.width > 1020 ){
+            alert("image should not be more than 1020 pixels width");
+
+            
+            const x = document.getElementsByClassName('image');
+            for (var i = 0; i < x.length; i++) {
+              x[i].value = "";
+          }
+
+            
+            
+            
+           
+           }
+        };
+        img.onerror = function() {  
+            alert( "not a valid file: " + file.type);
+            const x = document.getElementsByClassName('image');
+            for (var i = 0; i < x.length; i++) {
+              x[i].value = "";
+          }
+        };
+        img.src = _URL.createObjectURL(file);
+ 
+ 
+    }
+  })
+
+$(document).on('change','.imagemult',function(){
+    var file, img;
+
+
+    if ((file = this.files[0])) {
+        img = new Image();
+        img.onload = function() {
+          if(this.width > 1020 ){
+            alert("image should not be more than 1020 pixels width");
+
+            const x = document.getElementsByClassName('imagemult');
+            for (var i = 0; i < x.length; i++) {
+              x[i].value = "";
+          }
+            
+            
+            
+           
+           }
+        };
+        img.onerror = function() {  
+            alert( "not a valid file: " + file.type);
+            document.getElementsByClassName("image")[0].value = ""
+            document.getElementsByClassName("image")[1].value = ""
+        };
+        img.src = _URL.createObjectURL(file);
+ 
+ 
+    }
+  })
+
+
+  function showCategories(str) {
+    var xhttp;    
+    if (str == "") {
+      document.getElementById("txtHint").innerHTML = "";
+      return;
+    }
+    xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("txtHint").innerHTML = this.responseText;
+      }
+    };
+    xhttp.open("GET", "getcustomer.php?q="+str, true);
+    xhttp.send();
+  }
+
+  
+ 
+$('.list-unstyled').click(function(){
+  
+  $(this).toggleClass('active');
+   
+  });
+
+$(".list-unstyled li").click(function(){
+  $(this).parent().children('li').removeClass('init')
+  $(this).addClass('init')
+})
+
+$(document).on('click','.wire_cat',function(){
+ 
+  var tbId = $(this).parent()[0].id.slice(16,)
+  var value=  $(this).text();
+  console.log(value,tbId)
+ 
+    $(`#ApWire_${tbId} td.category:contains(${value})`).parent().show();
+    $(`#ApWire_${tbId} td.category:not(:contains(${value}))`).parent().hide();
+    
+    if (value == "Show all"){
+      $(`#ApWire_${tbId} td.category:contains()`).parent().show();
+    }
+    
+    
+  })
+  
+  $(document).on('click','.news_cat',function(){
+ 
+    var tbId = $(this).parent()[0].id.slice(16,)
+    var value= $(this).text();
+    console.log(value,tbId)
+  
+  
+      $(`#ApNews_${tbId} td.category2:contains(${value})`).parent().show();
+      $(`#ApNews_${tbId} td.category2:not(:contains(${value}))`).parent().hide();
+
+      if (value == "Show all"){
+        $(`#ApNews_${tbId} td.category2`).parent().show();
+      }
+      
+    })
+  
+    $('.dropdown').click(function(){
+
+      $('.dropdown-menu').toggleClass('show');
+
+  });
+
+  
+  $(function() {
+    var thHeight = $("table.mytable th:first").height();
+    $("table.mytable th").resizable({
+        handles: "e",
+        minHeight: thHeight,
+        maxHeight: thHeight,
+        minWidth: 40,
+        resize: function (event, ui) {
+          var sizerID = "#" + $(event.target).attr("id") + "-sizer";
+          $(sizerID).width(ui.size.width);
+        }
+    });
+  });
+ 
+  $(document).on('click','.expandModal',function(){
+    var tablename = $(this).attr('id').slice(13,)
+    var formData = new FormData();  
+    
+    $.ajax({
+      url: "contentgetRowData/",
+      type:'POST',
+      data:formData,
+      contentType: false,
+      processData: false,
+      mimeType: 'multipart/form-data',
+
+      success: function(data){ 
+        
+        data= JSON.parse(data)
+          console.log(data)
+          $(`#modal_expandviewbody_${tablename}`).empty()
+          $( `#ApWire_${tablename}` ).clone().prop('id', 'klon' ).appendTo( `#modal_expandviewbody_${tablename}` );
+          // $('#table thead > tr > th:nth-child(1),#table tbody > tr > td:nth-child(1)').remove();
+          var allRows = document.getElementById('klon').rows;
+          for (var i=0; i< allRows.length; i++) {
+            allRows[i].deleteCell(-1); }
+          
+          },
+          error: function(){
+            alert("There was an error");
+          } })
+  
+})
+
+$(document).on('click','.expandModal2',function(){
+  var tablename = $(this).attr('id').slice(14,)
+  var formData = new FormData();  
+  
+  $.ajax({
+    url: "contentgetRowData2/",
+    type:'POST',
+    data:formData,
+    contentType: false,
+    processData: false,
+    mimeType: 'multipart/form-data',
+
+    success: function(data){ 
+      
+      data= JSON.parse(data)
+        console.log(data)
+        $(`#modal_expandviewbody2_${tablename}`).empty()
+        $( `#ApNews_${tablename}` ).clone().prop('id', 'klon2' ).appendTo( `#modal_expandviewbody2_${tablename}` );
+        var allRows = document.getElementById('klon2').rows;
+          for (var i=0; i< allRows.length; i++) {
+            allRows[i].deleteCell(-1); }
+        
+        
+        },
+        error: function(){
+          alert("There was an error");
+        }}) 
+
+})
+
+
+
+
+</script>
+

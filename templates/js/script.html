@@ -50,25 +50,38 @@
 
 
 $(document).ready(function(){
-  {% if request.GET.secondTab %}
-  
-    $("#ApNews").trigger('click')
-   {% endif %}
-      // $(document).ready(function(){
-        
-      //   {% if request.path == ap_wire %}
-        
-          
-      //     $("#ApWire").addClass('nav-active')
-          
-      //   {% endif %}
 
-      //   {% if request.path == ap_news %}
-        
-      //     $("#ApNews").trigger('click')
-      //     $("#ApNews1").addClass('nav-active')
+     
+   const params = new URLSearchParams(window.location.search);
+
+  if (params.has("secondTab")) {
+    
+    $("#ApNews").addClass('nav-active')
+    $("#ApWireContent").addClass('d-none')
+    $("#ApWireContent").removeClass('d-block')
+
+
+    $("#ApNewsContent").removeClass('d-none')
+    $("#ApNewsContent").addClass('d-block')
+    
+  } else {
+    
+    $("#ApWire").addClass('nav-active')
+    $("#ApWireContent").addClass('d-block')
+    $("#ApWireContent").removeClass('d-none')
+
+
+    $("#ApNewsContent").removeClass('d-block')
+    $("#ApNewsContent").addClass('d-none')
+
+    
+  }
           
-      //   {% endif %}
+         
+          
+     
+
+    
 
         {% if request.GET.filepath %}
         var filepath = "{{request.GET.filepath}}"
@@ -220,7 +233,7 @@ $(document).ready(function(){
                 
                   $(`#editmodalbody_${tableName}`).empty()
                 
-                if (data.current_user_check == true){
+                if (data.current_user_check == true || data.superuser_check == true){
                   $(`#editmodalbody_${tableName}`).append(`
                   
                   <div class="row justify-content-center">
@@ -412,7 +425,7 @@ $(document).ready(function(){
                     //   `
                     $(`#editmodalbody2_${tableName}`).empty()
 
-                    if (data.current_user_check == true){
+                    if (data.current_user_check == true || data.superuser_check == true){
                       $(`#editmodalbody2_${tableName}`).append(`
                     
                     <div class="row justify-content-center">
@@ -1014,7 +1027,7 @@ $(document).ready(function(){
                   if (response.access_dict['view'] ==  true && response.tableIndex == 7 ){
                     
                     $(`#${row_id} td > div`).append(
-                    `<a class="row-add" href="/viewxml2/${pk}/" ><i class="fa fa-external-link" aria-hidden="true"></i></a>
+                    `<a class="row-add" href="/viewxml/${pk}/" ><i class="fa fa-external-link" aria-hidden="true"></i></a>
                     <a class="row-add downloadxml" id="downloadpdf-${addedto}" href="/downloadpdf/${pk}/" ><i class="fa fa-file-powerpoint-o"></i></a>
                     
                     `
@@ -1250,27 +1263,7 @@ $(document).on('click','.expandModal2',function(){
 
  
 
-  $(document).on('click','#ApWire',function(){
-    $("#ApWireContent").addClass('d-block')
-    $("#ApWireContent").removeClass('d-none')
 
-
-    $("#ApNewsContent").removeClass('d-block')
-    $("#ApNewsContent").addClass('d-none')
-
-
-  })
-
-  $(document).on('click','#ApNews',function(){
-    $("#ApWireContent").addClass('d-none')
-    $("#ApWireContent").removeClass('d-block')
-
-
-    $("#ApNewsContent").removeClass('d-none')
-    $("#ApNewsContent").addClass('d-block')
-
-
-  })
 
 
 

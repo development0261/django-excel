@@ -41,7 +41,9 @@
 </head>
 
 <body>
+  
   {% if user.is_authenticated %}
+  
   <section class="nav-slider-section">
     <div class="container-fluid">
       <div style="display:flex;justify-content:end">
@@ -68,9 +70,12 @@
             <div class="nav-model">
             <div class="nav-slider-tabs">
               {% comment %} <button class="{% if not request.GET.secondTab %} nav-active {% endif %} ApWire" id="ApWire">AP - Wire</button>{% endcomment %}
-              <button hidden="hidden" class="ApNews" id="ApNews">AP - News</button>
-              <button class="{% if not request.GET.secondTab %} nav-active {% endif %} ApWire" id="ApWire">AP - Wire</button>
-              <button class="{% if request.GET.secondTab %} nav-active {% endif %} ApNews" id="ApNews">AP - News</button>
+              <button hidden="hidden" class="ApNews" id="ApNewshidden">AP - News</button>
+              <button id="ApWire" onclick="location.href='{% url 'viewfunction' %}'">AP - Wire</button>
+              <button id="ApNews" onclick="location.href='{% url 'viewfunction' %}?secondTab=true'">AP - News</button>
+              
+
+              
             </div>
             <div class="button">
               <button class="btn btn-outline-primary "  data-toggle="modal"  id="Content_brief" data-target="#contentModal">Content Brief</button>

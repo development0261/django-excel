@@ -181,7 +181,12 @@ def getRowData(request,id,tableName):
         current_user_check = True
     else:
         current_user_check = False
-    
+
+    if request.user.is_superuser:
+        superuser_check = True
+    else:
+        superuser_check = False
+
     date = tableObj.date
     formatedDate = date.strftime('%Y-%m-%d')
     # image = tableObj.image
@@ -204,7 +209,7 @@ def getRowData(request,id,tableName):
         category_name = tableObj.category.name
     else:
         category_name = None
-    return JsonResponse({'current_user_check':current_user_check,'category':category_name,'blog_progress_status':blog_progress_status,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj,'imgdict':imgdict})
+    return JsonResponse({'superuser_check':superuser_check,'current_user_check':current_user_check,'category':category_name,'blog_progress_status':blog_progress_status,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj,'imgdict':imgdict})
 
 @csrf_exempt
 def contentgetRowData(request):
@@ -221,6 +226,11 @@ def getRowData2(request,id,tableName):
         current_user_check = True
     else:
         current_user_check = False
+
+    if request.user.is_superuser:
+        superuser_check = True
+    else:
+        superuser_check = False
     date = tableObj.date
     formatedDate = date.strftime('%Y-%m-%d')
     imageobj = None
@@ -241,7 +251,7 @@ def getRowData2(request,id,tableName):
     else:
         category_name = None
 
-    return JsonResponse({'current_user_check':current_user_check,'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj,'imgdict':imgdict})
+    return JsonResponse({'superuser_check':superuser_check,'current_user_check':current_user_check,'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj,'imgdict':imgdict})
 
 def editBlog(request,pk):
     if request.method == 'POST':
@@ -291,6 +301,11 @@ def editData(request,id,tableName):
     else:
         current_user_check = False
         blog_progress_status = tableObj.blog_release_status
+
+    if request.user.is_superuser:
+        superuser_check = True
+    else:
+        superuser_check = False
     # tableObj.blog_release_status = category.objects.get(id=cat_id)
     tableObj.save()
     
@@ -338,7 +353,7 @@ def editData(request,id,tableName):
     }
     month = year_dict[temp[5:7]]
     datetimevalue = temp[8:10]+" "+month+" "+temp[2:4]+" "+"-"+" "+temp[11:16]
-    return JsonResponse({'datetimevalue':datetimevalue,'updated':tableObj.updated,'tablename':tableObj.status,'row_id':tableObj.id,'desc_len':desc_len,'blog_progress_status':blog_progress_status,'current_user_check':current_user_check,'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})
+    return JsonResponse({'superuser_check':superuser_check,'datetimevalue':datetimevalue,'updated':tableObj.updated,'tablename':tableObj.status,'row_id':tableObj.id,'desc_len':desc_len,'blog_progress_status':blog_progress_status,'current_user_check':current_user_check,'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})
 
 @csrf_exempt
 def editData2(request,id,tableName):
@@ -491,6 +506,8 @@ def viewfunction(request):
         
 
         return render(request,'index.html',{'context_dict1':context_dict1,'context_dict':context_dict,'category_dict':categories,'context':context})
+        
+    else:        
         return redirect('loginview')
 
 
@@ -684,73 +701,31 @@ def buildxml2(pk,blogobj):
     root.set("xmlns:apcm","http://ap.org/schemas/03/2005/apcm")
     root.set("xml:lang","en-us")
 
-    q1 = et.SubElement(root,"title")
-    q1.text = "American Heart Association News"
-
-    m1 = et.Element('link')
-    m1.set("rel","self")
-    m1.set("href","https://www.heart.org/-/media/RSS-Feeds/apfeed.xml")
-    root.append (m1)
-
     m1 = et.Element('author')
     root.append (m1)
     a1= et.SubElement(m1,"name")
-    a1.text = "American Heart Association News"
+    a1.text = "ShaktiCoin"
     a2= et.SubElement(m1,"uri")
-    a2.text = "https://www.heart.org"
+    a2.text = "https://shakticoin.com/"
+    a3 = et.SubElement(root,"id")
+    a3.text = "shakticoin123"
     a4 = et.SubElement(root,"title")
-    a4.text = "American Heart Association News"
+    a4.text = "ShaktiCoin"
+    a5 = et.SubElement(root,'link')
+    a5.set("href","https://ap.shakticoin.com/post-sitemap.xml")
+    a5.set("rel","self")
+    a6 = et.SubElement(root,'rights')
+    a6.text = "Copyright 2022 ShaktiCoin"
     a7 = et.SubElement(root,'updated')
     updated = str(blogobj.updated)
     utz = updated[:10]+"T"+updated[11:]
     a7.text = str(utz)
-    a6 = et.SubElement(root,'rights')
-    a6.text = "Copyright 2022 American Heart Association News"
-    
 
 
     m2 = et.Element('entry')
     m2.set("xml:lang","en-us")
     root.append (m2)
 
-    
-    reverted_count=str(blogobj.reverted_count)
-    if reverted_count == "None" :
-        uid = "urn:publicid:ap.shakticoin:"+str(blogobj.unique_id)+"-0"
-    else:
-        uid = "urn:publicid:ap.shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
-
-    b1 = et.SubElement(m2, "id")
-    b1.text = str(uid)
-    b5 = et.SubElement(m2, "published")
-    updated = str(blogobj.published_on)
-    utz = updated[:10]+"T"+updated[11:]
-    b5.text = str(utz)
-    b6 = et.SubElement(m2, "updated")
-    updated = str(blogobj.updated)
-    utz = updated[:10]+"T"+updated[11:]
-    b6.text = str(utz)
-    b2 = et.SubElement(m2, "title")
-    b2.text = str(blogobj.topic)
-    b3 = et.SubElement(m2,'rights')
-    b3.text = "Copyright 2022 American Heart Association News"
-    a5 = et.SubElement(m2,'link')
-    a5.set("rel","alternate")
-    a5.set("href","https://www.heart.org/en/news/2022/03/25/5-barriers-to-eating-a-heart-healthy-diet-that-have-nothing-to-do-with-willpower")
-    a10 = et.SubElement(m2,'category')
-    a10.set("label","English - All US orgs")
-    a10.set("term","English - All US orgs")
-    a10.set("scheme","http://cv.ap.org/keyword")
-
-    a11 = et.SubElement(m2,'link')
-    a11.set("rel","alternate")
-    a11.set("href",f"urn:publicid:www.heart.org:{randno}-2")
-
-    m2 = et.Element('entry')
-    m2.set("xml:lang","en-us")
-    root.append (m2)
-
-    
     reverted_count=str(blogobj.reverted_count)
     if reverted_count == "None" :
         uid = "urn:publicid:ap.shakticoin:"+str(randno)+"-0"
@@ -759,8 +734,6 @@ def buildxml2(pk,blogobj):
 
     b1 = et.SubElement(m2, "id")
     b1.text = str(uid)
-
-   
     b5 = et.SubElement(m2, "published")
     updated = str(blogobj.published_on)
     utz = updated[:10]+"T"+updated[11:]
@@ -775,8 +748,6 @@ def buildxml2(pk,blogobj):
         a5 = et.SubElement(m2,'content')
         a5.set("type","image/jpeg")
         a5.set("src","https://shaktidjangoblog-prod.s3.amazonaws.com/"+str(blogobj.image)) 
-    
-    
     a = et.SubElement(m2,"category")
     a.set("label","Global")
     a.set("term","Global")
@@ -793,7 +764,23 @@ def buildxml2(pk,blogobj):
     elem.text=str(blogobj.topic)
     elem = et.SubElement(elee,"apcm:Characteristics")
     elem.set("MediaType","Text")
- 
+
+    elee = et.SubElement(m2,"apnm:NewsManagement")
+    elem = et.SubElement(elee,"apnm:ManagementId")
+    if reverted_count == "None" :
+        elem.text = "urn:publicid:shakticoin:"+str(randno)+"-0"
+    else:
+        elem.text = "urn:publicid:shakticoin:"+str(randno)+"-"+reverted_count
+    elem = et.SubElement(elee,"apnm:ManagementType")
+    elem.text="Change"
+    elem = et.SubElement(elee,"apnm:ManagementSequenceNumber")
+    elem.text="3"
+    elem = et.SubElement(elee,"apnm:PublishingStatus")
+    elem.text="Usable"
+    
+    
+    
+    
     x = blogobj.description.split("\n")
     y = []
     z=[]
@@ -814,27 +801,17 @@ def buildxml2(pk,blogobj):
         ele.text = str(i)
         for obj in results:
             ele1 = et.SubElement(ele,"apxh:a")
+            # b2 = et.SubElement(ele, "title")
+            # b2.text = ""
             ele1.set("href",str(obj['href']))
             ele1.set("target","_blank")
             ele1.set("rel","nofollow noopener")
             ele1.text=str(obj.text)
-    print(z)
-    
-    elee = et.SubElement(m2,"apnm:NewsManagement")
-    elem = et.SubElement(elee,"apnm:ManagementId")
-    if reverted_count == "None" :
-        elem.text = "urn:publicid:shakticoin:"+str(randno)+"-0"
-    else:
-        elem.text = "urn:publicid:shakticoin:"+str(randno)+"-"+reverted_count
-    elem = et.SubElement(elee,"apnm:ManagementType")
-    elem.text="Change"
-    elem = et.SubElement(elee,"apnm:ManagementSequenceNumber")
-    elem.text="3"
-    elem = et.SubElement(elee,"apnm:PublishingStatus")
-    elem.text="Usable"
 
     tree = et.ElementTree(root)
-    
+
+    tree2 = et.ElementTree(root)
+
     xmlfolder_exist()
     tree.write('{}/xml/output_xml_Blog_AP_News_{}.xml'.format(MEDIA_ROOT,blogobj.pk), encoding="utf-8",xml_declaration=True)
 
@@ -1220,23 +1197,24 @@ def buildxmlall2():
     root.set("xmlns","http://www.w3.org/2005/Atom")
     root.set("xmlns:apcm","http://ap.org/schemas/03/2005/apcm")
     root.set("xml:lang","en-us")
-
-    q1 = et.SubElement(root,"title")
-    q1.text = "American Heart Association News"
-
-    m1 = et.Element('link')
-    m1.set("rel","self")
-    m1.set("href","https://www.heart.org/-/media/RSS-Feeds/apfeed.xml")
-    root.append (m1)
+    print("here")
+    
 
     m1 = et.Element('author')
     root.append (m1)
     a1= et.SubElement(m1,"name")
-    a1.text = "American Heart Association News"
+    a1.text = "ShaktiCoin"
     a2= et.SubElement(m1,"uri")
-    a2.text = "https://www.heart.org"
+    a2.text = "https://shakticoin.com/"
+    a3 = et.SubElement(root,"id")
+    a3.text = "shakticoin123"
     a4 = et.SubElement(root,"title")
-    a4.text = "American Heart Association News"
+    a4.text = "ShaktiCoin"
+    # para = ET.SubElement(..., "p", link_id=1)
+    # ET.SubElement(para, "link", id=2, type="external", url="http://www.google.com").text="Google.com"
+
+    a6 = et.SubElement(root,'rights')
+    a6.text = "Copyright 2022 ShaktiCoin"
 
     # current time and timezone
     now = str(datetime.now())
@@ -1251,10 +1229,10 @@ def buildxmlall2():
         tz_format = "00:00"
 
     a7 = et.SubElement(root,'updated')
-    a7.text = now_format + "+" + tz_format
-    a6 = et.SubElement(root,'rights')
-    a6.text = "Copyright 2022 American Heart Association News"
-    
+    a7.text = now_format+"+"+tz_format
+
+    m2 = et.Element('entry')
+    root.append (m2)
 
     blogall = Ap_News.objects.filter(Q(status="Ready_For_Release") | Q(status="App_Published"))
     for blogobj in blogall:        
@@ -1264,7 +1242,7 @@ def buildxmlall2():
         root.append (m2)
         reverted_count=str(blogobj.reverted_count)
         if reverted_count == "None" :
-            uid = "urn:publicid:ap.sahakticoin:"+str(blogobj.unique_id)+"-0"
+            uid = "urn:publicid:ap.shakticoin:"+str(blogobj.unique_id)+"-0"
         else:
             uid = "urn:publicid:ap.shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
 
@@ -1282,14 +1260,11 @@ def buildxmlall2():
         b6.text = str(utz)
         b2 = et.SubElement(m2, "title")
         b2.text = str(blogobj.topic)
-        
         images_obj = moreimages_apnews.objects.filter(post = blogobj)
-        
         a = et.SubElement(m2,"category")
         a.set("label","Global")
         a.set("term","Global")
         a.set("scheme","http://cv.ap.org/keyword")
-
         b1 = et.SubElement(m2, "link")
         b1.set("rel","related")
         if reverted_count == "None" :
@@ -1316,7 +1291,6 @@ def buildxmlall2():
         elem = et.SubElement(elee,'link')
         elem.set('href','https://ap.shakticoin.com/viewxml/{}'.format(blogobj.pk))
         elem.set("rel","self")
-
 
         elee = et.SubElement(m2,"apnm:NewsManagement")
         elem = et.SubElement(elee,"apnm:ManagementId")
@@ -1357,9 +1331,11 @@ def buildxmlall2():
                 ele1.set("rel","nofollow noopener")
                 ele1.text=str(obj.text)
         
+
         m2 = et.Element('entry')
         m2.set("xml:lang","en-us")
         root.append (m2)
+
         if reverted_count == "None" :
             uid = "urn:publicid:ap.shakticoin.com:"+randno+"-0"
         else:
@@ -1377,6 +1353,7 @@ def buildxmlall2():
         b6.text = str(utz)
         b2 = et.SubElement(m2, "title")
         b2.text = str(blogobj.topic)
+
         
 
         if blogobj.image :
@@ -1397,8 +1374,6 @@ def buildxmlall2():
         # else:
         #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+reverted_count)
 
-        o1 = et.Element('apxh:div')
-        n1.append (o1)
         elee = et.SubElement(m2,"apcm:ContentMetadata")
         elem = et.SubElement(elee,"apcm:HeadLine")
         elem.text=str(blogobj.topic)
@@ -1408,7 +1383,7 @@ def buildxmlall2():
         elee = et.SubElement(m2,"apnm:NewsManagement")
         elem = et.SubElement(elee,"apnm:ManagementId")
         if reverted_count == "None" :
-            elem.text = "urn:publicid:shakticoin:"+randno+"-0"
+            elem.text = "urn:publicid:ap.shakticoin.com:"+randno+"-0"
         else:
             elem.text = "urn:publicid:shakticoin:"+randno+"-"+reverted_count
         elem = et.SubElement(elee,"apnm:ManagementType")
@@ -1417,17 +1392,16 @@ def buildxmlall2():
         elem.text="3"
         elem = et.SubElement(elee,"apnm:PublishingStatus")
         elem.text="Usable"
+        
+
+        
 
     
       
     tree = et.ElementTree(root)
-      
-    
-
-
     xmlfolder_exist()
     tree.write('{}/xml/output_xml_Blog_AP_News.xml'.format(MEDIA_ROOT), encoding="utf-8")
-
+    
 
 
 def viewxmlall2(request):
@@ -1435,6 +1409,8 @@ def viewxmlall2(request):
     print("call")
     response = FileResponse(open(f"{MEDIA_ROOT}/xml/output_xml_Blog_AP_News.xml", 'rb')) 
     return response
+
+
 
 def downloadxmlall(request):
     
