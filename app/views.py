@@ -278,6 +278,9 @@ def editData(request,id,tableName):
     topic = request.POST['topic']
     description = request.POST['description']
     cat_id = request.POST['category']
+    author_id = request.POST['author']
+    
+    
     blog_progress_status = request.POST['status']
 
     tableObj = Ap_Wire.objects.get(pk = id)
@@ -293,6 +296,15 @@ def editData(request,id,tableName):
     
     tableObj.description = description
     tableObj.topic = topic
+    
+    #updating author
+    if request.user.is_superuser:
+        User = get_user_model()
+        auth_update = User.objects.get(id= author_id)
+        tableObj.author = auth_update
+        auth_update.save()
+    
+
     tableObj.category = cat_obj
     if current_user == tableObj.author.username:
         current_user_check = True
@@ -362,8 +374,9 @@ def editData2(request,id,tableName):
     description = request.POST['description']
     cat_id = request.POST['category']
     blog_progress_status = request.POST['status']
-    
-    
+    author_id = request.POST['author']
+    print(author_id)
+
     
     if cat_id == "Select Category":
         cat_obj = None
@@ -372,10 +385,22 @@ def editData2(request,id,tableName):
         cat_obj= category.objects.get(id=cat_id)
         category_name = cat_obj.name
     
+    
+    
+    
+
     tableObj = Ap_News.objects.get(pk = id)
     tableObj.category = cat_obj
     tableObj.description = description
     tableObj.topic = topic
+
+    #updating author
+    if request.user.is_superuser:
+        User = get_user_model()
+        auth_update = User.objects.get(id= author_id)
+        tableObj.author = auth_update
+        auth_update.save()
+
     if current_user == tableObj.author.username:
         current_user_check = True
         tableObj.blog_release_status = blog_progress_status
@@ -495,8 +520,11 @@ def viewfunction(request):
         permissions.objects.filter(user=request.user)
 
         categories = category.objects.all()
-        
-        
+
+
+        User = get_user_model()
+
+        users = User.objects.values()
 
         
 
@@ -505,7 +533,7 @@ def viewfunction(request):
 
         
 
-        return render(request,'index.html',{'context_dict1':context_dict1,'context_dict':context_dict,'category_dict':categories,'context':context})
+        return render(request,'index.html',{'user_dict':users,'context_dict1':context_dict1,'context_dict':context_dict,'category_dict':categories,'context':context})
         
     else:        
         return redirect('loginview')

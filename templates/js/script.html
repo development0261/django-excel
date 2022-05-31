@@ -9,7 +9,14 @@
     ["{{cat.name}}","{{cat.pk}}"],
     {% endfor%}
     ]
-  console.log(cat_array)
+  console.log(cat_array) 
+  
+  var user_array  = [
+    {% for user in user_dict %}
+    ["{{user.username}}","{{user.id}}"],
+    {% endfor%}
+    ]
+  console.log(user_array)
      CKEDITOR.config.toolbar = [
     ['Link','Unlink','Bold','Italic','Underline']
  ] ;
@@ -236,6 +243,10 @@ $(document).ready(function(){
                 if (data.current_user_check == true || data.superuser_check == true){
                   $(`#editmodalbody_${tableName}`).append(`
                   
+    
+    
+    
+
                   <div class="row justify-content-center">
                           <div class="col-md-8">
                               <div  class="title">
@@ -253,7 +264,7 @@ $(document).ready(function(){
                                       <textarea name="description" rows="10" cols="55" id="description_${tableName}_${data.pk}">${data.content}</textarea>
                                       </div>
                                       <div class="field-name">   
-                                       
+                                        
                                         <label>Category</label>
                                         <div class="select_box">
                                           <select class="box" id="category_${tableName}_${data.pk}" onchange="showCategories(this.value)" name="category"> 
@@ -270,6 +281,28 @@ $(document).ready(function(){
                                               })
                                             }
                                           </select>
+
+                                          {% if request.user.is_superuser %}
+  
+                                          
+                                          <label>Author</label>
+                                        <div class="select_box">
+                                          <select class="box" id="author_${tableName}_${data.pk}" onchange="showAuthor(this.value)" name="author"> 
+                                            
+
+                                            
+
+                                            
+                                            ${
+                                              user_array.map((item,index)=>{
+                                                return(
+                                                  `<option value="${item[1]}" ${data.author == item[0]?`selected`:''}>${item[0]}</option>`
+                                                )
+                                              })
+                                            }
+                                          </select>
+
+                                          {% endif %}
 
                                           <label>Status</label>
                                           <div class="select_box">
@@ -460,7 +493,24 @@ $(document).ready(function(){
                                               })
                                             }
                                           </select>
+                                          {% if request.user.is_superuser %}
+                                          <label>Author</label>
+                                        <div class="select_box">
+                                          <select class="box" id="author_${tableName}_${data.pk}" onchange="showAuthor(this.value)" name="author"> 
+                                            
 
+                                            
+
+                                            
+                                            ${
+                                              user_array.map((item,index)=>{
+                                                return(
+                                                  `<option value="${item[1]}" ${data.author == item[0]?`selected`:''}>${item[0]}</option>`
+                                                )
+                                              })
+                                            }
+                                          </select>
+                                          {% endif %}
                                           <label>Status</label>
                                           <div class="select_box">
                                             <select id="status_${tableName}_${data.pk}" class="box" name="status"> 
@@ -698,7 +748,7 @@ $(document).ready(function(){
         var description = CKEDITOR.instances[`description_${tableName}_${id}`].getData( )
         
         var image = $("#image_"+tableName+"_"+id).prop('files')[0];
-    
+        var author = $("#author_"+tableName+"_"+id).val()
         var images = $("#images_"+tableName+"_"+id).prop('files');
         var len = images.length
         var count = 0
@@ -712,7 +762,6 @@ $(document).ready(function(){
           count = count + 1
         }
         var category = $("#category_"+tableName+"_"+id).val()
-        
         var status = $("#status_"+tableName+"_"+id).val()
         
         
@@ -724,6 +773,7 @@ $(document).ready(function(){
         formData.append('images', images);
         formData.append('description', description);
         formData.append('status', status);
+        formData.append('author', author);
 
         
         
@@ -806,7 +856,7 @@ $(document).ready(function(){
       console.log(id)
       console.log(keys)
       var title = $("#News_title_"+tableName+"_"+id).val()
-      
+      var author = $("#author_"+tableName+"_"+id).val()
       var description = CKEDITOR.instances[`News_description_${tableName}_${id}`].getData()
       var image = $("#image_"+tableName+"_"+id).prop('files')[0];
       var images = $("#images_"+tableName+"_"+id).prop('files')[0];
@@ -828,8 +878,9 @@ $(document).ready(function(){
       formData.append('description', description);
       formData.append('image', image);
       formData.append('images', images);
-      formData.append('category',category)
+      formData.append('category',category);
       formData.append('status', status);
+      formData.append('author', author);
       console.log(description)
       $.ajax({
         url: "editData2/"+id+"/"+tableName+"/",
@@ -853,8 +904,8 @@ $(document).ready(function(){
             console.log(keys)
             
             
-            $(`#${keys[2]}_${keys[1]}`).children('td').remove()
-            $(`#${keys[2]}_${keys[1]}`).append(
+            $(`#ApNewsrow_${keys[2]}_${keys[1]}`).children('td').remove()
+            $(`#ApNewsrow_${keys[2]}_${keys[1]}`).append(
               `
             
                 <td>${data.topic}</td>
@@ -1136,17 +1187,18 @@ $(document).ready(function(){
                 var pk = primaryKeyArray[primaryKeyArray.length - 1]
                 var row_td_content = $(`#${row_id} td:last-child`).html()
                 
+                
               
-                $(`#${row_id}`).attr("id",`${addedto}_${dropid}`);
-                row_id = addedto + '_' + dropid
+                $(`#ApNewsrow_${row_id}`).attr("id",`${addedto}_${dropid}`);
+                row_id = 'News_' + addedto + '_' + dropid
 
-                $(`#${row_id} td > div`).empty()
+                $(`#ApNewsrow_${row_id} td > div`).empty()
                 
                 
                 
                   
                   if (response.access_dict['view'] ==  true ){
-                    $(`#${row_id} td > div`).append(
+                    $(`#ApNewsrow_${row_id} td > div`).append(
                     `
                     <a class="row-add viewRow2" id="viewRow2-${pk}-${addedto}"  ><i class="fa fa-eye"></i></a>
                     `
@@ -1155,7 +1207,7 @@ $(document).ready(function(){
 
                   if (response.access_dict['edit'] ==  true && response.tableIndex <= 5){
                     
-                    $(`#${row_id} td > div`).append(
+                    $(`#ApNewsrow_${row_id} td > div`).append(
                     `
                     <a class="row-add editRow2" id="editRow2-${pk}-${addedto}"  ><i class="fa fa-edit"></i></a>
                     `
@@ -1164,7 +1216,7 @@ $(document).ready(function(){
 
                   if (response.access_dict['to_delete'] ==  true && response.tableIndex <= 5){
                     
-                    $(`#${row_id} td > div`).append(
+                    $(`#ApNewsrow_${row_id} td > div`).append(
                     `
                     <a class="row-add deleteRow2" id="deleteRow2-${pk}-${addedto}" href="/deleteBlog2/${pk}/" ><i class="fa fa-trash"></i></a>
                     `
@@ -1174,7 +1226,7 @@ $(document).ready(function(){
                   
 
                   // if (response.access_dict['view'] ==  true && response.tableIndex >= 6 ){
-                  //   $(`#${row_id} td > div`).append(
+                  //   $(`#ApNewsrow_${row_id} td > div`).append(
                   //   `
                   //   <a class="row-add downloadxml2file2" id="downloadxml2file2-${addedto}" href="/downloadxml2file2/${pk}/" ><i class="fa fa-file-excel-o"></i></a>
                     
@@ -1183,11 +1235,11 @@ $(document).ready(function(){
                   // }
 
                   if (response.access_dict['publish'] ==  true && response.tableIndex == 6){
-                    $(`#${row_id} td > div`).append(
+                    $(`#ApNewsrow_${row_id} td > div`).append(
                       `
                       <a class="row-add backblog2 plane backblog2Click" id="backblog2-${pk}-${addedto}" href="/backblog2/${pk}/" ><i class="fa fa-backward"></i></a>
                       `)
-                    $(`#${row_id} td > div`).append(
+                    $(`#ApNewsrow_${row_id} td > div`).append(
                     `
                     <a class="row-add publishRow plane2 publishRowClick" id="publishRow2-${pk}-${addedto}" href="/publishBlog2/${pk}/" ><i class="fa fa-paper-plane"></i></a>
                     `
@@ -1199,7 +1251,7 @@ $(document).ready(function(){
                   if (response.access_dict['view'] ==  true && response.tableIndex == 7 ){
                     
                     
-                    $(`#${row_id} td > div`).append(
+                    $(`#ApNewsrow_${row_id} td > div`).append(
                     `
                     <a class="row-add" href="/viewxml2/${pk}/" ><i class="fa fa-external-link" aria-hidden="true"></i></a>
                     <a class="row-add downloadpdf2" id="downloadpdf2-${addedto}" href="/downloadpdf2/${pk}/" ><i class="fa fa-file-powerpoint-o"></i></a>
@@ -1352,6 +1404,21 @@ $(document).on('change','.imagemult',function(){
     xhttp.send();
   }
 
+  function showAuthor(str) {
+    var xhttp;    
+    if (str == "") {
+      document.getElementById("txtHint").innerHTML = "";
+      return;
+    }
+    xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("txtHint").innerHTML = this.responseText;
+      }
+    };
+    xhttp.open("GET", "getcustomer.php?q="+str, true);
+    xhttp.send();
+  }
   
  
 $('.list-unstyled').click(function(){

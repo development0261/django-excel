@@ -381,7 +381,7 @@
                           
                         {% for v in val %}
                         
-                        <tr id="{{key|replaceSpacewithUnderScore }}_{{v.pk}}"
+                        <tr id="ApNewsrow_{{key|replaceSpacewithUnderScore }}_{{v.pk}}"
                           class = "
                           {% if forloop.parentloop.counter == 2 and v.blog_release_status == "Draft" %}
                           {% now "Y-m-d" as todays_date %}
