@@ -574,3 +574,10 @@ body {
     display: flex;
     justify-content: space-between;
 }
+.select_box select{
+    width: 190px;
+    margin-right: 10px;
+}
+.Draft{
+    width: 100px !important;
+}
