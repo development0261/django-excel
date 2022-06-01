@@ -550,7 +550,8 @@ def publishBlog2(request,pk):
     messages.success(request,"Your blog {} for AP News is Published".format(blogobj.topic))
 
     filepath = downloadxml(request,pk,stringPath=True)
-    return redirect('/?filepath={}'.format(filepath))
+    return redirect('/?filepath={}&secondTab=True'.format(filepath))
+    
 
 def printpdf(desc,imagepath,topic,images):
     import time
@@ -867,7 +868,7 @@ def downloadpdf(request,pk):
         i = i.replace("&nbsp;","")
         i = i.replace("&#39;","\'")
         
-        i = re.sub('<[^<]*?/?>', ' ', i)
+        
         z.append(i)
     pdf = printpdf(z,image_data,str(blogobj.topic),imglist) 
     return pdf
@@ -895,7 +896,7 @@ def downloadpdf2(request,pk):
         i = i.replace("&nbsp;","")
         i = i.replace("&#39;","\'")
         
-        i = re.sub('<[^<]*?/?>', ' ', i)
+        
         z.append(i)
     
     pdf = printpdf(z,image_data,str(blogobj.topic),imglist)

@@ -263,8 +263,8 @@ $(document).ready(function(){
                                           <label>Description*</label>
                                       <textarea name="description" rows="10" cols="55" id="description_${tableName}_${data.pk}">${data.content}</textarea>
                                       </div>
-                                      <div class="field-name">   
-                                        
+                                      <div class="field-name custom-field">   
+                                        <div class="field-category">
                                         <label>Category</label>
                                         <div class="select_box">
                                           <select class="box" id="category_${tableName}_${data.pk}" onchange="showCategories(this.value)" name="category"> 
@@ -284,7 +284,9 @@ $(document).ready(function(){
 
                                           {% if request.user.is_superuser %}
   
-                                          
+                                        </div>
+                                      </div>
+                                        <div class="field-author">
                                           <label>Author</label>
                                         <div class="select_box">
                                           <select class="box" id="author_${tableName}_${data.pk}" onchange="showAuthor(this.value)" name="author"> 
@@ -303,7 +305,9 @@ $(document).ready(function(){
                                           </select>
 
                                           {% endif %}
-
+                                        </div>
+                                      </div>
+                                        <div class="field-status">
                                           <label>Status</label>
                                           <div class="select_box">
                                             <select id="status_${tableName}_${data.pk}" class="box" name="status"> 
@@ -314,7 +318,8 @@ $(document).ready(function(){
                                               <option value="Completed">Completed</option>
                                             </select>
                                         </div> 
-                                        
+                                      </div>
+                                    </div>
                                     </div>
             
                                       <div class="field-name">
@@ -361,8 +366,8 @@ $(document).ready(function(){
                                           <label>Description*</label>
                                       <textarea name="description" rows="10" cols="55" id="description_${tableName}_${data.pk}">${data.content}</textarea>
                                       </div>
-                                      <div class="field-name">   
-                                       
+                                      <div class="field-name custom-field">   
+                                        <div class="field-category">
                                         <label>Category</label>
                                         <div class="select_box">
                                           <select class="box" id="category_${tableName}_${data.pk}" onchange="showCategories(this.value)" name="category"> 
@@ -380,10 +385,16 @@ $(document).ready(function(){
                                             }
                                           </select>
 
-                                        </div> 
+                                          
+  
+                                        </div>
+                                      </div>
+                                        
+                                   
+                                        
                                         
                                     </div>
-            
+                                    </div>
                                       <div class="field-name">
                                         <label>Image</label>
 
@@ -478,7 +489,8 @@ $(document).ready(function(){
                                         <textarea name="description" rows="10" cols="55" id="News_description_${tableName}_${data.pk}">${data.content}</textarea>
                                         </div>
                                         <div class="field-name">   
-                                       
+                                          <div class="field-name custom-field">   
+                                            <div class="field-category">
                                           <label>Category</label>
                                           <div class="select_box">
                                           <select class="box" id="category_${tableName}_${data.pk}" onchange="showCategories(this.value)" name="category"> 
@@ -494,6 +506,9 @@ $(document).ready(function(){
                                             }
                                           </select>
                                           {% if request.user.is_superuser %}
+                                        </div>
+                                      </div>
+                                        <div class="field-author">
                                           <label>Author</label>
                                         <div class="select_box">
                                           <select class="box" id="author_${tableName}_${data.pk}" onchange="showAuthor(this.value)" name="author"> 
@@ -511,6 +526,9 @@ $(document).ready(function(){
                                             }
                                           </select>
                                           {% endif %}
+                                        </div>
+                                      </div>
+                                        <div class="field-status">
                                           <label>Status</label>
                                           <div class="select_box">
                                             <select id="status_${tableName}_${data.pk}" class="box" name="status"> 
@@ -521,7 +539,8 @@ $(document).ready(function(){
                                               <option value="Completed">Completed</option>
                                             </select>
                                         </div> 
-                                          
+                                      </div>
+                                    </div>
                                       </div>
                                       <div class="field-name">
                                         <label>Image</label>
@@ -1187,18 +1206,17 @@ $(document).ready(function(){
                 var pk = primaryKeyArray[primaryKeyArray.length - 1]
                 var row_td_content = $(`#${row_id} td:last-child`).html()
                 
-                
               
-                $(`#ApNewsrow_${row_id}`).attr("id",`${addedto}_${dropid}`);
-                row_id = 'News_' + addedto + '_' + dropid
+                $(`#${row_id}`).attr("id",`ApNewsrow_${addedto}_${dropid}`);
+                row_id = 'ApNewsrow_' + addedto + '_' + dropid
 
-                $(`#ApNewsrow_${row_id} td > div`).empty()
+                $(`#${row_id} td > div`).empty()
                 
                 
                 
                   
                   if (response.access_dict['view'] ==  true ){
-                    $(`#ApNewsrow_${row_id} td > div`).append(
+                    $(`#${row_id} td > div`).append(
                     `
                     <a class="row-add viewRow2" id="viewRow2-${pk}-${addedto}"  ><i class="fa fa-eye"></i></a>
                     `
@@ -1207,7 +1225,7 @@ $(document).ready(function(){
 
                   if (response.access_dict['edit'] ==  true && response.tableIndex <= 5){
                     
-                    $(`#ApNewsrow_${row_id} td > div`).append(
+                    $(`#${row_id} td > div`).append(
                     `
                     <a class="row-add editRow2" id="editRow2-${pk}-${addedto}"  ><i class="fa fa-edit"></i></a>
                     `
@@ -1216,7 +1234,7 @@ $(document).ready(function(){
 
                   if (response.access_dict['to_delete'] ==  true && response.tableIndex <= 5){
                     
-                    $(`#ApNewsrow_${row_id} td > div`).append(
+                    $(`#${row_id} td > div`).append(
                     `
                     <a class="row-add deleteRow2" id="deleteRow2-${pk}-${addedto}" href="/deleteBlog2/${pk}/" ><i class="fa fa-trash"></i></a>
                     `
@@ -1226,7 +1244,7 @@ $(document).ready(function(){
                   
 
                   // if (response.access_dict['view'] ==  true && response.tableIndex >= 6 ){
-                  //   $(`#ApNewsrow_${row_id} td > div`).append(
+                  //   $(`#${row_id} td > div`).append(
                   //   `
                   //   <a class="row-add downloadxml2file2" id="downloadxml2file2-${addedto}" href="/downloadxml2file2/${pk}/" ><i class="fa fa-file-excel-o"></i></a>
                     
@@ -1235,11 +1253,11 @@ $(document).ready(function(){
                   // }
 
                   if (response.access_dict['publish'] ==  true && response.tableIndex == 6){
-                    $(`#ApNewsrow_${row_id} td > div`).append(
+                    $(`#${row_id} td > div`).append(
                       `
                       <a class="row-add backblog2 plane backblog2Click" id="backblog2-${pk}-${addedto}" href="/backblog2/${pk}/" ><i class="fa fa-backward"></i></a>
                       `)
-                    $(`#ApNewsrow_${row_id} td > div`).append(
+                    $(`#${row_id} td > div`).append(
                     `
                     <a class="row-add publishRow plane2 publishRowClick" id="publishRow2-${pk}-${addedto}" href="/publishBlog2/${pk}/" ><i class="fa fa-paper-plane"></i></a>
                     `
@@ -1251,7 +1269,7 @@ $(document).ready(function(){
                   if (response.access_dict['view'] ==  true && response.tableIndex == 7 ){
                     
                     
-                    $(`#ApNewsrow_${row_id} td > div`).append(
+                    $(`#${row_id} td > div`).append(
                     `
                     <a class="row-add" href="/viewxml2/${pk}/" ><i class="fa fa-external-link" aria-hidden="true"></i></a>
                     <a class="row-add downloadpdf2" id="downloadpdf2-${addedto}" href="/downloadpdf2/${pk}/" ><i class="fa fa-file-powerpoint-o"></i></a>

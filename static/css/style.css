@@ -383,7 +383,7 @@ body {
     width: 200px;
     border: 1px solid #935cdb;
     background-color: #fff;
-    
+    z-index: 999 !important;
   }
   
   .list-select-wrp ul {
@@ -502,6 +502,7 @@ body {
 }
 
 
+
 /* Responcive */
 @media screen and (max-width: 1024px){
     .table-carousel .owl-nav button.owl-prev {
@@ -567,4 +568,9 @@ body {
     body{
         padding: 0;
     }
+}
+
+.field-name.custom-field {
+    display: flex;
+    justify-content: space-between;
 }
