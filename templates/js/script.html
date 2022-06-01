@@ -1097,8 +1097,8 @@ $(document).ready(function(){
                   if (response.access_dict['view'] ==  true && response.tableIndex == 7 ){
                     
                     $(`#${row_id} td > div`).append(
-                    `<a class="row-add" href="/viewxml/${pk}/" ><i class="fa fa-external-link" aria-hidden="true"></i></a>
-                    <a target="_blank" class="row-add downloadxml" id="downloadpdf-${addedto}" href="/downloadpdf/${pk}/" ><i class="fa fa-file-powerpoint-o"></i></a>
+                    `<a target="_blank" class="row-add" href="/viewxml/${pk}/" ><i class="fa fa-external-link" aria-hidden="true"></i></a>
+                    <a class="row-add downloadxml" id="downloadpdf-${addedto}" href="/downloadpdf/${pk}/" ><i class="fa fa-file-powerpoint-o"></i></a>
                     
                     `
                   )
