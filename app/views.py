@@ -209,7 +209,7 @@ def getRowData(request,id,tableName):
         category_name = tableObj.category.name
     else:
         category_name = None
-    return JsonResponse({'superuser_check':superuser_check,'current_user_check':current_user_check,'category':category_name,'blog_progress_status':blog_progress_status,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj,'imgdict':imgdict})
+    return JsonResponse({'status':tableObj.blog_release_status,'superuser_check':superuser_check,'current_user_check':current_user_check,'category':category_name,'blog_progress_status':blog_progress_status,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj,'imgdict':imgdict})
 
 @csrf_exempt
 def contentgetRowData(request):
@@ -251,7 +251,7 @@ def getRowData2(request,id,tableName):
     else:
         category_name = None
 
-    return JsonResponse({'superuser_check':superuser_check,'current_user_check':current_user_check,'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj,'imgdict':imgdict})
+    return JsonResponse({'status':tableObj.blog_release_status,'superuser_check':superuser_check,'current_user_check':current_user_check,'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj,'imgdict':imgdict})
 
 def editBlog(request,pk):
     if request.method == 'POST':
@@ -282,7 +282,8 @@ def editData(request,id,tableName):
     
     
     blog_progress_status = request.POST['status']
-
+    print(blog_progress_status)
+    print("-------------------------------------")
     tableObj = Ap_Wire.objects.get(pk = id)
     
     if cat_id == "Select Category":
@@ -306,7 +307,7 @@ def editData(request,id,tableName):
     
 
     tableObj.category = cat_obj
-    if current_user == tableObj.author.username:
+    if current_user == tableObj.author.username or request.user.is_superuser:
         current_user_check = True
         tableObj.blog_release_status = blog_progress_status
         
@@ -401,7 +402,7 @@ def editData2(request,id,tableName):
         tableObj.author = auth_update
         auth_update.save()
 
-    if current_user == tableObj.author.username:
+    if current_user == tableObj.author.username or request.user.is_superuser:
         current_user_check = True
         tableObj.blog_release_status = blog_progress_status
         
@@ -1072,7 +1073,7 @@ def buildxmlall():
         topic_replacedwithunderscore = str(blogobj.topic).replace(" ","_")
         b1 = et.SubElement(m2, "link")
         b1.set("rel","alternate")
-        b1.set('href','https://ap.shakticoin.com/en/blog/{}'.format(topic_replacedwithunderscore))
+        b1.set('href','https://shakticoin.com/en/blog/{}'.format(topic_replacedwithunderscore))
 
         n1 = et.Element('content')
         n1.set("type","xhtml")
@@ -1304,7 +1305,7 @@ def buildxmlall2():
         topic_replacedwithunderscore = str(blogobj.topic).replace(" ","_")
         b1 = et.SubElement(m2, "link")
         b1.set("rel","alternate")
-        b1.set('href','https://ap.shakticoin.com/en/blog/{}'.format(topic_replacedwithunderscore))
+        b1.set('href','https://shakticoin.com/en/blog/{}'.format(topic_replacedwithunderscore))
 
         n1 = et.Element('content')
         n1.set("type","xhtml")
