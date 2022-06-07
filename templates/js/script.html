@@ -260,14 +260,14 @@
                                     <h2>Edit Blog</h2>
                                 </div>
                                 <div class="login-form">
-                                    <form method="POST" enctype="multipart/form-data">
+                                    <form id="editmodalform" method="POST" enctype="multipart/form-data">
                                       {% csrf_token %}
                                         <div class="field-name">
                                             <label>Title</label>
-                                            <input type="text" placeholder="" value="${data.topic}" name="topic" id="title_${tableName}_${data.pk}">
+                                            <input type="text" placeholder="" value="${data.topic}" name="topic" id="title_${tableName}_${data.pk}" required />
                                         </div>
                                         <div class="field-name">
-                                            <label>Description*</label>
+                                            <label>description</label>
                                         <textarea name="description" rows="10" cols="55" id="description_${tableName}_${data.pk}">${data.content}</textarea>
                                         </div>
                                         <div class="field-name custom-field">   
@@ -368,14 +368,14 @@
                                     <h2>Edit Blog</h2>
                                 </div>
                                 <div class="login-form">
-                                    <form method="POST" enctype="multipart/form-data">
+                                    <form id="editmodalform" method="POST" enctype="multipart/form-data">
                                       {% csrf_token %}
                                         <div class="field-name">
                                             <label>Title</label>
-                                            <input type="text" placeholder="" value="${data.topic}" name="topic" id="title_${tableName}_${data.pk}">
+                                            <input type="text" placeholder="" value="${data.topic}" name="topic" id="title_${tableName}_${data.pk}" required />
                                         </div>
                                         <div class="field-name">
-                                            <label>Description*</label>
+                                            <label>description</label>
                                         <textarea name="description" rows="10" cols="55" id="description_${tableName}_${data.pk}">${data.content}</textarea>
                                         </div>
                                         <div class="field-name custom-field">   
@@ -490,14 +490,14 @@
                                       <h2>Edit Blog</h2>
                                   </div>
                                   <div class="login-form">
-                                      <form method="POST">
+                                      <form id="editmodalform2" method="POST">
                                         {% csrf_token %}
                                           <div class="field-name">
                                               <label>Title</label>
-                                              <input type="text" placeholder="" value="${data.topic}" name="topic" id="News_title_${tableName}_${data.pk}">
+                                              <input type="text" placeholder="" value="${data.topic}" name="topic" id="News_title_${tableName}_${data.pk}" required />
                                           </div>
                                           <div class="field-name">
-                                              <label>Description*</label>
+                                              <label>description</label>
                                           <textarea name="description" rows="10" cols="55" id="News_description_${tableName}_${data.pk}">${data.content}</textarea>
                                           </div>
                                           <div class="field-name">   
@@ -584,14 +584,14 @@
                                       <h2>Edit Blog</h2>
                                   </div>
                                   <div class="login-form">
-                                      <form method="POST">
+                                      <form id="editmodalform2" method="POST">
                                         {% csrf_token %}
                                           <div class="field-name">
                                               <label>Title</label>
-                                              <input type="text" placeholder="" value="${data.topic}" name="topic" id="News_title_${tableName}_${data.pk}">
+                                              <input type="text" placeholder="" value="${data.topic}" name="topic" id="News_title_${tableName}_${data.pk}" required />
                                           </div>
                                           <div class="field-name">
-                                              <label>Description*</label>
+                                              <label>description</label>
                                           <textarea name="description" rows="10" cols="55" id="News_description_${tableName}_${data.pk}">${data.content}</textarea>
                                           </div>
                                           <div class="field-name">   
@@ -809,6 +809,10 @@
           formData.append('description', description);
           formData.append('status', status);
           formData.append('author', author);
+
+          if (title.length == 0){
+          alert("Title field is required")
+        return;}
   
           
           
@@ -839,22 +843,26 @@
               }
                 
               
-              console.log(keys)
                 $(`#${keys[2]}_${keys[1]}`).children('td').remove()
+                
                 $(`#${keys[2]}_${keys[1]}`).append(
                   `
                   
                     <td>${data.topic}</td>
                     <td>${data.author}</td>
-                    <td>${category_temp}</td>
+                    <td class="category" >${category_temp}</td>
                     <td>${data.datetimevalue}</td>
                     <td>${data.blog_progress_status}</td>
                     <td>${data.desc_len}</td>
                     
-                    <td> <div class="new-row-control">
-                      <a class="row-add viewRow" id="viewRow-${id}-${tableName}"  ><i class="fa fa-eye"></i></a>
-                      <a class="row-add editRow" id="editRow-${id}-${tableName}"><i class="fa fa-edit"></i></a>
-                      <a class="row-add deleteRow" id="deleteRow-${id}-${tableName}" href="/deleteBlog/${id}/" ><i class="fa fa-trash"></i></a>
+                    <td> <div class="new-row-control">` + 
+                       
+                      (data.access_dict['view'] ==  true ? `<a class="row-add viewRow" id="viewRow-${id}-${tableName}"  ><i class="fa fa-eye"></i></a>`: '') + 
+                      (data.access_dict['edit'] ==  true ? `<a class="row-add editRow" id="editRow-${id}-${tableName}"><i class="fa fa-edit"></i></a>`: '') + 
+                      (data.access_dict['to_delete'] ==  true ? `<a class="row-add deleteRow" id="deleteRow-${id}-${tableName}" href="/deleteBlog/${id}/" ><i class="fa fa-trash"></i></a>`: '') + 
+                      `
+                      
+                      
                       ${
                         tableName == 'Ready_For_Release' ? `
                         <a target="_blank" class="row-add downloadxml" id="downloadxml-${tableName}" href="/downloadxml/${id}/" ><i class="fa fa-file-excel-o"></i></a>
@@ -916,6 +924,9 @@
         formData.append('category',category);
         formData.append('status', status);
         formData.append('author', author);
+        if (title.length == 0){
+          alert("Title field is required")
+        return;}
         console.log(description)
         $.ajax({
           url: "editData2/"+id+"/"+tableName+"/",
@@ -945,15 +956,20 @@
               
                   <td>${data.topic}</td>
                   <td>${data.author}</td>
-                  <td>${category_temp}</td>
+                  <td class="category2">${category_temp}</td>
                   <td>${data.datetimevalue}</td>
                   <td>${data.blog_progress_status}</td>
                   <td>${data.desc_len}</td>
                   
-                  <td> <div class="new-row-control">
-                    <a class="row-add viewRow2" id="viewRow2-${id}-${tableName}"  ><i class="fa fa-eye"></i></a>
-                    <a class="row-add editRow2" id="editRow2-${id}-${tableName}"><i class="fa fa-edit"></i></a>
-                    <a class="row-add deleteRow2" id="deleteRow2-${id}-${tableName}" href="/deleteBlog2/${id}/" ><i class="fa fa-trash"></i></a>
+                  <td> <div class="new-row-control">` + 
+                       
+                    (data.access_dict['view'] ==  true ? `<a class="row-add viewRow2" id="viewRow2-${id}-${tableName}"  ><i class="fa fa-eye"></i></a>`: '') + 
+                    (data.access_dict['edit'] ==  true ? `<a class="row-add editRow2" id="editRow2-${id}-${tableName}"><i class="fa fa-edit"></i></a>`: '') + 
+                    (data.access_dict['to_delete'] ==  true ? `<a class="row-add deleteRow2" id="deleteRow2-${id}-${tableName}" href="/deleteBlog2/${id}/" ><i class="fa fa-trash"></i></a>`: '') + 
+                    `
+                    
+                    
+                    
                     ${
                       tableName == 'Ready_For_Release' ? `
                       <a target="_blank" class="row-add downloadxml2file2" id="downloadxml2file2-${tableName}" href="/downloadxml2file2/${id}/" ><i class="fa fa-file-excel-o"></i></a>
@@ -1583,7 +1599,7 @@
   
   })
   
-  
+
   
   
   </script>

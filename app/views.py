@@ -188,7 +188,7 @@ def getRowData(request,id,tableName):
         superuser_check = False
 
     date = tableObj.date
-    formatedDate = date.strftime('%Y-%m-%d')
+    formatedDate = date.strftime('%d %b %y')
     # image = tableObj.image
     imageobj = None
     if tableObj.image:
@@ -232,7 +232,7 @@ def getRowData2(request,id,tableName):
     else:
         superuser_check = False
     date = tableObj.date
-    formatedDate = date.strftime('%Y-%m-%d')
+    formatedDate = date.strftime('%d %b %y')
     imageobj = None
     if tableObj.image:
         imageobj =tableObj.image.url
@@ -283,7 +283,6 @@ def editData(request,id,tableName):
     
     blog_progress_status = request.POST['status']
     print(blog_progress_status)
-    print("-------------------------------------")
     tableObj = Ap_Wire.objects.get(pk = id)
     
     if cat_id == "Select Category":
@@ -366,7 +365,20 @@ def editData(request,id,tableName):
     }
     month = year_dict[temp[5:7]]
     datetimevalue = temp[8:10]+" "+month+" "+temp[2:4]+" "+"-"+" "+temp[11:16]
-    return JsonResponse({'superuser_check':superuser_check,'datetimevalue':datetimevalue,'updated':tableObj.updated,'tablename':tableObj.status,'row_id':tableObj.id,'desc_len':desc_len,'blog_progress_status':blog_progress_status,'current_user_check':current_user_check,'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})
+
+    if permissions.objects.filter(user__in = [request.user],status=tableObj.status).exists():
+        permiss = permissions.objects.filter(user = request.user,status=tableObj.status).first()
+            
+        access_dict = {
+            'create':permiss.create ,
+            'edit':permiss.edit ,
+            'view':permiss.view ,
+            'to_delete':permiss.to_delete ,
+            'move':permiss.move,
+            'publish':permiss.publish
+        }
+
+    return JsonResponse({'access_dict':access_dict,'superuser_check':superuser_check,'datetimevalue':datetimevalue,'updated':tableObj.updated,'tablename':tableObj.status,'row_id':tableObj.id,'desc_len':desc_len,'blog_progress_status':blog_progress_status,'current_user_check':current_user_check,'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})
 
 @csrf_exempt
 def editData2(request,id,tableName):
@@ -457,7 +469,20 @@ def editData2(request,id,tableName):
     month = year_dict[temp[5:7]]
     datetimevalue = temp[8:10]+" "+month+" "+temp[2:4]+" "+"-"+" "+temp[11:16]
     formatedDate = date.strftime('%B %d,%Y')
-    return JsonResponse({'datetimevalue':datetimevalue,'updated':tableObj.updated,'desc_len':desc_len,'blog_progress_status':blog_progress_status,'current_user_check':current_user_check,'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})
+
+
+    if permissions.objects.filter(user__in = [request.user],status=tableObj.status).exists():
+        permiss = permissions.objects.filter(user = request.user,status=tableObj.status).first()
+            
+        access_dict = {
+            'create':permiss.create ,
+            'edit':permiss.edit ,
+            'view':permiss.view ,
+            'to_delete':permiss.to_delete ,
+            'move':permiss.move,
+            'publish':permiss.publish
+        }
+    return JsonResponse({'access_dict':access_dict,'datetimevalue':datetimevalue,'updated':tableObj.updated,'desc_len':desc_len,'blog_progress_status':blog_progress_status,'current_user_check':current_user_check,'category':category_name,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk})
 
 
 
@@ -1496,6 +1521,9 @@ def createBlog(request):
             files = request.FILES.getlist('extra_imagewire[]')
             for i in files:                
                 moreimages_apwire.objects.create(post=blog,image=i)
+
+        print("---------------")
+        print(sel)
 
         return redirect('viewfunction')
 
