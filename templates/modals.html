@@ -38,11 +38,11 @@
             </button> {% endcomment %}
           </div>
           <div  class="title">
-            <h2>Delete blog {{v.topic}} ?</h2>        
+            <center><h2>Delete blog {{v.topic}} ?</h2></center>
         </div>
           <div class="modal-body deleteModel1" id="deletemodalbody_{{key|replaceSpacewithUnderScore }}">
-            <button type="button" onclick="location.href='{% url 'deleteBlog' v.pk %}'" class="btn btn-danger" >Delete</button>
-            <button type="button" data-dismiss="modal" class="btn btn-secondary" class="btn btn-secondary">Cancel</button>
+            <center><button type="button" onclick="location.href='{% url 'deleteBlog' v.pk %}'" class="btn btn-danger" >Delete</button>
+            <button type="button" data-dismiss="modal" class="btn btn-secondary" class="btn btn-secondary">Cancel</button></center>
             
           </div>
             
@@ -116,11 +116,11 @@
               </button> {% endcomment %}
             </div>
             <div  class="title">
-              <h2>Delete blog {{v.topic}} ?</h2>        
+              <center><h2>Delete blog {{v.topic}} ?</h2></center>
           </div>
             <div class="modal-body deleteModel2" id="deletemodalbody2_{{key|replaceSpacewithUnderScore }}">
-              <button type="button" onclick="location.href='{% url 'deleteBlog2' v.pk %}'" class="btn btn-danger" >Delete</button>
-              <button type="button" data-dismiss="modal" class="btn btn-secondary">Cancel</button>
+              <center><button type="button" onclick="location.href='{% url 'deleteBlog2' v.pk %}'" class="btn btn-danger" >Delete</button>
+              <button type="button" data-dismiss="modal" class="btn btn-secondary">Cancel</button></center>
               
             </div>
               
