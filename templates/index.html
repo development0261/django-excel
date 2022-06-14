@@ -242,11 +242,15 @@
 
                             
 
-                          
+                            
 
                             {% if user|checkTablePermissiondelete:key and forloop.parentloop.counter <= 5 %}
-                            <a class="row-add deleteRow" id="deleteRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'deleteBlog' v.pk %}><i class="fa fa-trash"></i></a>
+                            <a class="row-add deleteRow" data-toggle="modal" data-target="#detetemodal_{{v.pk}}" id="deleteRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" ><i class="fa fa-trash"></i></a>
                             {% endif %}
+
+                            
+
+                            
                             
                             {% comment %} {% if forloop.parentloop.counter == 6 %}
                             <a class="row-add downloadxml" id="downloadxml-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxml' v.pk %}><i class="fa fa-file-excel-o"></i></a>
@@ -265,6 +269,11 @@
                             <a class="row-add downloadpdf" id="downloadpdf-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadpdf' v.pk %}><i class="fa fa-file-powerpoint-o"></i></a>
                             {% comment %} <a class="row-add downloadxmlfile2" id="downloadxmlfile2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxmlfile2' v.pk %}><i class="fa fa-file-excel-o"></i></a> {% endcomment %}
                             {%endif%}
+
+                            {% if user|checkTablePermissiondelete:key and forloop.parentloop.counter == 7 %}
+                            <a class="row-add deleteRow" data-toggle="modal" data-target="#detetemodal_{{v.pk}}" id="deleteRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" ><i class="fa fa-trash"></i></a>
+                            {% comment %} <a class="row-add deleteRow" id="deleteRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" ><i class="fa fa-trash"></i></a> {% endcomment %}
+                            {% endif %}
 
                             
                               
@@ -430,7 +439,7 @@
                             {% endif %}
 
                             {% if user|checkTablePermissiondelete:key and forloop.parentloop.counter <= 5 %}
-                            <a class="row-add deleteRow2" id="deleteRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" href={% url 'deleteBlog2' v.pk %}><i class="fa fa-trash"></i></a>
+                            <a class="row-add deleteRow2" data-toggle="modal" data-target="#detetemodal2_{{v.pk}}" id="deleteRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" ><i class="fa fa-trash"></i></a>
                             {% endif %}
                             
                             {% comment %} {% if forloop.parentloop.counter == 6 %}
@@ -450,7 +459,10 @@
                             <a class="row-add downloadpdf2" id="downloadpdf2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadpdf2' v.pk %}><i class="fa fa-file-powerpoint-o"></i></a>
                             {% comment %} <a class="row-add downloadxmlfile2" id="downloadxmlfile2-{{key|replaceSpacewithUnderScore }}" href={% url 'downloadxmlfile2' v.pk %}><i class="fa fa-file-excel-o"></i></a> {% endcomment %}
 
+                            {% if user|checkTablePermissiondelete:key and forloop.parentloop.counter == 7 %}
+                            <a class="row-add deleteRow2" data-toggle="modal" data-target="#detetemodal2_{{v.pk}}" id="deleteRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" ><i class="fa fa-trash"></i></a>
                             
+                            {% endif %}
 
                             {%endif%}
                             

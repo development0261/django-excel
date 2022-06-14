@@ -227,9 +227,7 @@
         {% comment %} id="editRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}" {% endcomment %}
         
         
-  
-  
-  
+        
           $(document).on('click','.editRow',function(){
             console.log("editrow")
               var keys = $(this).attr('id').split('-')
@@ -859,7 +857,7 @@
                        
                       (data.access_dict['view'] ==  true ? `<a class="row-add viewRow" id="viewRow-${id}-${tableName}"  ><i class="fa fa-eye"></i></a>`: '') + 
                       (data.access_dict['edit'] ==  true ? `<a class="row-add editRow" id="editRow-${id}-${tableName}"><i class="fa fa-edit"></i></a>`: '') + 
-                      (data.access_dict['to_delete'] ==  true ? `<a class="row-add deleteRow" id="deleteRow-${id}-${tableName}" href="/deleteBlog/${id}/" ><i class="fa fa-trash"></i></a>`: '') + 
+                      (data.access_dict['to_delete'] ==  true ? `<a class="row-add deleteRow" id="deleteRow-${id}" data-target="#detetemodal_${id}" data-toggle="modal"><i class="fa fa-trash"></i></a>`: '') + 
                       `
                       
                       
@@ -965,9 +963,10 @@
                        
                     (data.access_dict['view'] ==  true ? `<a class="row-add viewRow2" id="viewRow2-${id}-${tableName}"  ><i class="fa fa-eye"></i></a>`: '') + 
                     (data.access_dict['edit'] ==  true ? `<a class="row-add editRow2" id="editRow2-${id}-${tableName}"><i class="fa fa-edit"></i></a>`: '') + 
-                    (data.access_dict['to_delete'] ==  true ? `<a class="row-add deleteRow2" id="deleteRow2-${id}-${tableName}" href="/deleteBlog2/${id}/" ><i class="fa fa-trash"></i></a>`: '') + 
+                    (data.access_dict['to_delete'] ==  true ? `<a class="row-add deleteRow2" id="deleteRow2-${id}" data-target="#detetemodal2_${id}" data-toggle="modal"><i class="fa fa-trash"></i></a>`: '') + 
                     `
                     
+
                     
                     
                     ${
@@ -1105,7 +1104,7 @@
                       
                       $(`#${row_id} td > div`).append(
                       `
-                      <a class="row-add deleteRow" id="deleteRow-${pk}-${addedto}" href="/deleteBlog/${pk}/" ><i class="fa fa-trash"></i></a>
+                      <a class="row-add deleteRow" id="deleteRow-${pk}-${addedto}" data-target="#detetemodal_${pk}" data-toggle="modal" ><i class="fa fa-trash"></i></a>
                       `
                     )
                     }
@@ -1132,6 +1131,15 @@
                       `<a target="_blank" class="row-add" href="/viewxml/${pk}/" ><i class="fa fa-external-link" aria-hidden="true"></i></a>
                       <a class="row-add downloadxml" id="downloadpdf-${addedto}" href="/downloadpdf/${pk}/" ><i class="fa fa-file-powerpoint-o"></i></a>
                       
+                      `
+                    )
+                    }
+
+                    if (response.access_dict['to_delete'] ==  true && response.tableIndex == 7 ){
+                      
+                      $(`#${row_id} td > div`).append(
+                      `
+                      <a class="row-add deleteRow" id="deleteRow-${pk}-${addedto}" data-target="#detetemodal_${pk}" data-toggle="modal" ><i class="fa fa-trash"></i></a>
                       `
                     )
                     }
@@ -1268,10 +1276,12 @@
                       
                       $(`#${row_id} td > div`).append(
                       `
-                      <a class="row-add deleteRow2" id="deleteRow2-${pk}-${addedto}" href="/deleteBlog2/${pk}/" ><i class="fa fa-trash"></i></a>
+                      <a class="row-add deleteRow2" id="deleteRow2-${pk}-${addedto}" data-target="#detetemodal2_${pk}" data-toggle="modal"><i class="fa fa-trash"></i></a>
                       `
                     )
                     }
+
+                    
                     
                     
   
@@ -1310,6 +1320,15 @@
                     )
                    
                     
+                    }
+
+                    if (response.access_dict['to_delete'] ==  true && response.tableIndex == 7){
+                      
+                      $(`#${row_id} td > div`).append(
+                      `
+                      <a class="row-add deleteRow2" id="deleteRow2-${pk}-${addedto}" data-target="#detetemodal2_${pk}" data-toggle="modal" ><i class="fa fa-trash"></i></a>
+                      `
+                    )
                     }
   
                     

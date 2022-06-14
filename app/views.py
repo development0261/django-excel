@@ -589,7 +589,7 @@ def printpdf(desc,imagepath,topic,images):
     topic=str(topic)
     doc = SimpleDocTemplate(f"{MEDIA_ROOT}/pdf/{topic}.pdf",pagesize=letter,
                             rightMargin=72,leftMargin=72,
-                            topMargin=72,bottomMargin=18)
+                            topMargin=72,bottomMargin=18,title=f"{topic}")
     Story=[]
     if imagepath:
         im = Image(imagepath, 6*inch, 3.5*inch)
@@ -700,6 +700,68 @@ def buildxml(pk,blogobj):
         elem.text = "urn:publicid:shakticoin:"+str(randno)+"-0"
     else:
         elem.text = "urn:publicid:shakticoin:"+str(randno)+"-"+reverted_count
+    elem = et.SubElement(elee,"apnm:ManagementType")
+    elem.text="Change"
+    elem = et.SubElement(elee,"apnm:ManagementSequenceNumber")
+    elem.text="3"
+    elem = et.SubElement(elee,"apnm:PublishingStatus")
+    elem.text="Usable"
+
+    m2 = et.Element('entry')
+    m2.set("xml:lang","en-us")
+    root.append (m2)
+
+    if reverted_count == "None" :
+        uid = "urn:publicid:ap.shakticoin.com:"+randno+"-0"
+    else:
+        uid = "urn:publicid:ap.shakticoin.com:"+randno+"-"+reverted_count
+
+    b1 = et.SubElement(m2, "id")
+    b1.text = str(uid)
+    b5 = et.SubElement(m2, "published")
+    updated = str(blogobj.published_on)
+    utz = updated[:10]+"T"+updated[11:]
+    b5.text = str(utz)
+    b6 = et.SubElement(m2, "updated")
+    updated = str(blogobj.updated)
+    utz = updated[:10]+"T"+updated[11:]
+    b6.text = str(utz)
+    b2 = et.SubElement(m2, "title")
+    b2.text = str(blogobj.topic)
+
+    
+
+    if blogobj.image :
+        a5 = et.SubElement(m2,'content')
+        a5.set("type","image/jpeg")
+        a5.set("src","https://shaktidjangoblog-prod.s3.amazonaws.com/"+str(blogobj.image)) 
+
+    images_obj = moreimages_apwire.objects.filter(post = blogobj)
+    if images_obj:
+        for i in images_obj:
+            a5 = et.SubElement(m2,'content')
+            a5.set("type","image/jpeg")
+            a5.set("src","https://shaktidjangoblog-prod.s3.amazonaws.com/"+str(i.image)) 
+    
+    # b1 = et.SubElement(m2, "link")
+    # b1.set("rel","related")
+    # if reverted_count == "None" :
+    #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+"-0")
+    # else:
+    #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+reverted_count)
+
+    elee = et.SubElement(m2,"apcm:ContentMetadata")
+    elem = et.SubElement(elee,"apcm:HeadLine")
+    elem.text=str(blogobj.topic)
+    elem = et.SubElement(elee,"apcm:Characteristics")
+    elem.set("MediaType","Photo")
+
+    elee = et.SubElement(m2,"apnm:NewsManagement")
+    elem = et.SubElement(elee,"apnm:ManagementId")
+    if reverted_count == "None" :
+        elem.text = "urn:publicid:ap.shakticoin.com:"+randno+"-0"
+    else:
+        elem.text = "urn:publicid:shakticoin:"+randno+"-"+reverted_count
     elem = et.SubElement(elee,"apnm:ManagementType")
     elem.text="Change"
     elem = et.SubElement(elee,"apnm:ManagementSequenceNumber")
@@ -826,6 +888,68 @@ def buildxml2(pk,blogobj):
         elem.text = "urn:publicid:shakticoin:"+str(randno)+"-0"
     else:
         elem.text = "urn:publicid:shakticoin:"+str(randno)+"-"+reverted_count
+    elem = et.SubElement(elee,"apnm:ManagementType")
+    elem.text="Change"
+    elem = et.SubElement(elee,"apnm:ManagementSequenceNumber")
+    elem.text="3"
+    elem = et.SubElement(elee,"apnm:PublishingStatus")
+    elem.text="Usable"
+
+    m2 = et.Element('entry')
+    m2.set("xml:lang","en-us")
+    root.append (m2)
+
+    if reverted_count == "None" :
+        uid = "urn:publicid:ap.shakticoin.com:"+randno+"-0"
+    else:
+        uid = "urn:publicid:ap.shakticoin.com:"+randno+"-"+reverted_count
+
+    b1 = et.SubElement(m2, "id")
+    b1.text = str(uid)
+    b5 = et.SubElement(m2, "published")
+    updated = str(blogobj.published_on)
+    utz = updated[:10]+"T"+updated[11:]
+    b5.text = str(utz)
+    b6 = et.SubElement(m2, "updated")
+    updated = str(blogobj.updated)
+    utz = updated[:10]+"T"+updated[11:]
+    b6.text = str(utz)
+    b2 = et.SubElement(m2, "title")
+    b2.text = str(blogobj.topic)
+
+    
+
+    if blogobj.image :
+        a5 = et.SubElement(m2,'content')
+        a5.set("type","image/jpeg")
+        a5.set("src","https://shaktidjangoblog-prod.s3.amazonaws.com/"+str(blogobj.image)) 
+
+    images_obj = moreimages_apnews.objects.filter(post = blogobj)
+    if images_obj:
+        for i in images_obj:
+            a5 = et.SubElement(m2,'content')
+            a5.set("type","image/jpeg")
+            a5.set("src","https://shaktidjangoblog-prod.s3.amazonaws.com/"+str(i.image)) 
+    
+    # b1 = et.SubElement(m2, "link")
+    # b1.set("rel","related")
+    # if reverted_count == "None" :
+    #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+"-0")
+    # else:
+    #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+reverted_count)
+
+    elee = et.SubElement(m2,"apcm:ContentMetadata")
+    elem = et.SubElement(elee,"apcm:HeadLine")
+    elem.text=str(blogobj.topic)
+    elem = et.SubElement(elee,"apcm:Characteristics")
+    elem.set("MediaType","Photo")
+
+    elee = et.SubElement(m2,"apnm:NewsManagement")
+    elem = et.SubElement(elee,"apnm:ManagementId")
+    if reverted_count == "None" :
+        elem.text = "urn:publicid:ap.shakticoin.com:"+randno+"-0"
+    else:
+        elem.text = "urn:publicid:shakticoin:"+randno+"-"+reverted_count
     elem = et.SubElement(elee,"apnm:ManagementType")
     elem.text="Change"
     elem = et.SubElement(elee,"apnm:ManagementSequenceNumber")
@@ -1054,8 +1178,7 @@ def buildxmlall():
     a7 = et.SubElement(root,'updated')
     a7.text = now_format+"+"+tz_format
 
-    m2 = et.Element('entry')
-    root.append (m2)
+    
 
     blogall = Ap_Wire.objects.filter(Q(status="Ready_For_Release") | Q(status="App_Published"))
     for blogobj in blogall:        
@@ -1286,8 +1409,7 @@ def buildxmlall2():
     a7 = et.SubElement(root,'updated')
     a7.text = now_format+"+"+tz_format
 
-    m2 = et.Element('entry')
-    root.append (m2)
+    
 
     blogall = Ap_News.objects.filter(Q(status="Ready_For_Release") | Q(status="App_Published"))
     for blogobj in blogall:        

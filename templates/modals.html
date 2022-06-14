@@ -24,6 +24,38 @@
       </div>
     </div>
 
+    {% for v in val %}
+    <div class="modal fade bd-example-modal-lg"  tabindex="" role="dialog" id="detetemodal_{{v.pk}}">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+      
+            <button type="button" class="close closeModel" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+              
+              {% comment %} <span aria-hidden="true">&times;</span>
+            </button> {% endcomment %}
+          </div>
+          <div  class="title">
+            <h2>Delete blog {{v.topic}} ?</h2>        
+        </div>
+          <div class="modal-body deleteModel1" id="deletemodalbody_{{key|replaceSpacewithUnderScore }}">
+            <button type="button" onclick="location.href='{% url 'deleteBlog' v.pk %}'" class="btn btn-danger" >Delete</button>
+            <button type="button" data-dismiss="modal" class="btn btn-secondary" class="btn btn-secondary">Cancel</button>
+            
+          </div>
+            
+            
+          </div>
+    
+      </div>
+    </div>
+      {% endfor %}
+    
+    
+
+
     <div class="modal fade bd-example-modal-lg"  tabindex="" role="dialog" id="modal_expandview_{{key|replaceSpacewithUnderScore }}">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -69,6 +101,35 @@
         
         </div>
       </div>
+
+      {% for v in val %}
+      <div class="modal fade bd-example-modal-lg"  tabindex="" role="dialog" id="detetemodal2_{{v.pk}}">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+        
+              <button type="button" class="close closeModel" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+                
+                {% comment %} <span aria-hidden="true">&times;</span>
+              </button> {% endcomment %}
+            </div>
+            <div  class="title">
+              <h2>Delete blog {{v.topic}} ?</h2>        
+          </div>
+            <div class="modal-body deleteModel2" id="deletemodalbody2_{{key|replaceSpacewithUnderScore }}">
+              <button type="button" onclick="location.href='{% url 'deleteBlog2' v.pk %}'" class="btn btn-danger" >Delete</button>
+              <button type="button" data-dismiss="modal" class="btn btn-secondary">Cancel</button>
+              
+            </div>
+              
+              
+            </div>
+      
+        </div>
+      </div>
+        {% endfor %}
 
       <div class="modal fade bd-example-modal-lg"  tabindex="" role="dialog" id="modal_expandview2_{{key|replaceSpacewithUnderScore }}">
         <div class="modal-dialog modal-lg" role="document">
@@ -373,8 +434,6 @@
     </div>
 </div>
 </div>
-
-
 
 
 
