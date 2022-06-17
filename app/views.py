@@ -624,11 +624,11 @@ def buildxml(pk,blogobj):
     randno = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
     root = et.Element('feed')
     root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
-    root.set("xmlns:apxh","http://w3.org/1999/xhtml")
+    root.set("xmlns:apxh","https://www.w3.org/1999/xhtml")
     root.set("xmlns:ap","http://ap.org/schemas/03/2005/aptypes")
     root.set("xmlns","http://www.w3.org/2005/Atom")
     root.set("xmlns:apcm","http://ap.org/schemas/03/2005/apcm")
-    root.set("xml:lang","en-us")
+    root.set("xml:lang","en")
 
     m1 = et.Element('author')
     root.append (m1)
@@ -812,11 +812,11 @@ def buildxml2(pk,blogobj):
     randno = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
     root = et.Element('feed')
     root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
-    root.set("xmlns:apxh","http://w3.org/1999/xhtml")
+    root.set("xmlns:apxh","https://www.w3.org/1999/xhtml")
     root.set("xmlns:ap","http://ap.org/schemas/03/2005/aptypes")
     root.set("xmlns","http://www.w3.org/2005/Atom")
     root.set("xmlns:apcm","http://ap.org/schemas/03/2005/apcm")
-    root.set("xml:lang","en-us")
+    root.set("xml:lang","en")
 
     m1 = et.Element('author')
     root.append (m1)
@@ -1139,11 +1139,11 @@ def downloadxml2file2(request,pk):
 def buildxmlall():
     root = et.Element('feed')
     root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
-    root.set("xmlns:apxh","http://w3.org/1999/xhtml")
+    root.set("xmlns:apxh","https://www.w3.org/1999/xhtml")
     root.set("xmlns:ap","http://ap.org/schemas/03/2005/aptypes")
     root.set("xmlns","http://www.w3.org/2005/Atom")
     root.set("xmlns:apcm","http://ap.org/schemas/03/2005/apcm")
-    root.set("xml:lang","en-us")
+    root.set("xml:lang","en")
 
     
 
@@ -1370,11 +1370,11 @@ def viewxmlall(request):
 def buildxmlall2():
     root = et.Element('feed')
     root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
-    root.set("xmlns:apxh","http://w3.org/1999/xhtml")
+    root.set("xmlns:apxh","https://www.w3.org/1999/xhtml")
     root.set("xmlns:ap","http://ap.org/schemas/03/2005/aptypes")
     root.set("xmlns","http://www.w3.org/2005/Atom")
     root.set("xmlns:apcm","http://ap.org/schemas/03/2005/apcm")
-    root.set("xml:lang","en-us")
+    root.set("xml:lang","en")
     print("here")
     
 
