@@ -104,6 +104,29 @@
                     <div class="title">
                         <h5>{{forloop.counter}}. {{key|namereplace}}</h5>
                     </div>
+
+                    <div class="select-button">
+                      <div class="custom-select-category">
+                       <div class="list-select-wrp" style="z-index:1">
+                         <ul class="list-unstyled" id="wire_cat_ApWire_{{key|replaceSpacewithUnderScore }}"> 
+                           <li value="0" class="news_cat init">Select Date Order</li>
+                           {%for v in val%}
+                           
+                           {% endfor%}
+                           <li value="Ascending" class="abstractclass">Ascending</li>
+                           <li value="Descending" class="abstractclass">Descending</li>
+                           
+                         </ul>
+                         <div class="downarrow">
+                           <i class="fa fa-angle-down"></i>
+                         </div>
+                       </div>
+                       
+                   </div> 
+                
+                   
+                 </div>
+
                     <div class="select-button">
                      <div class="custom-select-category">
                       <div class="list-select-wrp" style="z-index:1">
@@ -152,7 +175,7 @@
                           <th id="column-header-2">Title</th>
                           <th id="column-header-3">Author</th>
                           <th id="column-header-4">Category </th>
-                          <th id="column-header-5">Date</th>
+                          <th class="sortit" id="column-header-5">Date</th>
                           <th id="column-header-6">Status</th>
                           <th id="column-header-7">Word Count</th>
                           <th id="column-header-8">Action</th>
@@ -208,7 +231,11 @@
                           <td>{{v.topic}}</td>
                           <td>{{v.author}}</td>
                           <td class="category" >{{v.category.name}}</td>
-                          <td>{{v.updated|date:"d M y - H:i"}}</td>
+
+                          <td><span style="display:none">{{v.updated|date:"U"}}</span>{{v.updated|date:"d M y - H:i"}}</td>
+                          
+                          
+                          {% comment %} <td>{{v.updated|date:"d M y - H:i"}}</td> {% endcomment %}
                           <td>{{v.blog_release_status}}</td>
                           <td>{{v|desc_count}}</td>
                           
@@ -361,7 +388,7 @@
                   
                     {% comment %} {{user|validateuser:key}} {% endcomment %}
                     
-                    <table class="table mytable"  id="ApNews_{{key|replaceSpacewithUnderScore }}">
+                    <table class="table mytable2"  id="ApNews_{{key|replaceSpacewithUnderScore }}">
                       <thead>
                         <tr>
                           <th id="column-header-1">Id</th>

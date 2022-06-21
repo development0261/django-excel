@@ -476,6 +476,12 @@ body {
     border-bottom: 1px solid #D1C4F3;
 }
 
+.colorclass2 {
+    background: #d38328 !important;
+    color: #fff;
+    border-bottom: 1px solid #D1C4F3;
+}
+
 .loader {
     height: 40px;
     width:40px;
