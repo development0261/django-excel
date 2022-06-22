@@ -480,6 +480,20 @@ body {
     border: 2px solid green;
 }
 
+.downOrder i.fa.fa-caret-down {
+    opacity: 1;
+}
+.upOrder i.fa.fa-caret-up {
+    opacity: 1;
+    
+}
+i.fa.fa-caret-up, i.fa.fa-caret-down {
+    padding-left: 2px !important;
+    /* padding-left: 5px; */
+    color: #5928d3 !important;
+    opacity: 0.5;
+}
+
 .loader {
     height: 40px;
     width:40px;
