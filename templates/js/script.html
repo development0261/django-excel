@@ -247,11 +247,6 @@
                   
                   if (data.current_user_check == true || data.superuser_check == true){
                     $(`#editmodalbody_${tableName}`).append(`
-                    
-      
-      
-      
-  
                     <div class="row justify-content-center">
                             <div class="col-md-8">
                                 <div  class="title">
@@ -274,10 +269,6 @@
                                           <div class="select_box">
                                             <select class="box" id="category_${tableName}_${data.pk}" onchange="showCategories(this.value)" name="category"> 
                                               <option selected>Select Category</option>
-  
-                                              
-  
-                                              
                                               ${
                                                 cat_array.map((item,index)=>{
                                                   return(
@@ -295,10 +286,6 @@
                                             <label>Author</label>
                                           <div class="select_box">
                                             <select class="box" id="author_${tableName}_${data.pk}" onchange="showAuthor(this.value)" name="author"> 
-                                              
-  
-                                              
-  
                                               
                                               ${
                                                 user_array.map((item,index)=>{
@@ -324,8 +311,6 @@
                                                     )
                                                   })
                                                 }
-  
-                                                
                                               </select>
                                           </div> 
                                         </div>
@@ -342,12 +327,6 @@
                                           <label>Extra Images (Upload Mulitple)</label>
                                           <input type="file" accept="image/*" multiple="multiple" id="images_${tableName}_${data.pk}" placeholder="" name="images[]" class="images" >
                                         </div>
-                            
-                                      
-  
-                                     
-               
-                 
                                         <button type="button" class="login-submit addEditRow" id="addEditRow-${data.pk}-${tableName}" name="Add" value="Add">Save Blog</button>
                                         
                                         <a  style="text-decoration:none;cursor:pointer" class="ml-3 closeModel" data-dismiss="modal" >Close</a>
@@ -415,11 +394,6 @@
                                           <label>Extra Images (Upload Mulitple)</label>
                                           <input type="file" accept="image/*" multiple="multiple" id="images_${tableName}_${data.pk}" placeholder="" name="images[]" class="images" >
                                         </div>
-                            
-                                      
-  
-                                     
-               
                  
                                         <button type="button" class="login-submit addEditRow" id="addEditRow-${data.pk}-${tableName}" name="Add" value="Add">Save Blog</button>
                                         
@@ -431,11 +405,7 @@
                    
                    )
                    }
-                  
-                    
                    CKEDITOR.replace(`description_${tableName}_${data.pk}`);
-                   
-                   
                     $(`#editmodal_${tableName}`).modal('show')
                 },
                 error: function(){
@@ -759,9 +729,6 @@
               }
             });
   
-           
-  
-  
           })
        
         
@@ -811,12 +778,6 @@
           if (title.length == 0){
           alert("Title field is required")
         return;}
-  
-          
-          
-          
-          
-          
           
           
           // console.log(image)
@@ -1204,7 +1165,7 @@
             */
             console.log($(this))
             var row_id = ui.item[0].id
-             var addedTo = $(this).closest("table.mytable")
+             var addedTo = $(this).closest("table.mytable2")
               
               
               dataa=ui.item[0]
@@ -1213,7 +1174,7 @@
               dropid = dropidArray[dropidArray.length - 1]
               addedto = addedTo.attr('id').slice(7,)
               var idCounter = 0
-              {% comment %} $("table.mytable").each(function(){
+              {% comment %} $("table.mytable2").each(function(){
                 console.log($(this).attr('id'))
                 console.log(addedTo.attr('id'))
                   if($(this).attr('id') == addedTo.attr('id')){
@@ -1331,12 +1292,6 @@
                     )
                     }
   
-                    
-                    
-                    
-                    
-                  
-  
                 }
               }) 
               
@@ -1380,14 +1335,6 @@
     
   })
   
-  
-  
-   
-  
-  
-  
-  
-  
     var _URL = window.URL || window.webkitURL;
   
     $(document).on('change','.image',function(){
@@ -1405,11 +1352,6 @@
               for (var i = 0; i < x.length; i++) {
                 x[i].value = "";
             }
-  
-              
-              
-              
-             
              }
           };
           img.onerror = function() {  
@@ -1439,10 +1381,6 @@
               for (var i = 0; i < x.length; i++) {
                 x[i].value = "";
             }
-              
-              
-              
-             
              }
           };
           img.onerror = function() {  
@@ -1616,7 +1554,7 @@
             alert("There was an error");
           }}) 
   
-  })
+  });
   
   $('.mytable th.sortit').click(function () {
     var table = $(this).parents('table').eq(0)
@@ -1634,14 +1572,14 @@
     }
     if (!this.asc) { rows = rows.reverse() }
     for (var i = 0; i < rows.length; i++) { table.append(rows[i]) }
-})
-function comparer(index) {
-    return function (a, b) {
-    var valA = getCellValue(a, index), valB = getCellValue(b, index)
-    return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
-    }
-}
-function getCellValue(row, index) { return $(row).children('td').eq(index).text() }
+  })
+  function comparer(index) {
+      return function (a, b) {
+      var valA = getCellValue(a, index), valB = getCellValue(b, index)
+      return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
+      }
+  }
+  function getCellValue(row, index) { return $(row).children('td').eq(index-1).text() }
 
   </script>
   

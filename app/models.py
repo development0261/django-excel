@@ -1,4 +1,5 @@
 from datetime import date
+from email.mime import image
 from unittest.util import _MAX_LENGTH
 
 from django.db import models
@@ -156,6 +157,7 @@ class permissions(models.Model):
 
 
 
+
     
         
         
@@ -240,3 +242,12 @@ class permissions(models.Model):
 #     user = models.ForeignKey(UserCustom,on_delete=models.CASCADE)
 #     role = models.CharField(choices=ROLE,max_length=20,null=True,blank=True)
 #     tables = MultiSelectField(choices=tables_choice)
+
+class Mangeimages(models.Model):
+    image = models.ImageField(upload_to='media/')
+
+    class Meta:
+      verbose_name_plural = "manage images"
+
+     
+     

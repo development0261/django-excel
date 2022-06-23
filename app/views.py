@@ -652,14 +652,14 @@ def buildxml(pk,blogobj):
 
 
     m2 = et.Element('entry')
-    m2.set("xml:lang","en-us")
+    m2.set("xml:lang","en")
     root.append (m2)
 
     reverted_count=str(blogobj.reverted_count)
     if reverted_count == "None" :
-        uid = "urn:publicid:ap.shakticoin:"+str(randno)+"-0"
+        uid = "urn:publicid:ap.shakticoin:"+str(randno)+"0"
     else:
-        uid = "urn:publicid:ap.shakticoin:"+str(randno)+"-"+reverted_count
+        uid = "urn:publicid:ap.shakticoin:"+str(randno)+reverted_count
 
     b1 = et.SubElement(m2, "id")
     b1.text = str(uid)
@@ -697,9 +697,9 @@ def buildxml(pk,blogobj):
     elee = et.SubElement(m2,"apnm:NewsManagement")
     elem = et.SubElement(elee,"apnm:ManagementId")
     if reverted_count == "None" :
-        elem.text = "urn:publicid:shakticoin:"+str(randno)+"-0"
+        elem.text = "urn:publicid:shakticoin:"+str(randno)+"0"
     else:
-        elem.text = "urn:publicid:shakticoin:"+str(randno)+"-"+reverted_count
+        elem.text = "urn:publicid:shakticoin:"+str(randno)+reverted_count
     elem = et.SubElement(elee,"apnm:ManagementType")
     elem.text="Change"
     elem = et.SubElement(elee,"apnm:ManagementSequenceNumber")
@@ -708,13 +708,13 @@ def buildxml(pk,blogobj):
     elem.text="Usable"
 
     m2 = et.Element('entry')
-    m2.set("xml:lang","en-us")
+    m2.set("xml:lang","en")
     root.append (m2)
 
     if reverted_count == "None" :
-        uid = "urn:publicid:ap.shakticoin.com:"+randno+"-0"
+        uid = "urn:publicid:ap.shakticoin.com:"+randno+"0"
     else:
-        uid = "urn:publicid:ap.shakticoin.com:"+randno+"-"+reverted_count
+        uid = "urn:publicid:ap.shakticoin.com:"+randno+reverted_count
 
     b1 = et.SubElement(m2, "id")
     b1.text = str(uid)
@@ -746,9 +746,9 @@ def buildxml(pk,blogobj):
     # b1 = et.SubElement(m2, "link")
     # b1.set("rel","related")
     # if reverted_count == "None" :
-    #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+"-0")
+    #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+"0")
     # else:
-    #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+reverted_count)
+    #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+reverted_count)
 
     elee = et.SubElement(m2,"apcm:ContentMetadata")
     elem = et.SubElement(elee,"apcm:HeadLine")
@@ -759,9 +759,9 @@ def buildxml(pk,blogobj):
     elee = et.SubElement(m2,"apnm:NewsManagement")
     elem = et.SubElement(elee,"apnm:ManagementId")
     if reverted_count == "None" :
-        elem.text = "urn:publicid:ap.shakticoin.com:"+randno+"-0"
+        elem.text = "urn:publicid:ap.shakticoin.com:"+randno+"0"
     else:
-        elem.text = "urn:publicid:shakticoin:"+randno+"-"+reverted_count
+        elem.text = "urn:publicid:shakticoin:"+randno+reverted_count
     elem = et.SubElement(elee,"apnm:ManagementType")
     elem.text="Change"
     elem = et.SubElement(elee,"apnm:ManagementSequenceNumber")
@@ -795,7 +795,7 @@ def buildxml(pk,blogobj):
             # b2 = et.SubElement(ele, "title")
             # b2.text = ""
             ele1.set("href",str(obj['href']))
-            ele1.set("target","_blank")
+            # ele1.set("target","_blank")
             ele1.set("rel","nofollow noopener")
             ele1.text=str(obj.text)
 
@@ -840,14 +840,14 @@ def buildxml2(pk,blogobj):
 
 
     m2 = et.Element('entry')
-    m2.set("xml:lang","en-us")
+    m2.set("xml:lang","en")
     root.append (m2)
 
     reverted_count=str(blogobj.reverted_count)
     if reverted_count == "None" :
-        uid = "urn:publicid:ap.shakticoin:"+str(randno)+"-0"
+        uid = "urn:publicid:ap.shakticoin:"+str(randno)+"0"
     else:
-        uid = "urn:publicid:ap.shakticoin:"+str(randno)+"-"+reverted_count
+        uid = "urn:publicid:ap.shakticoin:"+str(randno)+reverted_count
 
     b1 = et.SubElement(m2, "id")
     b1.text = str(uid)
@@ -885,9 +885,9 @@ def buildxml2(pk,blogobj):
     elee = et.SubElement(m2,"apnm:NewsManagement")
     elem = et.SubElement(elee,"apnm:ManagementId")
     if reverted_count == "None" :
-        elem.text = "urn:publicid:shakticoin:"+str(randno)+"-0"
+        elem.text = "urn:publicid:shakticoin:"+str(randno)+"0"
     else:
-        elem.text = "urn:publicid:shakticoin:"+str(randno)+"-"+reverted_count
+        elem.text = "urn:publicid:shakticoin:"+str(randno)+reverted_count
     elem = et.SubElement(elee,"apnm:ManagementType")
     elem.text="Change"
     elem = et.SubElement(elee,"apnm:ManagementSequenceNumber")
@@ -896,13 +896,13 @@ def buildxml2(pk,blogobj):
     elem.text="Usable"
 
     m2 = et.Element('entry')
-    m2.set("xml:lang","en-us")
+    m2.set("xml:lang","en")
     root.append (m2)
 
     if reverted_count == "None" :
-        uid = "urn:publicid:ap.shakticoin.com:"+randno+"-0"
+        uid = "urn:publicid:ap.shakticoin.com:"+randno+"0"
     else:
-        uid = "urn:publicid:ap.shakticoin.com:"+randno+"-"+reverted_count
+        uid = "urn:publicid:ap.shakticoin.com:"+randno+reverted_count
 
     b1 = et.SubElement(m2, "id")
     b1.text = str(uid)
@@ -934,9 +934,9 @@ def buildxml2(pk,blogobj):
     # b1 = et.SubElement(m2, "link")
     # b1.set("rel","related")
     # if reverted_count == "None" :
-    #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+"-0")
+    #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+"0")
     # else:
-    #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+reverted_count)
+    #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+reverted_count)
 
     elee = et.SubElement(m2,"apcm:ContentMetadata")
     elem = et.SubElement(elee,"apcm:HeadLine")
@@ -947,9 +947,9 @@ def buildxml2(pk,blogobj):
     elee = et.SubElement(m2,"apnm:NewsManagement")
     elem = et.SubElement(elee,"apnm:ManagementId")
     if reverted_count == "None" :
-        elem.text = "urn:publicid:ap.shakticoin.com:"+randno+"-0"
+        elem.text = "urn:publicid:ap.shakticoin.com:"+randno+"0"
     else:
-        elem.text = "urn:publicid:shakticoin:"+randno+"-"+reverted_count
+        elem.text = "urn:publicid:shakticoin:"+randno+reverted_count
     elem = et.SubElement(elee,"apnm:ManagementType")
     elem.text="Change"
     elem = et.SubElement(elee,"apnm:ManagementSequenceNumber")
@@ -983,7 +983,7 @@ def buildxml2(pk,blogobj):
             # b2 = et.SubElement(ele, "title")
             # b2.text = ""
             ele1.set("href",str(obj['href']))
-            ele1.set("target","_blank")
+            # ele1.set("target","_blank")
             ele1.set("rel","nofollow noopener")
             ele1.text=str(obj.text)
 
@@ -1184,13 +1184,13 @@ def buildxmlall():
     for blogobj in blogall:        
         randno = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
         m2 = et.Element('entry')
-        m2.set("xml:lang","en-us")
+        m2.set("xml:lang","en")
         root.append (m2)
         reverted_count=str(blogobj.reverted_count)
         if reverted_count == "None" :
-            uid = "urn:publicid:ap.shakticoin:"+str(blogobj.unique_id)+"-0"
+            uid = "urn:publicid:ap.shakticoin:"+str(blogobj.unique_id)+"0"
         else:
-            uid = "urn:publicid:ap.shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
+            uid = "urn:publicid:ap.shakticoin:"+str(blogobj.unique_id)+reverted_count
 
         
 
@@ -1212,12 +1212,12 @@ def buildxmlall():
         a.set("term","Global")
         a.set("scheme","http://cv.ap.org/keyword")
         b1 = et.SubElement(m2, "link")
-        b1.set("rel","related")
+        
         if reverted_count == "None" :
-            b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+"-0")
+            b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"0")
         else:
-            b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+reverted_count)
-
+            b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+reverted_count)
+        b1.set("rel","related")
         topic_replacedwithunderscore = str(blogobj.topic).replace(" ","_")
         b1 = et.SubElement(m2, "link")
         b1.set("rel","alternate")
@@ -1241,9 +1241,9 @@ def buildxmlall():
         elee = et.SubElement(m2,"apnm:NewsManagement")
         elem = et.SubElement(elee,"apnm:ManagementId")
         if reverted_count == "None" :
-            elem.text = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-0"
+            elem.text = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"0"
         else:
-            elem.text = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
+            elem.text = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+reverted_count
         elem = et.SubElement(elee,"apnm:ManagementType")
         elem.text="Change"
         elem = et.SubElement(elee,"apnm:ManagementSequenceNumber")
@@ -1273,19 +1273,19 @@ def buildxmlall():
             for obj in results:
                 ele1 = et.SubElement(ele,"apxh:a")
                 ele1.set("href",str(obj['href']))
-                ele1.set("target","_blank")
+                # ele1.set("target","_blank")
                 ele1.set("rel","nofollow noopener")
                 ele1.text=str(obj.text)
         
 
         m2 = et.Element('entry')
-        m2.set("xml:lang","en-us")
+        m2.set("xml:lang","en")
         root.append (m2)
 
         if reverted_count == "None" :
-            uid = "urn:publicid:ap.shakticoin.com:"+randno+"-0"
+            uid = "urn:publicid:ap.shakticoin.com:"+randno+"0"
         else:
-            uid = "urn:publicid:ap.shakticoin.com:"+randno+"-"+reverted_count
+            uid = "urn:publicid:ap.shakticoin.com:"+randno+reverted_count
 
         b1 = et.SubElement(m2, "id")
         b1.text = str(uid)
@@ -1316,9 +1316,9 @@ def buildxmlall():
         # b1 = et.SubElement(m2, "link")
         # b1.set("rel","related")
         # if reverted_count == "None" :
-        #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+"-0")
+        #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+"0")
         # else:
-        #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+reverted_count)
+        #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+reverted_count)
 
         elee = et.SubElement(m2,"apcm:ContentMetadata")
         elem = et.SubElement(elee,"apcm:HeadLine")
@@ -1329,9 +1329,9 @@ def buildxmlall():
         elee = et.SubElement(m2,"apnm:NewsManagement")
         elem = et.SubElement(elee,"apnm:ManagementId")
         if reverted_count == "None" :
-            elem.text = "urn:publicid:ap.shakticoin.com:"+randno+"-0"
+            elem.text = "urn:publicid:ap.shakticoin.com:"+randno+"0"
         else:
-            elem.text = "urn:publicid:shakticoin:"+randno+"-"+reverted_count
+            elem.text = "urn:publicid:shakticoin:"+randno+reverted_count
         elem = et.SubElement(elee,"apnm:ManagementType")
         elem.text="Change"
         elem = et.SubElement(elee,"apnm:ManagementSequenceNumber")
@@ -1359,14 +1359,14 @@ class xmlValue:
     
     def __str__(self) -> str:
         return self.data
-
+ #////////////
 def viewxmlall(request):
     buildxmlall()
     response = open(f"{MEDIA_ROOT}/xml/output_xml_Blog_AP_Wire.xml", 'rb')
     return HttpResponse(response.read(),content_type="application/xml")
 
 
-
+#////////////
 def buildxmlall2():
     root = et.Element('feed')
     root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
@@ -1415,13 +1415,13 @@ def buildxmlall2():
     for blogobj in blogall:        
         randno = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
         m2 = et.Element('entry')
-        m2.set("xml:lang","en-us")
+        m2.set("xml:lang","en")
         root.append (m2)
         reverted_count=str(blogobj.reverted_count)
         if reverted_count == "None" :
-            uid = "urn:publicid:ap.shakticoin:"+str(blogobj.unique_id)+"-0"
+            uid = "urn:publicid:ap.shakticoin:"+str(blogobj.unique_id)+"0"
         else:
-            uid = "urn:publicid:ap.shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
+            uid = "urn:publicid:ap.shakticoin:"+str(blogobj.unique_id)+reverted_count
 
         
 
@@ -1443,12 +1443,12 @@ def buildxmlall2():
         a.set("term","Global")
         a.set("scheme","http://cv.ap.org/keyword")
         b1 = et.SubElement(m2, "link")
-        b1.set("rel","related")
+        
         if reverted_count == "None" :
-            b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+"-0")
+            b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"0")
         else:
-            b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+reverted_count)
-
+            b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+reverted_count)
+        b1.set("rel","related")
         topic_replacedwithunderscore = str(blogobj.topic).replace(" ","_")
         b1 = et.SubElement(m2, "link")
         b1.set("rel","alternate")
@@ -1472,9 +1472,9 @@ def buildxmlall2():
         elee = et.SubElement(m2,"apnm:NewsManagement")
         elem = et.SubElement(elee,"apnm:ManagementId")
         if reverted_count == "None" :
-            elem.text = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-0"
+            elem.text = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"0"
         else:
-            elem.text = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+"-"+reverted_count
+            elem.text = "urn:publicid:shakticoin:"+str(blogobj.unique_id)+reverted_count
         elem = et.SubElement(elee,"apnm:ManagementType")
         elem.text="Change"
         elem = et.SubElement(elee,"apnm:ManagementSequenceNumber")
@@ -1504,19 +1504,19 @@ def buildxmlall2():
             for obj in results:
                 ele1 = et.SubElement(ele,"apxh:a")
                 ele1.set("href",str(obj['href']))
-                ele1.set("target","_blank")
+                # ele1.set("target","_blank")
                 ele1.set("rel","nofollow noopener")
                 ele1.text=str(obj.text)
         
 
         m2 = et.Element('entry')
-        m2.set("xml:lang","en-us")
+        m2.set("xml:lang","en")
         root.append (m2)
 
         if reverted_count == "None" :
-            uid = "urn:publicid:ap.shakticoin.com:"+randno+"-0"
+            uid = "urn:publicid:ap.shakticoin.com:"+randno+"0"
         else:
-            uid = "urn:publicid:ap.shakticoin.com:"+randno+"-"+reverted_count
+            uid = "urn:publicid:ap.shakticoin.com:"+randno+reverted_count
 
         b1 = et.SubElement(m2, "id")
         b1.text = str(uid)
@@ -1547,9 +1547,9 @@ def buildxmlall2():
         # b1 = et.SubElement(m2, "link")
         # b1.set("rel","related")
         # if reverted_count == "None" :
-        #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+"-0")
+        #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+"0")
         # else:
-        #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+"-"+reverted_count)
+        #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+reverted_count)
 
         elee = et.SubElement(m2,"apcm:ContentMetadata")
         elem = et.SubElement(elee,"apcm:HeadLine")
@@ -1560,9 +1560,9 @@ def buildxmlall2():
         elee = et.SubElement(m2,"apnm:NewsManagement")
         elem = et.SubElement(elee,"apnm:ManagementId")
         if reverted_count == "None" :
-            elem.text = "urn:publicid:ap.shakticoin.com:"+randno+"-0"
+            elem.text = "urn:publicid:ap.shakticoin.com:"+randno+"0"
         else:
-            elem.text = "urn:publicid:shakticoin:"+randno+"-"+reverted_count
+            elem.text = "urn:publicid:shakticoin:"+randno+reverted_count
         elem = et.SubElement(elee,"apnm:ManagementType")
         elem.text="Change"
         elem = et.SubElement(elee,"apnm:ManagementSequenceNumber")
@@ -1775,9 +1775,6 @@ def dropData2(request,dropid,removedfrom,addedto):
                 'move':permiss.move,
                 'publish':permiss.publish
             }
-
-
-
         return JsonResponse({'msg':'success','access_dict':access_dict,'tableIndex':index+1,'description_count':description_count})
 
 def deleteBlog(request,pk):
@@ -1827,3 +1824,18 @@ def addimagewire(req,pk):
 # - Click event on ViewBlog
 # - Create Single New Model same as Add Blog and make body empty(also give id)
 # - Retrive data from backend as we doing for editview and append data in modal body 
+
+#image
+
+def imageview(request):
+    ap_wire_img = Ap_Wire.objects.all()
+    ap_news_img = Ap_News.objects.all()
+    extra_img = Mangeimages.objects.all()
+    return render(request,'images.html',{"img":ap_wire_img,"img2":ap_news_img,"extra_img":extra_img})
+
+def uploadimage(request):
+    if request.method == "POST":
+        image=request.FILES['Mangeimages']
+        mangeimages = Mangeimages(image=image)
+        mangeimages.save()
+    return redirect('imageview')

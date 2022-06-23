@@ -1,6 +1,8 @@
 from unicodedata import name
 from django.urls import path
 from . import views
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('',views.viewfunction,name='viewfunction'),
@@ -61,7 +63,10 @@ urlpatterns = [
 
     path('addimagewire/<str:pk>/',views.addimagewire,name="addimagewire"),
 
+    path('imageview',views.imageview,name="imageview"),
 
-
-
+    path('uploadimage',views.uploadimage,name="uploadimage")
 ]
+
+if settings.DEBUG:
+     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)   
