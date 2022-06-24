@@ -44,26 +44,7 @@
   
   {% if user.is_authenticated %}
   
-  <section class="nav-slider-section">
-    <div class="container-fluid">
-      <div style="display:flex;justify-content:end">
-        {% comment %} <h4>Hi, {{user.username}}</h4>
-        <a class="btn btn-danger" href="{% url 'logout' %}"> Logout</a> {% endcomment %}
-        <div class="custom-select-category">
-          <div class="list-select-wrp" style="z-index:1">
-            <ul class="list-unstyled" id="wire_cat_ApWire_{{key|replaceSpacewithUnderScore }}"> 
-              
-              <li class="init"><i class="fa - fa-user"></i> {{user.username}}</li>
-              <li class="init-l"><a href="{% url 'logout' %}"><i class="fa fa-sign-out"></i> Logout</a></li>
-
-             
-                
-            </ul>
-          </div>
-        
-      </div>
-    </div>
-
+  
 {%include 'base.html'%}
             <!-- First Tab-->
             <div class="ns-slider-box-section" id="ApWireContent">
@@ -530,7 +511,7 @@
 
   {% include "js/base-script.html" %}
 
-{% include "modals.html" %}
+  {% include "modals.html" %}
 
 {% include "js/script.html" %}
   

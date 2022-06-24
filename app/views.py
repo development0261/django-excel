@@ -177,6 +177,7 @@ def register(request):
 def getRowData(request,id,tableName):
     current_user = request.user.username
     tableObj = Ap_Wire.objects.get(pk = id)
+    # manageimage = Mangeimages.objects.get(pk=id)
     if current_user == tableObj.author.username:
         current_user_check = True
     else:
@@ -201,7 +202,12 @@ def getRowData(request,id,tableName):
         count = 0
         for i in imageobjs:
             count += 1
-            imgdict[str(count)]=i.image.url
+            if i.image:
+                x = str(i.image.url)
+                new = x.replace("https%3A/shaktidjangoblog-prod.s3.amazonaws.com/","")
+                
+                imgdict[str(count)]=new
+ 
     
 
     blog_progress_status = tableObj.blog_release_status
@@ -209,6 +215,8 @@ def getRowData(request,id,tableName):
         category_name = tableObj.category.name
     else:
         category_name = None
+    # if manageimage.image:
+    #     newimages = manageimage.image.url
     return JsonResponse({'status':tableObj.blog_release_status,'superuser_check':superuser_check,'current_user_check':current_user_check,'category':category_name,'blog_progress_status':blog_progress_status,'topic':tableObj.topic,'author':tableObj.author.username,'date':formatedDate,'pk':tableObj.pk,'content':tableObj.description,'image':imageobj,'imgdict':imgdict})
 
 @csrf_exempt
@@ -244,7 +252,11 @@ def getRowData2(request,id,tableName):
         count = 0
         for i in imageobjs:
             count += 1
-            imgdict[str(count)]=i.image.url
+            if i.image:
+                x = str(i.image.url)
+                new = x.replace("https%3A/shaktidjangoblog-prod.s3.amazonaws.com/","")
+                
+                imgdict[str(count)]=new
     
     if tableObj.category:
         category_name = tableObj.category.name
@@ -278,12 +290,17 @@ def editData(request,id,tableName):
     topic = request.POST['topic']
     description = request.POST['description']
     cat_id = request.POST['category']
+    imnew_id = request.POST['newimages']
+
+  
+
+    
     author_id = request.POST['author']
     
     
     blog_progress_status = request.POST['status']
     print(blog_progress_status)
-    tableObj = Ap_Wire.objects.get(pk = id)
+    
     
     if cat_id == "Select Category":
         cat_obj = None
@@ -291,7 +308,19 @@ def editData(request,id,tableName):
     else:
         cat_obj= category.objects.get(id=cat_id)
         category_name = cat_obj.name
-    
+
+    tableObj = Ap_Wire.objects.get(pk = id)
+    print("?")
+    print(imnew_id)
+    if not str(imnew_id)=="0":
+        moreimages_obj = moreimages_apwire.objects.create(post = tableObj)
+        # moreimages_obj = moreimages_apwire.objects.get(post=tableObj)
+        newimageobj = Mangeimages.objects.get(id = imnew_id)
+        print("BEFORE-----------")
+        
+        moreimages_obj.image = newimageobj.image.url
+        moreimages_obj.save()
+        print("BAFTEESRES-----------")
 
     
     tableObj.description = description
@@ -388,7 +417,12 @@ def editData2(request,id,tableName):
     cat_id = request.POST['category']
     blog_progress_status = request.POST['status']
     author_id = request.POST['author']
-    print(author_id)
+    imnew_id = request.POST['newimages2']
+
+    
+        
+    
+    
 
     
     if cat_id == "Select Category":
@@ -397,6 +431,19 @@ def editData2(request,id,tableName):
     else:
         cat_obj= category.objects.get(id=cat_id)
         category_name = cat_obj.name
+
+    tableObj = Ap_News.objects.get(pk = id)
+
+    if not imnew_id=="Select New Images":
+        moreimages_obj = moreimages_apnews.objects.create(post = tableObj)
+        # moreimages_obj = moreimages_apwire.objects.get(post=tableObj)
+        newimageobj = Mangeimages.objects.get(id = imnew_id)
+        print("BEFORE-----------")
+        
+        moreimages_obj.image = newimageobj.image.url
+        moreimages_obj.save()
+        print("BAFTEESRES-----------")
+
     
     
     
@@ -547,19 +594,13 @@ def viewfunction(request):
 
         categories = category.objects.all()
 
+        new_images_dict = Mangeimages.objects.all()
+
 
         User = get_user_model()
 
         users = User.objects.values()
-
-        
-
-
-        
-
-        
-
-        return render(request,'index.html',{'user_dict':users,'context_dict1':context_dict1,'context_dict':context_dict,'category_dict':categories,'context':context})
+        return render(request,'index.html',{'user_dict':users,'context_dict1':context_dict1,'context_dict':context_dict,'category_dict':categories,'context':context,'new_images_dict':new_images_dict})
         
     else:        
         return redirect('loginview')
@@ -1338,12 +1379,7 @@ def buildxmlall():
         elem.text="3"
         elem = et.SubElement(elee,"apnm:PublishingStatus")
         elem.text="Usable"
-        
 
-        
-
-    
-      
     tree = et.ElementTree(root)
     xmlfolder_exist()
     tree.write('{}/xml/output_xml_Blog_AP_Wire.xml'.format(MEDIA_ROOT), encoding="utf-8",xml_declaration=True)
@@ -1828,14 +1864,30 @@ def addimagewire(req,pk):
 #image
 
 def imageview(request):
+    obj = content_brief.objects.all()
+    if obj:
+        context = obj
+    else:
+        context = None
     ap_wire_img = Ap_Wire.objects.all()
     ap_news_img = Ap_News.objects.all()
     extra_img = Mangeimages.objects.all()
-    return render(request,'images.html',{"img":ap_wire_img,"img2":ap_news_img,"extra_img":extra_img})
+    return render(request,'images.html',{"img":ap_wire_img,"img2":ap_news_img,"extra_img":extra_img,'context':context})
 
 def uploadimage(request):
+    
+    
     if request.method == "POST":
         image=request.FILES['Mangeimages']
-        mangeimages = Mangeimages(image=image)
-        mangeimages.save()
+        Mangeimages.objects.create(image=image)
+        # mangeimages = Mangeimages(image=image)
+        # mangeimages.save()
     return redirect('imageview')
+
+    
+        # blog = Ap_Wire.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description'],status="Content_Pitching",category=cat_obj,blog_release_status=sel)
+        # if 'image' in request.FILES:
+        #     image=request.FILES['image']
+        #     blog.image = image
+        #     blog.save()
+        

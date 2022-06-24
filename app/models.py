@@ -247,7 +247,7 @@ class Mangeimages(models.Model):
     image = models.ImageField(upload_to='media/')
 
     class Meta:
-      verbose_name_plural = "manage images"
+      verbose_name_plural = "manage image"
 
      
      
