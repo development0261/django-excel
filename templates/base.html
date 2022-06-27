@@ -1,4 +1,6 @@
 {%load static%}
+{% load customtags %}
+
 
 {% if messages %}
 {% for message in messages %}
@@ -10,3 +12,45 @@
 </div>
 {% endfor %}
 {% endif %} 
+
+{% if user.is_authenticated %}
+<section class="nav-slider-section">
+  <div class="container-fluid">
+    <div style="display:flex;justify-content:end">
+      {% comment %} <h4>Hi, {{user.username}}</h4>
+      <a class="btn btn-danger" href="{% url 'logout' %}"> Logout</a> {% endcomment %}
+      <div class="custom-select-category">
+        <div class="list-select-wrp" style="z-index:1">
+          <ul class="list-unstyled" id="wire_cat_ApWire_{{key|replaceSpacewithUnderScore }}"> 
+            
+            <li class="init"><i class="fa - fa-user"></i> {{user.username}}</li>
+            <li class="init-l"><a href="{% url 'logout' %}"><i class="fa fa-sign-out"></i> Logout</a></li>
+
+           
+              
+          </ul>
+        </div>
+      
+    </div>
+  </div>
+  {% endif %}
+
+<div class="row"> 
+    <div class="col-12">
+      <div class="nav-slider-section-inner">
+        <div class="nav-model">
+        <div class="nav-slider-tabs">
+          {% comment %} <button class="{% if not request.GET.secondTab %} nav-active {% endif %} ApWire" id="ApWire">AP - Wire</button>{% endcomment %}
+          <button hidden="hidden" class="ApNews" id="ApNewshidden">AP - News</button>
+          <button id="ApWire" onclick="location.href='{% url 'viewfunction' %}'">AP - Wire</button>
+          <button id="ApNews" onclick="location.href='{% url 'viewfunction' %}?secondTab=true'">AP - News</button>
+          
+        </div>
+        <div class="button">
+          <button class="btn"  data-toggle="modal"  id="Content_brief" data-target="#contentModal">Content Brief</button>
+          {% comment %} <button class="btn btn-outline-primary slider-option before-b-click">Test 1</button>
+          <button class="btn btn-outline-primary slider-option after-b-click d-none">Test 1</button> {% endcomment %}
+          <a class="manage_images_btn"  href="{% url 'imageview' %}">Manage Images</a>
+
+        </div>
+  </div>

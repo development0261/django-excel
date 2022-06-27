@@ -10,6 +10,13 @@
       {% endfor%}
       ]
     console.log(cat_array) 
+
+    var new_images  = [
+      {% for new in new_images_dict %}
+      ["{{new.image}}","{{new.pk}}"],
+      {% endfor%}
+      ]
+    console.log(new_images) 
     
     var user_array  = [
       {% for user in user_dict %}
@@ -247,11 +254,6 @@
                   
                   if (data.current_user_check == true || data.superuser_check == true){
                     $(`#editmodalbody_${tableName}`).append(`
-                    
-      
-      
-      
-  
                     <div class="row justify-content-center">
                             <div class="col-md-8">
                                 <div  class="title">
@@ -274,10 +276,6 @@
                                           <div class="select_box">
                                             <select class="box" id="category_${tableName}_${data.pk}" onchange="showCategories(this.value)" name="category"> 
                                               <option selected>Select Category</option>
-  
-                                              
-  
-                                              
                                               ${
                                                 cat_array.map((item,index)=>{
                                                   return(
@@ -295,10 +293,6 @@
                                             <label>Author</label>
                                           <div class="select_box">
                                             <select class="box" id="author_${tableName}_${data.pk}" onchange="showAuthor(this.value)" name="author"> 
-                                              
-  
-                                              
-  
                                               
                                               ${
                                                 user_array.map((item,index)=>{
@@ -324,13 +318,13 @@
                                                     )
                                                   })
                                                 }
-  
-                                                
                                               </select>
                                           </div> 
                                         </div>
                                       </div>
                                       </div>
+
+                                      
               
                                         <div class="field-name">
                                           <label>Image</label>
@@ -342,15 +336,39 @@
                                           <label>Extra Images (Upload Mulitple)</label>
                                           <input type="file" accept="image/*" multiple="multiple" id="images_${tableName}_${data.pk}" placeholder="" name="images[]" class="images" >
                                         </div>
-                            
-                                      
-  
-                                     
-               
-                 
+
+                                        <div class='col-lg-12'>
+                                          <div class='saprator_box'>
+                                            <span>OR</span>
+                                          </div>
+                                        </div>
+
+                                        <div class="field-name custom-field">   
+                                          <div class="field-category">
+                                          <label>Add New Images</label>
+                                          <div class="select_box">
+                                            <select class="box" style='width: 100%;' id="newimages_${tableName}_${data.pk}" onchange="showNewimages(this.value)" name="newimages"> 
+                                              <option selected value="0" >Select New Images</option>
+                                              ${
+                                                new_images.map((item,index)=>{
+                                                  return(
+                                                    `<option value="${item[1]}" ${data.image == item[0]?`selected`:''}>${item[0].slice(6)}</option>`
+                                                  )
+                                                })
+                                              }
+                                            </select>
+    
+                                          </div>
+                                          </div>
+                                      </div>
+
                                         <button type="button" class="login-submit addEditRow" id="addEditRow-${data.pk}-${tableName}" name="Add" value="Add">Save Blog</button>
                                         
                                         <a  style="text-decoration:none;cursor:pointer" class="ml-3 closeModel" data-dismiss="modal" >Close</a>
+
+
+                                      
+
                                     </form>
                                 </div>
                             </div>
@@ -399,10 +417,31 @@
     
                                           </div>
                                         </div>
+
+                                        <div class='col-lg-12'>
+                                          <div class='saprator_box'>
+                                            <span>OR</span>
+                                          </div>
+                                        </div>
                                           
-                                     
-                                          
-                                          
+                                      <div class="field-name custom-field">   
+                                        <div class="field-category">
+                                        <label>Add New Images</label>
+                                        <div class="select_box">
+                                          <select class="box" style='width: 100%;' id="newimages_${tableName}_${data.pk}" onchange="showNewimages(this.value)" name="newimages"> 
+                                            <option selected>Select New Images</option>
+                                            ${
+                                              new_images.map((item,index)=>{
+                                                return(
+                                                  `<option value="${item[1]}" ${data.image == item[0]?`selected`:''}>${item[0].slice(6)}</option>`
+                                                )
+                                              })
+                                            }
+                                          </select>
+                                        </div>
+                                      </div>   
+                                    </div>
+   
                                       </div>
                                       </div>
                                         <div class="field-name">
@@ -415,11 +454,6 @@
                                           <label>Extra Images (Upload Mulitple)</label>
                                           <input type="file" accept="image/*" multiple="multiple" id="images_${tableName}_${data.pk}" placeholder="" name="images[]" class="images" >
                                         </div>
-                            
-                                      
-  
-                                     
-               
                  
                                         <button type="button" class="login-submit addEditRow" id="addEditRow-${data.pk}-${tableName}" name="Add" value="Add">Save Blog</button>
                                         
@@ -431,11 +465,7 @@
                    
                    )
                    }
-                  
-                    
                    CKEDITOR.replace(`description_${tableName}_${data.pk}`);
-                   
-                   
                     $(`#editmodal_${tableName}`).modal('show')
                 },
                 error: function(){
@@ -560,15 +590,42 @@
                                           <label>Image</label>
                                           <input type="file" placeholder="" accept="image/*"  name="image" id="image_${tableName}_${data.pk}" class="image">
                                         </div>
+
+                                      
+                                        
   
                                         <div class="field-name">
                                           <label>Extra Images (Upload Mulitple)</label>
                                           <input type="file" accept="image/*" multiple="multiple" id="images_${tableName}_${data.pk}" placeholder="" name="images[]" class="images" >
                                         </div>
-                  
+
+                                        <div class='col-lg-12'>
+                                          <div class='saprator_box'>
+                                            <span>OR</span>
+                                          </div>
+                                        </div>
+                                        <div class="field-name custom-field">   
+                                          <div class="field-category">
+                                          <label>Add New Images</label>
+                                          <div class="select_box">
+                                            <select class="box" style='width: 100%;' id="newimages2_${tableName}_${data.pk}" onchange="showNewimages(this.value)" name="newimages2"> 
+                                              <option selected>Select New Images</option>
+                                              ${
+                                                new_images.map((item,index)=>{
+                                                  return(
+                                                    `<option value="${item[1]}" ${data.image == item[0]?`selected`:''}>${item[0].slice(6)}</option>`
+                                                  )
+                                                })
+                                              }
+                                            </select>
+  
+                                          </div>
+                                        </div>
+                                      </div>
                    
                                           <button type="button" class="login-submit addEditRow2" id="News_addEditRow2-${data.pk}-${tableName}" name="Add" value="Add">Save Blog</button>
                                           <a  style="text-decoration:none;cursor:pointer" class="ml-3 closeModel2" data-dismiss="modal" >Close</a>
+                                         
                                       </form>
                                   </div>
                               </div>
@@ -610,6 +667,33 @@
                                             </select>
   
                                         </div>
+                                        <div class='col-lg-12'>
+                                          <div class='saprator_box'>
+                                            <span>OR</span>
+                                          </div>
+                                        </div>
+                                        <div class="field-name custom-field">   
+                                          <div class="field-category">
+                                          <label>Add New Images</label>
+                                          <div class="select_box">
+                                            <select class="box" style='width: 100%;' id="newimages2_${tableName}_${data.pk}" onchange="showNewimages(this.value)" name="newimages2"> 
+                                              <option selected>Select New Images</option>
+                                              ${
+                                                new_images.map((item,index)=>{
+                                                  return(
+                                                    `<option value="${item[1]}" ${data.image == item[0]?`selected`:''}>${item[0].slice(6)}</option>`
+                                                  )
+                                                })
+                                              }
+                                            </select>
+    
+                                          </div>
+                                        </div>
+                                          
+                                     
+                                          
+                                          
+                                      </div>
                                         <div class="field-name">
                                           <label>Image</label>
                                           <input type="file" placeholder="" accept="image/*"  name="image" id="image_${tableName}_${data.pk}" class="image">
@@ -686,6 +770,7 @@
                   ` 
                   
                    <div class="post-image">
+                    
                     <img src="${images[k]}">
                 </div>
   
@@ -759,9 +844,6 @@
               }
             });
   
-           
-  
-  
           })
        
         
@@ -795,12 +877,13 @@
             count = count + 1
           }
           var category = $("#category_"+tableName+"_"+id).val()
+          var newimages = $("#newimages_"+tableName+"_"+id).val()
           var status = $("#status_"+tableName+"_"+id).val()
           
           
                   
           formData.append('category',category)
-          
+          formData.append('newimages', newimages);
           formData.append('topic', title);
           formData.append('image', image);
           formData.append('images', images);
@@ -811,12 +894,6 @@
           if (title.length == 0){
           alert("Title field is required")
         return;}
-  
-          
-          
-          
-          
-          
           
           
           // console.log(image)
@@ -902,6 +979,7 @@
         var image = $("#image_"+tableName+"_"+id).prop('files')[0];
         var images = $("#images_"+tableName+"_"+id).prop('files')[0];
         var category = $("#category_"+tableName+"_"+id).val()
+        var newimages2 = $("#newimages2_"+tableName+"_"+id).val()
         var images = $("#images_"+tableName+"_"+id).prop('files');
           var len = images.length
           var count = 0
@@ -918,6 +996,7 @@
         formData.append('topic', title);
         formData.append('description', description);
         formData.append('image', image);
+        formData.append('newimages2', newimages2);
         formData.append('images', images);
         formData.append('category',category);
         formData.append('status', status);
@@ -1336,12 +1415,6 @@
                     )
                     }
   
-                    
-                    
-                    
-                    
-                  
-  
                 }
               }) 
               
@@ -1385,14 +1458,6 @@
     
   })
   
-  
-  
-   
-  
-  
-  
-  
-  
     var _URL = window.URL || window.webkitURL;
   
     $(document).on('change','.image',function(){
@@ -1410,11 +1475,6 @@
               for (var i = 0; i < x.length; i++) {
                 x[i].value = "";
             }
-  
-              
-              
-              
-             
              }
           };
           img.onerror = function() {  
@@ -1444,10 +1504,6 @@
               for (var i = 0; i < x.length; i++) {
                 x[i].value = "";
             }
-              
-              
-              
-             
              }
           };
           img.onerror = function() {  
@@ -1479,6 +1535,24 @@
     }
   
     function showAuthor(str) {
+      var xhttp;    
+      if (str == "") {
+        document.getElementById("txtHint").innerHTML = "";
+        return;
+      }
+      xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          document.getElementById("txtHint").innerHTML = this.responseText;
+        }
+      };
+      xhttp.open("GET", "getcustomer.php?q="+str, true);
+      xhttp.send();
+    }
+
+
+    function showNewimages
+    (str) {
       var xhttp;    
       if (str == "") {
         document.getElementById("txtHint").innerHTML = "";
@@ -1621,7 +1695,7 @@
             alert("There was an error");
           }}) 
   
-  })
+  });
   
   $('.mytable th.sortit').click(function () {
     var table = $(this).parents('table').eq(0)
