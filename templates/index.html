@@ -280,6 +280,12 @@
                   </div>
                   {%endif%}
 
+                  {% if forloop.counter == 7 %}
+                  <div class="add-row-table">
+                    <a style="cursor: pointer;" href={%url 'viewxmlalldownload'%} class="OpenAddModel" id="XMLALL">+ Generate XML</a>
+                  </div>
+                  {%endif%}
+
                   {% if forloop.counter == 6  %}
                   
                   <div class="table-print-wrp">
@@ -471,6 +477,12 @@
                   {% if forloop.counter == 1 and user|checkTablePermissioncreate:key  %}
                   <div class="add-row-table">
                     <a style="cursor: pointer;" class="NewsOpenAddModel" id="NewsOpenAddModel{{key|replaceSpacewithUnderScore }}">+ Add Stories</a>
+                  </div>
+                  {%endif%}
+
+                  {% if forloop.counter == 7 %}
+                  <div class="add-row-table">
+                    <a style="cursor: pointer;" href={%url 'downloadxmlall2file2'%} class="OpenAddModel" id="XMLALL">+ Generate XML</a>
                   </div>
                   {%endif%}
 

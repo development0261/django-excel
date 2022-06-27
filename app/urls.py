@@ -65,7 +65,10 @@ urlpatterns = [
 
     path('imageview',views.imageview,name="imageview"),
 
-    path('uploadimage',views.uploadimage,name="uploadimage")
+    path('uploadimage',views.uploadimage,name="uploadimage"),
+
+    path('viewxmlalldownload',views.downloadxmlall,name='viewxmlalldownload'),
+    
 ]
 
 if settings.DEBUG:

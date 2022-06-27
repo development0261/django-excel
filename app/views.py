@@ -1177,10 +1177,13 @@ def downloadxml2file2(request,pk):
     return response
 
 
-def buildxmlall():
+def buildxmlall(download):
     root = et.Element('feed')
     root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
-    root.set("xmlns:apxh","https://www.w3.org/1999/xhtml")
+    if download == True:
+        root.set("xmlns:apxh","http://www.w3.org/1999/xhtml")
+    else:
+        root.set("xmlns:apxh","https://www.w3.org/1999/xhtml")
     root.set("xmlns:ap","http://ap.org/schemas/03/2005/aptypes")
     root.set("xmlns","http://www.w3.org/2005/Atom")
     root.set("xmlns:apcm","http://ap.org/schemas/03/2005/apcm")
@@ -1397,16 +1400,23 @@ class xmlValue:
         return self.data
  #////////////
 def viewxmlall(request):
-    buildxmlall()
+    buildxmlall(download=False)
     response = open(f"{MEDIA_ROOT}/xml/output_xml_Blog_AP_Wire.xml", 'rb')
     return HttpResponse(response.read(),content_type="application/xml")
 
+# def viewxmlalldownload(request):
+#     buildxmlall(download=True)
+#     response = open(f"{MEDIA_ROOT}/xml/output_xml_Blog_AP_Wire.xml", 'rb')
+#     return response
 
 #////////////
-def buildxmlall2():
+def buildxmlall2(download):
     root = et.Element('feed')
     root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
-    root.set("xmlns:apxh","https://www.w3.org/1999/xhtml")
+    if download == True:
+        root.set("xmlns:apxh","http://www.w3.org/1999/xhtml")
+    else:
+        root.set("xmlns:apxh","https://www.w3.org/1999/xhtml")
     root.set("xmlns:ap","http://ap.org/schemas/03/2005/aptypes")
     root.set("xmlns","http://www.w3.org/2005/Atom")
     root.set("xmlns:apcm","http://ap.org/schemas/03/2005/apcm")
@@ -1618,7 +1628,7 @@ def buildxmlall2():
 
 
 def viewxmlall2(request):
-    buildxmlall2()
+    buildxmlall2(download=False)
     print("call")
     response = FileResponse(open(f"{MEDIA_ROOT}/xml/output_xml_Blog_AP_News.xml", 'rb')) 
     return response
@@ -1627,8 +1637,7 @@ def viewxmlall2(request):
 
 def downloadxmlall(request):
     
-    buildxmlall()
-    
+    buildxmlall(download=True)
     # Pathout is the path to the output.xml
     xmlFile = open('{}/xml/output_xml_Blog_AP_Wire.xml'.format(MEDIA_ROOT), 'r')
     myfile = xmlFile.read()
@@ -1643,7 +1652,7 @@ def downloadxmlall(request):
 
 def downloadxmlall2file2(request):
     
-    buildxmlall2()
+    buildxmlall2(download=True)
     # Pathout is the path to the output.xml
     
 
