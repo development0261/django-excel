@@ -616,7 +616,7 @@ def publishBlog2(request,pk):
 
     messages.success(request,"Your blog {} for AP News is Published".format(blogobj.topic))
 
-    filepath = downloadxml(request,pk,stringPath=True)
+    filepath = downloadxml(request,pk,stringpath=True)
     return redirect('/?filepath={}&secondTab=True'.format(filepath))
     
 
@@ -661,11 +661,14 @@ def printpdf(desc,imagepath,topic,images):
     response = FileResponse(open(f"{MEDIA_ROOT}/pdf/{topic}.pdf", 'rb'),as_attachment=True)
     return response
 
-def buildxml(pk,blogobj):
+def buildxml(pk,blogobj,stringpath=False):
     randno = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
     root = et.Element('feed')
     root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
-    root.set("xmlns:apxh","https://www.w3.org/1999/xhtml")
+    if stringpath:
+        root.set("xmlns:apxh","http://www.w3.org/1999/xhtml")
+    else:        
+        root.set("xmlns:apxh","https://www.w3.org/1999/xhtml")
     root.set("xmlns:ap","http://ap.org/schemas/03/2005/aptypes")
     root.set("xmlns","http://www.w3.org/2005/Atom")
     root.set("xmlns:apcm","http://ap.org/schemas/03/2005/apcm")
@@ -849,11 +852,14 @@ def buildxml(pk,blogobj):
 
     # response = FileResponse(open(f"{MEDIA_ROOT}/xml/{topic}.pdf", 'rb'),as_attachment=True)
 
-def buildxml2(pk,blogobj):
+def buildxml2(pk,blogobj,stringpath=False):
     randno = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
     root = et.Element('feed')
     root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
-    root.set("xmlns:apxh","https://www.w3.org/1999/xhtml")
+    if stringpath:
+        root.set("xmlns:apxh","http://www.w3.org/1999/xhtml")
+    else:
+        root.set("xmlns:apxh","https://www.w3.org/1999/xhtml")
     root.set("xmlns:ap","http://ap.org/schemas/03/2005/aptypes")
     root.set("xmlns","http://www.w3.org/2005/Atom")
     root.set("xmlns:apcm","http://ap.org/schemas/03/2005/apcm")
@@ -1095,7 +1101,7 @@ def downloadpdf2(request,pk):
 
 
 
-def downloadxml(request,pk,stringPath= None):
+def downloadxml(request,pk,stringpath= None):
     blogobj = Ap_Wire.objects.get(pk=pk)
     response = buildxml(pk,blogobj)
     
@@ -1108,10 +1114,11 @@ def downloadxml(request,pk,stringPath= None):
     
    
 
-    if stringPath:
+    if stringpath:
         return '/media/xml/output_xml_Blog_AP_Wire_{}.xml'.format(blogobj.pk)
     else:
         return response
+    
 
 def viewxml(request,pk):
     blogobj = Ap_Wire.objects.get(pk=pk)
@@ -1134,7 +1141,7 @@ def publishBlog(request,pk):
     
     messages.success(request,"Your blog {} for AP Wire is Published".format(blogobj.topic))
 
-    filepath = downloadxml(request,pk,stringPath=True)
+    filepath = downloadxml(request,pk,stringpath=True)
     return redirect('/?filepath={}'.format(filepath))
 
 def backblog(request,pk):
@@ -1159,11 +1166,28 @@ def backblog2(request,pk):
 
     return redirect('/?secondTab=True')
 
+def downloadxml1file1(request,pk):
+    blogobj = Ap_Wire.objects.get(pk=pk)
+    
+
+    buildxml(pk,blogobj,stringpath=True)
+    
+    # Pathout is the path to the output.xml
+    
+    xmlFile = open('{}/xml/output_xml_Blog_AP_Wire_{}.xml'.format(MEDIA_ROOT,blogobj.pk), 'r')
+    print(xmlFile)
+    myfile = xmlFile.read()
+    response = HttpResponse(myfile, content_type='application/xml')
+    response['Content-Disposition'] = "attachment; filename=output_xml_Blog_AP_Wire_{}_{}.xml".format(blogobj.pk,blogobj.topic)
+    
+    
+    return response
+
 def downloadxml2file2(request,pk):
     blogobj = Ap_News.objects.get(pk=pk)
     
 
-    buildxml2(pk,blogobj)
+    buildxml2(pk,blogobj,stringpath=True)
     
     # Pathout is the path to the output.xml
     
@@ -1177,10 +1201,10 @@ def downloadxml2file2(request,pk):
     return response
 
 
-def buildxmlall(download):
+def buildxmlall(stringpath):
     root = et.Element('feed')
     root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
-    if download == True:
+    if stringpath == True:
         root.set("xmlns:apxh","http://www.w3.org/1999/xhtml")
     else:
         root.set("xmlns:apxh","https://www.w3.org/1999/xhtml")
@@ -1400,20 +1424,20 @@ class xmlValue:
         return self.data
  #////////////
 def viewxmlall(request):
-    buildxmlall(download=False)
+    buildxmlall(stringpath=False)
     response = open(f"{MEDIA_ROOT}/xml/output_xml_Blog_AP_Wire.xml", 'rb')
     return HttpResponse(response.read(),content_type="application/xml")
 
 # def viewxmlalldownload(request):
-#     buildxmlall(download=True)
+#     buildxmlall(stringpath=True)
 #     response = open(f"{MEDIA_ROOT}/xml/output_xml_Blog_AP_Wire.xml", 'rb')
 #     return response
 
 #////////////
-def buildxmlall2(download):
+def buildxmlall2(stringpath):
     root = et.Element('feed')
     root.set("xmlns:apnm","http://ap.org/schemas/03/2005/apnm")
-    if download == True:
+    if stringpath == True:
         root.set("xmlns:apxh","http://www.w3.org/1999/xhtml")
     else:
         root.set("xmlns:apxh","https://www.w3.org/1999/xhtml")
@@ -1628,7 +1652,7 @@ def buildxmlall2(download):
 
 
 def viewxmlall2(request):
-    buildxmlall2(download=False)
+    buildxmlall2(stringpath=False)
     print("call")
     response = FileResponse(open(f"{MEDIA_ROOT}/xml/output_xml_Blog_AP_News.xml", 'rb')) 
     return response
@@ -1637,7 +1661,7 @@ def viewxmlall2(request):
 
 def downloadxmlall(request):
     
-    buildxmlall(download=True)
+    buildxmlall(stringpath=True)
     # Pathout is the path to the output.xml
     xmlFile = open('{}/xml/output_xml_Blog_AP_Wire.xml'.format(MEDIA_ROOT), 'r')
     myfile = xmlFile.read()
@@ -1652,7 +1676,7 @@ def downloadxmlall(request):
 
 def downloadxmlall2file2(request):
     
-    buildxmlall2(download=True)
+    buildxmlall2(stringpath=True)
     # Pathout is the path to the output.xml
     
 

@@ -40,6 +40,7 @@ urlpatterns = [
     path('viewxmlall/',views.viewxmlall,name='viewxmlall'),
     path('viewxmlall2/',views.viewxmlall2,name='viewxmlall2'),
 
+    path('downloadxml1file1/<str:pk>/',views.downloadxml1file1,name='downloadxml1file1'),
     path('downloadxml2file2/<str:pk>/',views.downloadxml2file2,name='downloadxml2file2'),
     
     path('downloadxml2allfile2/<str:pk>/',views.downloadxmlall2file2,name='downloadxml2allfile2'),

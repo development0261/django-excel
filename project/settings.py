@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     'ckeditor',
     'import_export',
     'storages',
+    'apwire_instance_app',
+    'apnews_instance_app',
 
 
 

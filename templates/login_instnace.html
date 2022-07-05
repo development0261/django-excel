@@ -1,6 +1,5 @@
 <!doctype html>
 <html lang="en">
-  {%load static%}
 
 <head>
   {% load static %}
@@ -23,7 +22,7 @@
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
   <link rel="stylesheet" type="text/css" href="assets/css/style.css">
-  <title>Register</title>
+  <title>Login</title>
 </head>
 
 <body>
@@ -41,28 +40,26 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <div action="{% url 'loginview' %}" class="title">
-                    <h2>Register</h2>
+                <div action="{% url 'login_instance' %}" class="title">
+                    <h2>Login</h2>
                 </div>
                 <div class="login-form">
-                  <form method="POST">
-                    {% csrf_token %}
-                      <div class="field-name">
-                          <label>Username or email address*</label>
-                          <input type="text" placeholder="" name="username" required> 
-                      </div>
-                      <div class="field-name">
-                          <label>Password*</label>
-                          <input type="password" placeholder="" name="password" required>
-                      </div>
-                      <div class="field-name">
-                        <label> Confirm Password*</label>
-                        <input type="password" placeholder="" name="confirmpassword" required>
-                    </div>
-                     
-                      <button type="submit" class="login-submit" name="login" value="Log in">Register</button>
-                      
-                  </form>
+                    <form method="POST">
+                      {% csrf_token %}
+                        <div class="field-name">
+                            <label>Username or email address*</label>
+                            <input type="text" placeholder="" name="username">
+                        </div>
+                        <div class="field-name">
+                            <label>Password*</label>
+                            <input type="password" placeholder="" name="password">
+                        </div>
+    
+                        <div class="remember">
+                            <a href={% url 'register_instance' %}>Don't have an account? Register here</a>
+                        </div>
+                        <button type="submit" class="login-submit" name="login" value="Log in">Log in</button>
+                    </form>
                 </div>
             </div>
         </div>

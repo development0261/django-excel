@@ -1,0 +1,51 @@
+{%load static%}
+{% load customtags %}
+
+
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+    <strong id="g_msg">Message : {{message}} </strong>
+    <button type="button" onclick="parentNode.remove()" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endfor %}
+{% endif %} 
+
+{% if user.is_authenticated %}
+<section class="nav-slider-section">
+  <div class="container-fluid">
+    <div style="display:flex;justify-content:end">
+      {% comment %} <h4>Hi, {{user.username}}</h4>
+      <a class="btn btn-danger" href="{% url 'logout' %}"> Logout</a> {% endcomment %}
+      <div class="custom-select-category">
+        <div class="list-select-wrp" style="z-index:1">
+          <ul class="list-unstyled" id="wire_cat_ApWire_{{key|replaceSpacewithUnderScore }}"> 
+            
+            <li class="init"><i class="fa - fa-user"></i> {{user.username}}</li>
+            <li class="init-l"><a href="{% url 'logout_instance' %}"><i class="fa fa-sign-out"></i> Logout</a></li>
+
+           
+              
+          </ul>
+        </div>
+      
+    </div>
+  </div>
+  {% endif %}
+
+<div class="row"> 
+    <div class="col-12">
+      <div class="nav-slider-section-inner">
+        <div class="nav-model">
+        <div class="nav-slider-tabs">
+          {% comment %} <button class="{% if not request.GET.secondTab %} nav-active {% endif %} ApWire" id="ApWire">AP - Wire</button>{% endcomment %}
+          <button hidden="hidden" class="ApNews" id="ApNewshidden">AP - News</button>
+          <button id="ApWire_instance" onclick="location.href='{% url 'apwire_instance' %}'">AP - Wire Published</button>
+          <button id="ApNews_instance" onclick="location.href='{% url 'apnews_instance' %}'">AP - News Published</button>
+          
+        </div>
+        
+        
+  </div>
