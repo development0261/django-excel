@@ -280,11 +280,14 @@
                   </div>
                   {%endif%}
 
+
+                  {% comment %}
                   {% if forloop.counter == 7 %}
                   <div class="add-row-table">
                     <a style="cursor: pointer;" href={%url 'viewxmlalldownload'%} class="OpenAddModel" id="XMLALL">+ Generate XML</a>
                   </div>
                   {%endif%}
+                  {% endcomment %}
 
                   {% if forloop.counter == 6  %}
                   
@@ -480,11 +483,13 @@
                   </div>
                   {%endif%}
 
+                  {% comment %}
                   {% if forloop.counter == 7 %}
                   <div class="add-row-table">
                     <a style="cursor: pointer;" href={%url 'downloadxmlall2file2'%} class="OpenAddModel" id="XMLALL">+ Generate XML</a>
                   </div>
                   {%endif%}
+                  {% endcomment %}
 
                   {% if forloop.counter == 6  %}
                   <div class="table-print-wrp">
