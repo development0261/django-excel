@@ -881,3 +881,9 @@ h5.image_box_title {
     width:fit-content ;
     
 }
+
+.error {
+    color: red;
+    text-align: center;
+    margin-left: 25px;
+}

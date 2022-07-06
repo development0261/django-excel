@@ -45,7 +45,7 @@
                     <h2>Register</h2>
                 </div>
                 <div class="login-form">
-                  <form method="POST">
+                  <form id="registerform" method="POST">
                     {% csrf_token %}
                       <div class="field-name">
                           <label>Username or email address*</label>
@@ -82,5 +82,76 @@
   <script src="https://owlcarousel2.github.io/OwlCarousel2/assets/owlcarousel/owl.carousel.js"></script>
   <script src="{% static 'js/custom.js'%}"></script>
 </body>
+
+<!-- // PASSWORD VALIDATION /////////////////////////////////////////////// -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/additional-methods.js"></script>
+<script>
+   $(document).ready(function() {
+//To Prevent white Space
+$.validator.addMethod("nowhitespace", function(value, element) {
+    return this.optional(element) || /^\S+$/i.test(value);
+
+});
+
+//check Password
+$(function() {
+    $.validator.addMethod('checkPassword', function(value, element) {
+        return this.optional(element) ||
+            value.length >= 8 &&
+            /\d/.test(value) &&
+            /[a-z]/i.test(value);
+
+    }, 'your password must be at least 8 char long and contain at least 2  number and 2  character\'.')
+})
+
+$('#registerform').validate({
+    ignore: [],
+    debug: false,
+    rules: {
+      username:{
+        required: true,
+        nowhitespace: true,
+        minlength: 3,
+        maxlength: 10
+      },
+
+        password: {
+
+            required: true,
+            nowhitespace: true,
+            minlength: 8,
+            maxlength: 25,
+            checkPassword: true
+
+        }
+    },
+    messages: {
+        
+        password: {
+
+            required: " ** Please Enter Your Password **",
+            nowhitespace: " ** Password Must Not Contain White Spaces **",
+            minlength: " ** Password Must Be 8 Character Long **",
+            maxlength: " ** Max Range Of Password Is 25 Character **"
+        },
+        username: {
+                required: " ** Please enter first name **",
+                nowhitespace: " ** No White Spaces Allowed **",
+                minlength: "** Maximum Length Of Name is 3 Character **",
+                maxlength: "** Maximum Length Of Name is 10 Character **"
+            },
+
+
+       
+    },
+    
+    submitHandler: function(form) {
+        form.submit();
+    }
+});
+});
+</script>
 
 </html>

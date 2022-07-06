@@ -1,4 +1,4 @@
-#!/home/lbuser/django-excel/django-excel/venv/bin/python
+#!/home/admin142/projects/django-excel/venv/bin/python3
 
 import sys
 import json

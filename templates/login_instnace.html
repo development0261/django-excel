@@ -44,15 +44,15 @@
                     <h2>Login</h2>
                 </div>
                 <div class="login-form">
-                    <form method="POST">
+                    <form id="loginform" method="POST">
                       {% csrf_token %}
                         <div class="field-name">
                             <label>Username or email address*</label>
-                            <input type="text" placeholder="" name="username">
+                            <input id="username" type="text" placeholder="" name="username">
                         </div>
                         <div class="field-name">
                             <label>Password*</label>
-                            <input type="password" placeholder="" name="password">
+                            <input id="password" type="password" placeholder="" name="password">
                         </div>
     
                         <div class="remember">
@@ -79,5 +79,6 @@
   <script src="https://owlcarousel2.github.io/OwlCarousel2/assets/owlcarousel/owl.carousel.js"></script>
   <script src="{% static 'js/custom.js'%}"></script>
 </body>
+
 
 </html>

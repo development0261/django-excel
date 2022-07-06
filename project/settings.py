@@ -51,8 +51,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'import_export',
     'storages',
-    'apwire_instance_app',
-    'apnews_instance_app',
+    'django.contrib.sites',
 
 
 
@@ -63,6 +62,9 @@ INSTALLED_APPS = [
     'debug_toolbar',    
  
 ]
+SITE_ID = 1
+SUBDOMAIN_URLCONFS = {
+}
 # TIME_ZONE = 'Asia/Singapore'
 # USE_I18N = True
 # USE_L10N = True
@@ -88,6 +90,7 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
+    'django_hosts.middleware.HostsRequestMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -98,6 +101,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'subdomains.middleware.SubdomainURLRoutingMiddleware',
+    'django_hosts.middleware.HostsResponseMiddleware',
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -118,7 +122,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'project.wsgi.application'
+# WSGI_APPLICATION = 'project.wsgi.application'
 
 
 # Database
@@ -255,3 +259,6 @@ DATETIME_FORMAT = '%Y%m%d-%H:%m'
 
 # STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
+ROOT_HOSTCONF = 'project.hosts'
+
+DEFAULT_HOST = 'www'
