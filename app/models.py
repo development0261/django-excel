@@ -49,28 +49,8 @@ class UserCustom(AbstractUser):
             'App_Published':self.APPublished
         }
     
-
-    # def get_role_data(self):
-    #     return UserTableConnection.objects.filter(user = self)
-# class userdata(models.Model):
-#     user = models.OneToOneField(User,primary_key=True,on_delete=models.CASCADE)
-#     role = models.CharField(choices=ROLE,max_length=20,null=True,blank=True)
-#     accessint = models.IntegerField(validators=[
-#         MaxValueValidator(limit_value=7),
-#         MinValueValidator(limit_value=1)
-#     ],null=True,blank=True)
-
 from ckeditor.fields import RichTextField
 import uuid
-
-# categories = {
-#     ('Education','Education'),
-#     ("Minig Digital Currency","Minig Digital Currency"),
-#     ("MSB & PayDay","MSB & PayDay"),
-#     ("Child Poverty","Child Poverty"),
-#     ("Money with Hearts and Mind","Money with Hearts and Mind")
-# }
-
 
 
 class content_brief(models.Model):
@@ -83,11 +63,6 @@ class category(models.Model):
     name = models.CharField(max_length=100)
     class Meta:
       verbose_name_plural = "Category"
-
-# class blog_progress_status(models.Model):
-#     name = models.CharField(choices=STAT,max_length=100,default="In progress")
-#     class Meta:
-#       verbose_name_plural = "Status"
 
 
 class Ap_Wire(models.Model):
@@ -104,6 +79,7 @@ class Ap_Wire(models.Model):
     category = models.ForeignKey(category,null=True,blank=True ,on_delete=models.CASCADE)
     # blog_release_status = models.ForeignKey(blog_progress_status,on_delete=models.CASCADE)
     blog_release_status = models.CharField(max_length=30,choices=STAT,default="In progress")
+    downloadstatus = models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = "AP-Wire"
@@ -129,6 +105,7 @@ class Ap_News(models.Model):
     category = models.ForeignKey(category,null=True,blank=True ,on_delete=models.CASCADE)
     blog_release_status = models.CharField(max_length=30,choices=STAT,default="In progress")
     # blog_release_status = models.ForeignKey(blog_progress_status,on_delete=models.CASCADE)
+    downloadstatus = models.BooleanField(default=False)
 
     class Meta:
       verbose_name_plural = "AP-News"
@@ -155,99 +132,9 @@ class permissions(models.Model):
     class Meta:
       verbose_name_plural = "Permissions"
 
-
-
-
-    
         
-        
-
-
-# class apwire_ContentPitching(models.Model):
-#     title = models.CharField(max_length=20)
-#     author = models.CharField(max_length=20)
-#     Date = models.DateField()
-#     # permissions = models.CharField(max_length=20)
-
-# class apwire_WritingRewrite(models.Model):
-#     title = models.CharField(max_length=20)
-#     author = models.CharField(max_length=20)
-#     Date = models.DateField()
-
-# class apwire_ReviewDraft1(models.Model):
-#     title = models.CharField(max_length=20)
-#     author = models.CharField(max_length=20)
-#     Date = models.DateField()
-    
-# class apwire_ReviewDraft2(models.Model):
-#     title = models.CharField(max_length=20)
-#     author = models.CharField(max_length=20)
-#     Date = models.DateField()
-
-# class apwire_FDNApproval(models.Model):
-#     title = models.CharField(max_length=20)
-#     author = models.CharField(max_length=20)
-#     Date = models.DateField()
-
-# class apwire_ReadyForRelease(models.Model):
-#     title = models.CharField(max_length=20)
-#     author = models.CharField(max_length=20)
-#     Date = models.DateField()
-
-# class apwire_APPublished(models.Model):
-#     title = models.CharField(max_length=20)
-#     author = models.CharField(max_length=20)
-#     Date = models.DateField()
-
-# # //////////////////////////////////////////////////
-
-# class apnews_ContentPitching(models.Model):
-#     title = models.CharField(max_length=20)
-#     author = models.CharField(max_length=20)
-#     Date = models.DateField()
-
-# class apnews_WritingRewrite(models.Model):
-#     title = models.CharField(max_length=20)
-#     author = models.CharField(max_length=20)
-#     Date = models.DateField()
-
-# class apnews_ReviewDraft1(models.Model):
-#     title = models.CharField(max_length=20)
-#     author = models.CharField(max_length=20)
-#     Date = models.DateField()
-    
-# class apnews_ReviewDraft2(models.Model):
-#     title = models.CharField(max_length=20)
-#     author = models.CharField(max_length=20)
-#     Date = models.DateField()
-
-# class apews_FDNApproval(models.Model):
-#     title = models.CharField(max_length=20)
-#     author = models.CharField(max_length=20)
-#     Date = models.DateField()
-
-# class apnews_ReadyForRelease(models.Model):
-#     title = models.CharField(max_length=20)
-#     author = models.CharField(max_length=20)
-#     Date = models.DateField()
-
-# class apnews_APPublished(models.Model):
-#     title = models.CharField(max_length=20)
-#     author = models.CharField(max_length=20)
-#     Date = models.DateField()
-
-
-
-# class UserTableConnection(models.Model):
-#     user = models.ForeignKey(UserCustom,on_delete=models.CASCADE)
-#     role = models.CharField(choices=ROLE,max_length=20,null=True,blank=True)
-#     tables = MultiSelectField(choices=tables_choice)
-
 class Mangeimages(models.Model):
     image = models.ImageField(upload_to='media/')
 
     class Meta:
       verbose_name_plural = "manage image"
-
-     
-     

@@ -135,27 +135,27 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'static')
 ]
 
-# DATABASES = {
-#   'default': {
-#     'ENGINE': 'django.db.backends.postgresql',
-#     'HOST': 'shaktiblog-django-database.cqocxpwhlloo.us-east-2.rds.amazonaws.com',
-#     'NAME': 'shaktiblog',
-#     'USER': 'postgres',
-#     'PASSWORD': 'vEuV2p!Su6=Wwxm&',
-#    }
-# }
+DATABASES = {
+  'default': {
+    'ENGINE': 'django.db.backends.postgresql',
+    'HOST': 'shaktiblog-django-database.cqocxpwhlloo.us-east-2.rds.amazonaws.com',
+    'NAME': 'shaktiblog',
+    'USER': 'postgres',
+    'PASSWORD': 'vEuV2p!Su6=Wwxm&',
+   }
+}
 
 # Django debug
 # def show_toolbar(request):
 #     return True 
 # SHOW_TOOLBAR_CALLBACK = show_toolbar
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db1.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db1.sqlite3',
+#     }
+# }
 
 
 # Password validation
