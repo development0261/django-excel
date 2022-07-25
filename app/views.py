@@ -73,6 +73,10 @@ def userlogin(request):
         elif User.objects.filter(username=username).exists():
             if user:
                 if user.is_active:
+                    userobj = User.objects.get(username=username)
+                    if userobj.AP_flag == True:
+                        messages.warning(request,'incorrect credentials for ap.shakticoin, please login at apwire.shakticoin instead')
+                        return redirect('viewfunction')    
                     login(request,user)
                     return redirect('viewfunction')
 

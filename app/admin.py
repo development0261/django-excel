@@ -73,21 +73,22 @@ admin.site.unregister(Group)
 class Display(ImportExportModelAdmin,admin.ModelAdmin):
     list_display = ('topic',)
 
-class customuseradmin(UserAdmin,ImportExportModelAdmin):
-     fieldsets = (
-        *UserAdmin.fieldsets,  # original form fieldsets, expanded
-        (                      # new fieldset added on to the bottom
-            'Admin User Actions',  # group heading of your choice; set to None for a blank space instead of a header
-            {
-                'fields': (
+# class customuseradmin(UserAdmin,ImportExportModelAdmin):
+#      fieldsets = (
+#         *UserAdmin.fieldsets,  # original form fieldsets, expanded
+#         (                      # new fieldset added on to the bottom
+#             'Admin User Actions',  # group heading of your choice; set to None for a blank space instead of a header
+#             {
+#                 'fields': (
 
-                    'accessint',
+#                     'accessint',
+                    
 
                     
-                ),
-            },
-        ),
-    )
+#                 ),
+#             },
+#         ),
+#     )
 
 
 # admin.site.register(UserCustom,customuseradmin)
@@ -106,6 +107,7 @@ class UserProfileAdmin(UserAdmin,ImportExportModelAdmin):
                 'fields': (
 
                     'accessint',
+                    'AP_flag',
 
                     
                 ),

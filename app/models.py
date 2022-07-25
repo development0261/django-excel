@@ -38,6 +38,9 @@ class UserCustom(AbstractUser):
         MinValueValidator(limit_value=1)
     ],null=True,blank=True)
 
+    # If flag false then account works for ap.shakticoin
+    AP_flag = models.BooleanField(default=False)
+
     def get_table_role(self):
         return {
             'Content_Pitching':self.Content_Pitching,
