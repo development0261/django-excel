@@ -395,6 +395,7 @@
                                         <textarea name="description" rows="10" cols="55" id="description_${tableName}_${data.pk}">${data.content}</textarea>
                                         </div>
                                         <div class="field-name custom-field">   
+                                        </div>
                                           <div class="field-category">
                                           <label>Category</label>
                                           <div class="select_box">
@@ -417,13 +418,24 @@
     
                                           </div>
                                         </div>
-
+                                        <div class="field-name">
+                                          <label>Image</label>
+  
+                                          <input type="file" placeholder="" accept="image/*"  name="image" id="image_${tableName}_${data.pk}" class="image" >
+                                        </div>
+  
+                                        <div class="field-name">
+                                          <label>Extra Images (Upload Mulitple)</label>
+                                          <input type="file" accept="image/*" multiple="multiple" id="images_${tableName}_${data.pk}" placeholder="" name="images[]" class="images" >
+                                        </div>
                                         <div class='col-lg-12'>
                                           <div class='saprator_box'>
                                             <span>OR</span>
                                           </div>
                                         </div>
-                                          
+                                        
+                                        
+
                                       <div class="field-name custom-field">   
                                         <div class="field-category">
                                         <label>Add New Images</label>
@@ -440,22 +452,15 @@
                                           </select>
                                         </div>
                                       </div>   
+                                      
                                     </div>
+                                    <button type="button" class="login-submit addEditRow" id="addEditRow-${data.pk}-${tableName}" name="Add" value="Add">Save Blog</button>
    
                                       </div>
                                       </div>
-                                        <div class="field-name">
-                                          <label>Image</label>
-  
-                                          <input type="file" placeholder="" accept="image/*"  name="image" id="image_${tableName}_${data.pk}" class="image" >
-                                        </div>
-  
-                                        <div class="field-name">
-                                          <label>Extra Images (Upload Mulitple)</label>
-                                          <input type="file" accept="image/*" multiple="multiple" id="images_${tableName}_${data.pk}" placeholder="" name="images[]" class="images" >
-                                        </div>
+                                        
                  
-                                        <button type="button" class="login-submit addEditRow" id="addEditRow-${data.pk}-${tableName}" name="Add" value="Add">Save Blog</button>
+                                        
                                         
                                         <a  style="text-decoration:none;cursor:pointer" class="ml-3 closeModel" data-dismiss="modal" >Close</a>
                                     </form>
