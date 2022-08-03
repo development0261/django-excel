@@ -105,7 +105,7 @@ class Ap_News(models.Model):
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     updated = models.DateTimeField(auto_now=True)
     reverted_count = models.IntegerField(default=1)
-    # category = models.ForeignKey(category,null=True,blank=True ,on_delete=models.CASCADE)
+    category = models.ForeignKey(category,null=True,blank=True ,on_delete=models.CASCADE)
     blog_release_status = models.CharField(max_length=30,choices=STAT,default="In progress")
     # blog_release_status = models.ForeignKey(blog_progress_status,on_delete=models.CASCADE)
     downloadstatus = models.BooleanField(default=False)
