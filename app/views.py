@@ -1509,10 +1509,10 @@ def buildxmlall2(stringpath):
         b2 = et.SubElement(m2, "title")
         b2.text = str(blogobj.topic)
         images_obj = moreimages_apnews.objects.filter(post = blogobj)
-        a = et.SubElement(m2,"category")
-        a.set("label","Global")
-        a.set("term","Global")
-        a.set("scheme","http://cv.ap.org/keyword")
+        # a = et.SubElement(m2,"category")
+        # a.set("label","Global")
+        # a.set("term","Global")
+        # a.set("scheme","http://cv.ap.org/keyword")
         b1 = et.SubElement(m2, "link")
         
         if reverted_count == "None" :

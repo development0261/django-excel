@@ -55,7 +55,6 @@ class UserCustom(AbstractUser):
 from ckeditor.fields import RichTextField
 import uuid
 
-
 class content_brief(models.Model):
     topic = models.CharField(max_length=100)
     description = RichTextField()
@@ -66,7 +65,6 @@ class category(models.Model):
     name = models.CharField(max_length=100)
     class Meta:
       verbose_name_plural = "Category"
-
 
 class Ap_Wire(models.Model):
     topic = models.CharField(max_length=200)
