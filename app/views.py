@@ -64,6 +64,7 @@ def pdffolder_exist():
 def userlogin(request):
     if request.method == 'POST':
         username = request.POST.get("username")
+        username = username.rstrip()
         password = request.POST.get("password")
 
         user = authenticate(username=username,password=password)
