@@ -7,13 +7,13 @@ from django.conf import settings
 urlpatterns = [
     path('',views.viewfunction,name='viewfunction'),
     # path('viewApnews',views.viewfunction_APnews,name='viewAPnews'),
-    path('login',views.userlogin,name='loginview'),
+    path('login/',views.userlogin,name='loginview'),
     # path('logfail',views.logfail,name='logfail'),
-    path('register',views.register,name='register'),
-    path('createBlog',views.createBlog,name='createBlog'),
+    path('register/',views.register,name='register'),
+    path('createBlog/',views.createBlog,name='createBlog'),
     path('editBlog/<str:pk>/',views.editBlog,name='editBlog'),
 
-    path('get_permissions',views.get_permissions,name='get_permissions'),
+    path('get_permissions/',views.get_permissions,name='get_permissions'),
 
     path('publishBlog/<str:pk>/',views.publishBlog,name='publishBlog'),
     path('publishBlog2/<str:pk>/',views.publishBlog2,name='publishBlog2'),
@@ -45,7 +45,7 @@ urlpatterns = [
     
     path('downloadxml2allfile2/<str:pk>/',views.downloadxmlall2file2,name='downloadxml2allfile2'),
 
-    path('createBlog2',views.createBlog2,name='createBlog2'),
+    path('createBlog2/',views.createBlog2,name='createBlog2'),
 
     # path('saveTableRow/<str:tableName>/',views.saveTableRow,name="saveTableRow"),
     path('getRowData/<int:id>/<str:tableName>/',views.getRowData,name="getRowData"),
@@ -64,11 +64,11 @@ urlpatterns = [
 
     path('addimagewire/<str:pk>/',views.addimagewire,name="addimagewire"),
 
-    path('imageview',views.imageview,name="imageview"),
+    path('imageview/',views.imageview,name="imageview"),
 
-    path('uploadimage',views.uploadimage,name="uploadimage"),
+    path('uploadimage/',views.uploadimage,name="uploadimage"),
 
-    path('viewxmlalldownload',views.downloadxmlall,name='viewxmlalldownload'),
+    path('viewxmlalldownload/',views.downloadxmlall,name='viewxmlalldownload'),
     
 ]
 

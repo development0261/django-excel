@@ -775,15 +775,17 @@ def buildxml(pk,blogobj,stringpath=False):
     b2 = et.SubElement(m2, "title")
     b2.text = str(blogobj.topic)
 
-    
+    imagevar = False
 
     if blogobj.image :
+        imagevar = True
         a5 = et.SubElement(m2,'content')
         a5.set("type","image/jpeg")
         a5.set("src","https://shaktidjangoblog-prod.s3.amazonaws.com/"+str(blogobj.image)) 
 
     images_obj = moreimages_apwire.objects.filter(post = blogobj)
     if images_obj:
+        imagevar = True
         for i in images_obj:
             a5 = et.SubElement(m2,'content')
             a5.set("type","image/jpeg")
@@ -796,11 +798,13 @@ def buildxml(pk,blogobj,stringpath=False):
     # else:
     #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+reverted_count)
 
-    elee = et.SubElement(m2,"apcm:ContentMetadata")
-    elem = et.SubElement(elee,"apcm:HeadLine")
-    elem.text=str(blogobj.topic)
-    elem = et.SubElement(elee,"apcm:Characteristics")
-    elem.set("MediaType","Photo")
+    if imagevar:
+
+        elee = et.SubElement(m2,"apcm:ContentMetadata")
+        elem = et.SubElement(elee,"apcm:HeadLine")
+        elem.text=str(blogobj.topic)
+        elem = et.SubElement(elee,"apcm:Characteristics")
+        elem.set("MediaType","Photo")
 
     elee = et.SubElement(m2,"apnm:NewsManagement")
     elem = et.SubElement(elee,"apnm:ManagementId")
@@ -966,20 +970,25 @@ def buildxml2(pk,blogobj,stringpath=False):
     b2 = et.SubElement(m2, "title")
     b2.text = str(blogobj.topic)
 
-    
+    imagevar = False
 
     if blogobj.image :
+        imagevar = True
         a5 = et.SubElement(m2,'content')
         a5.set("type","image/jpeg")
         a5.set("src","https://shaktidjangoblog-prod.s3.amazonaws.com/"+str(blogobj.image)) 
 
     images_obj = moreimages_apnews.objects.filter(post = blogobj)
     if images_obj:
+        imagevar = True
         for i in images_obj:
             a5 = et.SubElement(m2,'content')
             a5.set("type","image/jpeg")
             a5.set("src","https://shaktidjangoblog-prod.s3.amazonaws.com/"+str(i.image)) 
     
+
+    if imagevar:
+
     # b1 = et.SubElement(m2, "link")
     # b1.set("rel","related")
     # if reverted_count == "None" :
@@ -987,11 +996,11 @@ def buildxml2(pk,blogobj,stringpath=False):
     # else:
     #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+reverted_count)
 
-    elee = et.SubElement(m2,"apcm:ContentMetadata")
-    elem = et.SubElement(elee,"apcm:HeadLine")
-    elem.text=str(blogobj.topic)
-    elem = et.SubElement(elee,"apcm:Characteristics")
-    elem.set("MediaType","Photo")
+        elee = et.SubElement(m2,"apcm:ContentMetadata")
+        elem = et.SubElement(elee,"apcm:HeadLine")
+        elem.text=str(blogobj.topic)
+        elem = et.SubElement(elee,"apcm:Characteristics")
+        elem.set("MediaType","Photo")
 
     elee = et.SubElement(m2,"apnm:NewsManagement")
     elem = et.SubElement(elee,"apnm:ManagementId")
@@ -1370,14 +1379,16 @@ def buildxmlall(stringpath):
         b2 = et.SubElement(m2, "title")
         b2.text = str(blogobj.topic)
 
-        
+        imagevar = False
 
         if blogobj.image :
+            imagevar = True
             a5 = et.SubElement(m2,'content')
             a5.set("type","image/jpeg")
             a5.set("src","https://shaktidjangoblog-prod.s3.amazonaws.com/"+str(blogobj.image)) 
 
         if images_obj:
+            imagevar = True
             for i in images_obj:
                 a5 = et.SubElement(m2,'content')
                 a5.set("type","image/jpeg")
@@ -1390,11 +1401,13 @@ def buildxmlall(stringpath):
         # else:
         #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+reverted_count)
 
-        elee = et.SubElement(m2,"apcm:ContentMetadata")
-        elem = et.SubElement(elee,"apcm:HeadLine")
-        elem.text=str(blogobj.topic)
-        elem = et.SubElement(elee,"apcm:Characteristics")
-        elem.set("MediaType","Photo")
+        if imagevar:
+
+            elee = et.SubElement(m2,"apcm:ContentMetadata")
+            elem = et.SubElement(elee,"apcm:HeadLine")
+            elem.text=str(blogobj.topic)
+            elem = et.SubElement(elee,"apcm:Characteristics")
+            elem.set("MediaType","Photo")
 
         elee = et.SubElement(m2,"apnm:NewsManagement")
         elem = et.SubElement(elee,"apnm:ManagementId")
@@ -1603,14 +1616,16 @@ def buildxmlall2(stringpath):
         b2 = et.SubElement(m2, "title")
         b2.text = str(blogobj.topic)
 
-        
+        imagevar = False
 
         if blogobj.image :
+            imagevar = True
             a5 = et.SubElement(m2,'content')
             a5.set("type","image/jpeg")
             a5.set("src","https://shaktidjangoblog-prod.s3.amazonaws.com/"+str(blogobj.image)) 
 
         if images_obj:
+            imagevar = True
             for i in images_obj:
                 a5 = et.SubElement(m2,'content')
                 a5.set("type","image/jpeg")
@@ -1623,11 +1638,13 @@ def buildxmlall2(stringpath):
         # else:
         #     b1.set("href","urn:publicid:ap.shakticoin.com:"+randno+reverted_count)
 
-        elee = et.SubElement(m2,"apcm:ContentMetadata")
-        elem = et.SubElement(elee,"apcm:HeadLine")
-        elem.text=str(blogobj.topic)
-        elem = et.SubElement(elee,"apcm:Characteristics")
-        elem.set("MediaType","Photo")
+        if imagevar :
+
+            elee = et.SubElement(m2,"apcm:ContentMetadata")
+            elem = et.SubElement(elee,"apcm:HeadLine")
+            elem.text=str(blogobj.topic)
+            elem = et.SubElement(elee,"apcm:Characteristics")
+            elem.set("MediaType","Photo")
 
         elee = et.SubElement(m2,"apnm:NewsManagement")
         elem = et.SubElement(elee,"apnm:ManagementId")
