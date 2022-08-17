@@ -129,6 +129,7 @@ $(".list-unstyled li").click(function(){
         img.onload = function() {
           if(this.width > 1020 ){
             alert("image should not be more than 1020 pixels width");
+            document.querySelector('#input').value = '';
 
             
             const x = document.getElementsByClassName('image');
