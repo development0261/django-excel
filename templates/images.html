@@ -26,7 +26,7 @@
                     <label for="input" id="label">
                         <ion-icon name="cloud-upload-outline"></ion-icon>
                         <span id="span">Upload your file here</span>
-                        <input id="input" type="file" name="Mangeimages" class="image">
+                        <input id="input" type="file" name="Mangeimages" class="image"  onchange="validateFileType()">
                       </label>
                       <button type="submit">Upload</button>
                 </div>
@@ -35,7 +35,7 @@
                 <div class="old_images">
                     <h5 class="image_box_title">Old Images</h5>
                     <div class="olg_image_list">
-                        <h3 class="old_image_title">App Wire Image</h3>
+                        <h3 class="old_image_title">AP Wire Image</h3>
                         <div class="image_list">
                         {% for i in img %}
                             {% if i.image %}
@@ -43,7 +43,7 @@
                             {% endif %}
                         {% endfor %}
 
-                        <h3 class="old_image_title">App News Image</h3>
+                        <h3 class="old_image_title">AP News Image</h3>
                         {% for j in img2 %}
                             {% if j.image %}
                                 <img src="{{ j.image.url}}" width="100" height="100">
@@ -90,61 +90,77 @@
       </script>
   </body>
 </html>
-
 <script>
-  $(document).on('click','.publishRowClick',function(){
-    $("#loaderSubmit").removeClass('d-none')
-    $('.publishRowClick').addClass('disabledAnchor');
+  {% comment %} disable anchor for publish on Ready for Release if it takes too long to load page {% endcomment %}
+
+$(document).on('click','.publishRowClick',function(){
+  $("#loaderSubmit").removeClass('d-none')
+  $('.publishRowClick').addClass('disabledAnchor');
+})
+
+$(document).on('click','.publishRow2Click',function(){
+  $("#loaderSubmit2").removeClass('d-none')
+  $('.publishRow2Click').addClass('disabledAnchor');
+})
+
+{% comment %} logout tab dropdown  {% endcomment %}
+$('.list-unstyled').click(function(){
+
+  $(this).toggleClass('active');
+   
+  });
+
+$(".list-unstyled li").click(function(){
+  $(this).parent().children('li').removeClass('init')
+  $(this).addClass('init')
+})
+  
+
+{% comment %} image width validation  {% endcomment %}
+
+  var _URL = window.URL || window.webkitURL;
+
+  $(document).on('change','.image',function(){
+    var file, img;
+
+
+    if ((file = this.files[0])) {
+        img = new Image();
+        img.onload = function() {
+          if(this.width > 1020 ){
+            alert("image should not be more than 1020 pixels width");
+
+            
+            const x = document.getElementsByClassName('image');
+            for (var i = 0; i < x.length; i++) {
+              x[i].value = "";
+          }
+           }
+        };
+        img.onerror = function() {  
+            alert( "not a valid file: " + file.type);
+            const x = document.getElementsByClassName('image');
+            for (var i = 0; i < x.length; i++) {
+              x[i].value = "";
+          }
+        };
+        img.src = _URL.createObjectURL(file);
+ 
+ 
+    }
   })
 
-  $(document).on('click','.publishRow2Click',function(){
-    $("#loaderSubmit2").removeClass('d-none')
-    $('.publishRow2Click').addClass('disabledAnchor');
-  })
-
-  $('.list-unstyled').click(function(){
-  
-    $(this).toggleClass('active');
-     
-    });
-  
-  $(".list-unstyled li").click(function(){
-    $(this).parent().children('li').removeClass('init')
-    $(this).addClass('init')
-  })
-    
-    var _URL = window.URL || window.webkitURL;
-  
-    $(document).on('change','.image',function(){
-      var file, img;
-  
-  
-      if ((file = this.files[0])) {
-          img = new Image();
-          img.onload = function() {
-            if(this.width > 1020 ){
-              alert("image should not be more than 1020 pixels width");
-  
-              
-              const x = document.getElementsByClassName('image');
-              for (var i = 0; i < x.length; i++) {
-                x[i].value = "";
-            }
-             }
-          };
-          img.onerror = function() {  
-              alert( "not a valid file: " + file.type);
-              const x = document.getElementsByClassName('image');
-              for (var i = 0; i < x.length; i++) {
-                x[i].value = "";
-            }
-          };
-          img.src = _URL.createObjectURL(file);
-   
-   
-      }
-    })
-  
+  function validateFileType(){
+    var fileName = document.getElementById("input").value;
+    var idxDot = fileName.lastIndexOf(".") + 1;
+    var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+    if (extFile=="jpg" || extFile=="jpeg"){
+        
+    }else{
+        alert("Only jpg/jpeg files are allowed!");
+        document.querySelector('#input').value = '';
+    }   
+}
 </script>
 {% include "modals.html" %}
 
