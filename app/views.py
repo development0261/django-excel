@@ -317,12 +317,9 @@ def editData(request,id,tableName):
     if not str(imnew_id)=="0":
         moreimages_obj = moreimages_apwire.objects.create(post = tableObj)
         # moreimages_obj = moreimages_apwire.objects.get(post=tableObj)
-        newimageobj = Mangeimages.objects.get(id = imnew_id)
-        print("BEFORE-----------")
-        
+        newimageobj = Mangeimages.objects.get(id = imnew_id)       
         moreimages_obj.image = newimageobj.image.url
         moreimages_obj.save()
-        print("BAFTEESRES-----------")
 
     
     tableObj.description = description
@@ -440,11 +437,9 @@ def editData2(request,id,tableName):
         moreimages_obj = moreimages_apnews.objects.create(post = tableObj)
         # moreimages_obj = moreimages_apwire.objects.get(post=tableObj)
         newimageobj = Mangeimages.objects.get(id = imnew_id)
-        print("BEFORE-----------")
         
         moreimages_obj.image = newimageobj.image.url
         moreimages_obj.save()
-        print("BAFTEESRES-----------")
 
     
     
@@ -1717,10 +1712,22 @@ def createBlog(request):
             cat_obj= category.objects.get(id=cat)
 
         sel = request.POST['status']
-        
 
 
         blog = Ap_Wire.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description'],status="Content_Pitching",category=cat_obj,blog_release_status=sel)
+
+        # Addign image from imagebank
+        imagebank_obj_id = request.POST['newimages']
+
+        if not imagebank_obj_id=="0":
+            newimageobj = Mangeimages.objects.get(id = imagebank_obj_id)
+            moreimages_obj = moreimages_apwire.objects.create(post = blog)
+            # moreimages_obj = moreimages_apwire.objects.get(post=tableObj)
+            
+            moreimages_obj.image = newimageobj.image.url
+            moreimages_obj.save()
+
+
         if 'image' in request.FILES:
             image=request.FILES['image']
             blog.image = image
@@ -1731,9 +1738,7 @@ def createBlog(request):
             files = request.FILES.getlist('extra_imagewire[]')
             for i in files:                
                 moreimages_apwire.objects.create(post=blog,image=i)
-
-        print("---------------")
-        print(sel)
+                
 
         return redirect('viewfunction')
 
@@ -1753,6 +1758,20 @@ def createBlog2(request):
         
 
         blog = Ap_News.objects.create(topic=request.POST['topic'],author=request.user,description=request.POST['description2'],status="Content_Pitching",category=cat_obj,blog_release_status=sel)
+
+        
+        # Addign image from imagebank
+        imagebank_obj_id = request.POST['newimages']
+
+        if not imagebank_obj_id=="0":
+            newimageobj = Mangeimages.objects.get(id = imagebank_obj_id)
+            moreimages_obj = moreimages_apnews.objects.create(post = blog)
+            # moreimages_obj = moreimages_apwire.objects.get(post=tableObj)
+            
+            moreimages_obj.image = newimageobj.image.url
+            moreimages_obj.save()
+
+
         if 'image' in request.FILES:
             image=request.FILES['image']
             blog.image = image

@@ -217,14 +217,14 @@
                           
                             
                             {% if user|checkTablePermissionview:key %}
-                            <a class="row-add viewRow" id="viewRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-eye"></i></a>
+                            <a class="row-add viewRow" onClick="Highlight(this.id)" id="viewRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-eye"></i></a>
                             {% if forloop.parentloop.counter == 7 %}
                               <a class="row-add" href={% url 'downloadxml' v.pk %} target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
                             {% endif %}
                             {% endif %}
 
                             {% if user|checkTablePermissionedit:key and forloop.parentloop.counter <= 5 %}
-                              <a class="row-add editRow" id="editRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
+                              <a class="row-add editRow" onClick="Highlight(this.id)" id="editRow-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
                             {% endif %}
 
                             
@@ -427,14 +427,14 @@
                           <td>{{v|desc_count}}</td>
                           <td> <div class="new-row-control">
                             {% if user|checkTablePermissionview:key %}
-                            <a class="row-add viewRow2" id="viewRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-eye"></i></a>
+                            <a class="row-add viewRow2" onClick="Highlight2(this.id)" id="viewRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-eye"></i></a>
                             {% if forloop.parentloop.counter == 7 %}
                               <a class="row-add" href={% url 'downloadxml2' v.pk %} target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
                             {% endif %}
                             {% endif %}
 
                             {% if user|checkTablePermissionedit:key and forloop.parentloop.counter <= 5 %}
-                              <a class="row-add editRow2" id="editRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
+                              <a class="row-add editRow2" onClick="Highlight2(this.id)" id="editRow2-{{v.pk}}-{{key|replaceSpacewithUnderScore }}"  ><i class="fa fa-edit"></i></a>
                             {% endif %}
 
                             {% if user|checkTablePermissiondelete:key and forloop.parentloop.counter <= 5 %}

@@ -327,13 +327,13 @@
                                       
               
                                         <div class="field-name">
-                                          <label>Image</label>
+                                          <label>Upload an Image From PC:</label>
   
                                           <input type="file" placeholder="" accept="image/*"  name="image" id="image_${tableName}_${data.pk}" class="image" >
                                         </div>
   
                                         <div class="field-name">
-                                          <label>Extra Images (Upload Mulitple)</label>
+                                          <label>Upload 2nd Image From PC (Upload Multiple):</label>
                                           <input type="file" accept="image/*" multiple="multiple" id="images_${tableName}_${data.pk}" placeholder="" name="images[]" class="images" >
                                         </div>
 
@@ -345,7 +345,7 @@
 
                                         <div class="field-name custom-field">   
                                           <div class="field-category">
-                                          <label>Add New Images</label>
+                                            <label>Upload From Shakti's Image-bank:</label>
                                           <div class="select_box">
                                             <select class="box" style='width: 100%;' id="newimages_${tableName}_${data.pk}" onchange="showNewimages(this.value)" name="newimages"> 
                                               <option selected value="0" >Select New Images</option>
@@ -355,7 +355,7 @@
                                                     `<option value="${item[1]}" ${data.image == item[0]?`selected`:''}>${item[0].slice(6)}</option>`
                                                   )
                                                 })
-                                              }
+                                              }   
                                             </select>
     
                                           </div>
@@ -419,13 +419,13 @@
                                           </div>
                                         </div>
                                         <div class="field-name">
-                                          <label>Image</label>
+                                          <label>Upload an Image From PC:</label>
   
                                           <input type="file" placeholder="" accept="image/*"  name="image" id="image_${tableName}_${data.pk}" class="image" >
                                         </div>
   
                                         <div class="field-name">
-                                          <label>Extra Images (Upload Mulitple)</label>
+                                          <label>Upload 2nd Image From PC (Upload Multiple):</label>
                                           <input type="file" accept="image/*" multiple="multiple" id="images_${tableName}_${data.pk}" placeholder="" name="images[]" class="images" >
                                         </div>
                                         <div class='col-lg-12'>
@@ -438,7 +438,7 @@
 
                                       <div class="field-name custom-field">   
                                         <div class="field-category">
-                                        <label>Add New Images</label>
+                                          <label>Upload From Shakti's Image-bank:</label>
                                         <div class="select_box">
                                           <select class="box" style='width: 100%;' id="newimages_${tableName}_${data.pk}" onchange="showNewimages(this.value)" name="newimages"> 
                                             <option selected>Select New Images</option>
@@ -592,7 +592,7 @@
                                       </div>
                                         </div>
                                         <div class="field-name">
-                                          <label>Image</label>
+                                          <label>Upload an Image From PC:</label>
                                           <input type="file" placeholder="" accept="image/*"  name="image" id="image_${tableName}_${data.pk}" class="image">
                                         </div>
 
@@ -600,7 +600,7 @@
                                         
   
                                         <div class="field-name">
-                                          <label>Extra Images (Upload Mulitple)</label>
+                                          <label>Upload 2nd Image From PC (Upload Multiple):</label>
                                           <input type="file" accept="image/*" multiple="multiple" id="images_${tableName}_${data.pk}" placeholder="" name="images[]" class="images" >
                                         </div>
 
@@ -611,7 +611,7 @@
                                         </div>
                                         <div class="field-name custom-field">   
                                           <div class="field-category">
-                                          <label>Add New Images</label>
+                                            <label>Upload From Shakti's Image-bank:</label>
                                           <div class="select_box">
                                             <select class="box" style='width: 100%;' id="newimages2_${tableName}_${data.pk}" onchange="showNewimages(this.value)" name="newimages2"> 
                                               <option selected>Select New Images</option>
@@ -676,7 +676,7 @@
                                         
                                         <div class="field-name custom-field">   
                                           <div class="field-category">
-                                          <label>Add New Images</label>
+                                            <label>Upload From Shakti's Image-bank:</label>
                                           <div class="select_box">
                                             <select class="box" style='width: 100%;' id="newimages2_${tableName}_${data.pk}" onchange="showNewimages(this.value)" name="newimages2"> 
                                               <option selected>Select New Images</option>
@@ -702,12 +702,12 @@
                                         </div>
                                       </div>
                                         <div class="field-name">
-                                          <label>Image</label>
+                                          <label>Upload an Image From PC:</label>
                                           <input type="file" placeholder="" accept="image/*"  name="image" id="image_${tableName}_${data.pk}" class="image">
                                         </div>
   
                                         <div class="field-name">
-                                          <label>Extra Images (Upload Mulitple)</label>
+                                          <label>Upload 2nd Image From PC (Upload Multiple):</label>
                                           <input type="file" accept="image/*" multiple="multiple" id="images_${tableName}_${data.pk}" placeholder="" name="images[]" class="images" >
                                         </div>
                   
@@ -1476,6 +1476,7 @@
           img.onload = function() {
             if(this.width > 1020 ){
               alert("image should not be more than 1020 pixels width");
+              
   
               
               const x = document.getElementsByClassName('image');
@@ -1483,7 +1484,22 @@
                 x[i].value = "";
             }
              }
+
+            // jpg/jpeg restriction 
+
+             var fileName = file.name
+             var idxDot = fileName.lastIndexOf(".") + 1;
+             var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+             if (extFile=="jpg" || extFile=="jpeg"){
+        
+            }else{  
+                alert("Only jpg/jpeg files are allowed!");
+                document.querySelector('#imagewire').value = '';
+                document.querySelector('#imagenews').value = '';
+                document.querySelector('.image').value = '';
+            }   
           };
+
           img.onerror = function() {  
               alert( "not a valid file: " + file.type);
               const x = document.getElementsByClassName('image');
@@ -1495,12 +1511,17 @@
    
    
       }
+
+
+
     })
+
+  
   
   $(document).on('change','.imagemult',function(){
       var file, img;
   
-  
+    
       if ((file = this.files[0])) {
           img = new Image();
           img.onload = function() {
@@ -1515,8 +1536,8 @@
           };
           img.onerror = function() {  
               alert( "not a valid file: " + file.type);
-              document.getElementsByClassName("image")[0].value = ""
-              document.getElementsByClassName("image")[1].value = ""
+              document.getElementsByClassName("imagemult")[0].value = ""
+              document.getElementsByClassName("imagemult")[1].value = ""
           };
           img.src = _URL.createObjectURL(file);
    
@@ -1754,7 +1775,75 @@ function comparer(index) {
 }
 function getCellValue(row, index) { return $(row).children('td').eq(index-1).text() }
 
+{% comment %} multiple images jpg/jpeg validation on create {% endcomment %}
 
+$('.imagemult').on('change', function(e) {
+
+  if (this.files && this.files.length > 0) {
+      fileName = Array.from(this.files).map(({name}) => name );
+      for (let index in fileName) {
+        file = fileName[index]
+        var idxDot = file.lastIndexOf(".") + 1;
+        var extFile = file.substr(idxDot, file.length).toLowerCase();
+        if (extFile=="jpg" || extFile=="jpeg"){
+            
+        }else{  
+            alert("Only jpg/jpeg files are allowed!");
+            document.querySelector('.imagemult').value = '';
+            document.querySelectorAll('.imagemult')[1].value = '';
+            break;
+        }   
+      }
+      /*
+        A different solution: 
+      
+      fileName = Array.from(this.files).map(({name}) => name);
+      $('#fileName').append(fileName.join('<br/>'));
+      
+      */
+  }
+})
+
+{% comment %} multiple images jpg/jpeg validation on edit {% endcomment %}
+$(document).on('change','.images',function(){
+  if (this.files && this.files.length > 0) {
+    fileName = Array.from(this.files).map(({name}) => name );
+    for (let index in fileName) {
+      file = fileName[index]
+      var idxDot = file.lastIndexOf(".") + 1;
+      var extFile = file.substr(idxDot, file.length).toLowerCase();
+      if (extFile=="jpg" || extFile=="jpeg"){
+          
+      }else{  
+          alert("Only jpg/jpeg files are allowed!");
+          document.querySelector('.images').value = '';
+          
+          break;
+      }   
+    }
+    /*
+      A different solution: 
+    
+    fileName = Array.from(this.files).map(({name}) => name);
+    $('#fileName').append(fileName.join('<br/>'));
+    
+    */
+}
+});
+
+{% comment %} highlight blog row on view {% endcomment %}
+
+function Highlight(clicked_id)
+{
+    blogid = clicked_id.split("-")[1]
+    $(`#Content_Pitching_${blogid}`).attr('class', 'colorclass2');
+}
+
+function Highlight2(clicked_id)
+{
+    blogid = clicked_id.split("-")[1]
+    $(`#ApNewsrow_Content_Pitching_${blogid}`).attr('class', 'colorclass2');
+}
   </script>
   
   

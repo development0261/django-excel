@@ -215,14 +215,35 @@
               </div>
               
             <div class="field-name">
-                <label>Image</label>
+              <label>Upload an Image From PC:</label>
                 <input type="file" accept="image/*" id="imagewire"  placeholder="" name="image" class="image" >
             </div>
 
             <div class="field-name">
-              <label>Extra Images (Upload Mulitple)</label>
+              <label>Upload 2nd Image From PC (Upload Multiple):</label>
               <input type="file" placeholder="" name="extra_imagewire[]" accept="image/*" multiple="multiple" class="imagemult">
           </div>
+
+          <div class='col-lg-12'>
+            <div class='saprator_box'>
+              <span>OR</span>
+            </div>
+          </div>
+
+          <div class="field-name custom-field">   
+            <div class="field-category">
+              <label>Upload From Shakti's Image-bank:</label>
+            <div class="select_box">
+              <select class="box" style='width: 100%;' id="newimages_ApWire" onchange="showNewimages(this.value)" name="newimages"> 
+                <option selected value="0" >Select New Images</option>
+{% for image in new_images_dict %}
+                      <option value="{{image.id}}">{{image.image.url|imagenameslice}} </option>
+   {% endfor %}
+              </select>
+
+            </div>
+            </div>
+        </div>
 
         
 
@@ -304,15 +325,38 @@
 
 
             <div class="field-name">
-                <label>Primary Image</label>
+                <label>Upload an Image From PC:</label>
                 <input type="file" placeholder="" accept="image/*" id="imagenews" name="image" class="image">
             </div>
 
             <div class="field-name">
-              <label>Extra Images (Upload Mulitple)</label>
+              <label>Upload 2nd Image From PC (Upload Multiple):</label>
               <input type="file" placeholder="" name="extra_imagenews[]" accept="image/*" multiple="multiple" class="imagemult">
           </div>
 
+          
+          <div class='col-lg-12'>
+            <div class='saprator_box'>
+              <span>OR</span>
+            </div>
+          </div>
+
+          <div class="field-name custom-field">   
+            <div class="field-category">
+            <label>Upload From Shakti's Image-bank:</label>
+            <div class="select_box">
+              <select class="box" style='width: 100%;' id="newimages_ApWire" onchange="showNewimages(this.value)" name="newimages"> 
+                <option selected value="0" >Select New Images</option>
+{% for image in new_images_dict %}
+                      <option value="{{image.id}}">{{image.image.url|imagenameslice}}<a> </option>
+   {% endfor %}
+              </select>
+
+            </div>
+            </div>
+        </div>
+
+        
             
 
             <button type="submit" class="login-submit" name="Add" value="Add">Save Story</button>

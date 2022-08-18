@@ -98,3 +98,7 @@ def checkDraftStatus(date1,date2):
         return True
     else:
         return False
+
+@register.filter
+def imagenameslice(value):
+    return value.split("/")[-1]

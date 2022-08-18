@@ -157,11 +157,12 @@ $(".list-unstyled li").click(function(){
     var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
     if (extFile=="jpg" || extFile=="jpeg"){
         
-    }else{
+    }else{  
         alert("Only jpg/jpeg files are allowed!");
         document.querySelector('#input').value = '';
     }   
 }
+
+
 </script>
 {% include "modals.html" %}
-
