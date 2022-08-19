@@ -237,7 +237,7 @@
               <select class="box" style='width: 100%;' id="newimages_ApWire" onchange="showNewimages(this.value)" name="newimages"> 
                 <option selected value="0" >Select New Images</option>
 {% for image in new_images_dict %}
-                      <option value="{{image.id}}">{{image.image.url|imagenameslice}} </option>
+                      <option url="https://shaktidjangoblog-prod.s3.amazonaws.com/media/{{image.image.url|imagenameslice}}" value="{{image.id}}">{{image.image.url|imagenameslice}} </option>
    {% endfor %}
               </select>
 
@@ -345,10 +345,10 @@
             <div class="field-category">
             <label>Upload From Shakti's Image-bank:</label>
             <div class="select_box">
-              <select class="box" style='width: 100%;' id="newimages_ApWire" onchange="showNewimages(this.value)" name="newimages"> 
+              <select class="box" style='width: 100%;' id="newimages_ApNews" onchange="showNewimages(this.value)" name="newimages"> 
                 <option selected value="0" >Select New Images</option>
 {% for image in new_images_dict %}
-                      <option value="{{image.id}}">{{image.image.url|imagenameslice}}<a> </option>
+                      <option url="https://shaktidjangoblog-prod.s3.amazonaws.com/media/{{image.image.url|imagenameslice}}" value="{{image.id}}">{{image.image.url|imagenameslice}}<a> </option>
    {% endfor %}
               </select>
 

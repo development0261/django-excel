@@ -1844,6 +1844,30 @@ function Highlight2(clicked_id)
     blogid = clicked_id.split("-")[1]
     $(`#ApNewsrow_Content_Pitching_${blogid}`).attr('class', 'colorclass2');
 }
+
+{% comment %} dropdown open image {% endcomment %}
+
+$(function() {
+  // bind change event to select
+  $('#newimages_ApWire').on('change', function() {
+    var url = $('option:selected', this).attr('url'); // get selected value
+    if (url) {
+ 				window.open(url,'_blank'); // redirect
+    }
+    return false;
+  });
+});
+
+$(function() {
+  // bind change event to select
+  $('#newimages_ApNews').on('change', function() {
+    var url = $('option:selected', this).attr('url'); // get selected value
+    if (url) {
+ 				window.open(url,'_blank'); // redirect
+    }
+    return false;
+  });
+});
   </script>
   
   
