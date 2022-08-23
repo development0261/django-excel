@@ -347,12 +347,12 @@
                                           <div class="field-category">
                                             <label>Upload From Shakti's Image-bank:</label>
                                           <div class="select_box">
-                                            <select class="box" style='width: 100%;' id="newimages_${tableName}_${data.pk}" onchange="showNewimages(this.value)" name="newimages"> 
+                                            <select class="box Apwire_moreimages_class" style='width: 100%;' id="newimages_${tableName}_${data.pk}" onchange="showNewimages(this.value)" name="newimages"> 
                                               <option selected value="0" >Select New Images</option>
                                               ${
                                                 new_images.map((item,index)=>{
                                                   return(
-                                                    `<option value="${item[1]}" ${data.image == item[0]?`selected`:''}>${item[0].slice(6)}</option>`
+                                                    `<option url="https://shaktidjangoblog-prod.s3.amazonaws.com/media/${item[0].slice(6)}" value="${item[1]}" ${data.image == item[0]?`selected`:''}>${item[0].slice(6)}</option>`
                                                   )
                                                 })
                                               }   
@@ -440,12 +440,12 @@
                                         <div class="field-category">
                                           <label>Upload From Shakti's Image-bank:</label>
                                         <div class="select_box">
-                                          <select class="box" style='width: 100%;' id="newimages_${tableName}_${data.pk}" onchange="showNewimages(this.value)" name="newimages"> 
+                                          <select class="box Apwire_moreimages_class" style='width: 100%;' id="newimages_${tableName}_${data.pk}" onchange="showNewimages(this.value)" name="newimages"> 
                                             <option selected>Select New Images</option>
                                             ${
                                               new_images.map((item,index)=>{
                                                 return(
-                                                  `<option value="${item[1]}" ${data.image == item[0]?`selected`:''}>${item[0].slice(6)}</option>`
+                                                  `<option url="https://shaktidjangoblog-prod.s3.amazonaws.com/media/${item[0].slice(6)}" value="${item[1]}" ${data.image == item[0]?`selected`:''}>${item[0].slice(6)}</option>`
                                                 )
                                               })
                                             }
@@ -613,12 +613,12 @@
                                           <div class="field-category">
                                             <label>Upload From Shakti's Image-bank:</label>
                                           <div class="select_box">
-                                            <select class="box" style='width: 100%;' id="newimages2_${tableName}_${data.pk}" onchange="showNewimages(this.value)" name="newimages2"> 
+                                            <select class="box Apnews_moreimages_class" style='width: 100%;' id="newimages2_${tableName}_${data.pk}" onchange="showNewimages(this.value)" name="newimages2"> 
                                               <option selected>Select New Images</option>
                                               ${
                                                 new_images.map((item,index)=>{
                                                   return(
-                                                    `<option value="${item[1]}" ${data.image == item[0]?`selected`:''}>${item[0].slice(6)}</option>`
+                                                    `<option url="https://shaktidjangoblog-prod.s3.amazonaws.com/media/${item[0].slice(6)}" value="${item[1]}" ${data.image == item[0]?`selected`:''}>${item[0].slice(6)}</option>`
                                                   )
                                                 })
                                               }
@@ -678,12 +678,12 @@
                                           <div class="field-category">
                                             <label>Upload From Shakti's Image-bank:</label>
                                           <div class="select_box">
-                                            <select class="box" style='width: 100%;' id="newimages2_${tableName}_${data.pk}" onchange="showNewimages(this.value)" name="newimages2"> 
+                                            <select class="box Apnews_moreimages_class" style='width: 100%;' id="newimages2_${tableName}_${data.pk}" onchange="showNewimages(this.value)" name="newimages2"> 
                                               <option selected>Select New Images</option>
                                               ${
                                                 new_images.map((item,index)=>{
                                                   return(
-                                                    `<option value="${item[1]}" ${data.image == item[0]?`selected`:''}>${item[0].slice(6)}</option>`
+                                                    `<option url="https://shaktidjangoblog-prod.s3.amazonaws.com/media/${item[0].slice(6)}" value="${item[1]}" ${data.image == item[0]?`selected`:''}>${item[0].slice(6)}</option>`
                                                   )
                                                 })
                                               }
@@ -1867,6 +1867,29 @@ $(function() {
     }
     return false;
   });
+});
+
+$(document).on('change','.Apwire_moreimages_class',function(){
+  // bind change event to select
+  
+    var url = $('option:selected', this).attr('url'); // get selected value
+    if (url) {
+ 				window.open(url,'_blank'); // redirect
+    }
+    return false;
+  
+});
+
+
+$(document).on('change','.Apnews_moreimages_class',function(){
+  // bind change event to select
+  
+    var url = $('option:selected', this).attr('url'); // get selected value
+    if (url) {
+ 				window.open(url,'_blank'); // redirect
+    }
+    return false;
+  
 });
   </script>
   
