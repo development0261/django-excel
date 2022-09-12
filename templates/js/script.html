@@ -1651,9 +1651,25 @@
     });
   
     
+{% comment %}  Table headers resize {% endcomment %}
+
     $(function() {
       var thHeight = $("table.mytable th:first").height();
       $("table.mytable th").resizable({
+          handles: "e",
+          minHeight: thHeight,
+          maxHeight: thHeight,
+          minWidth: 40,
+          resize: function (event, ui) {
+            var sizerID = "#" + $(event.target).attr("id") + "-sizer";
+            $(sizerID).width(ui.size.width);
+          }
+      });
+    });
+
+    $(function() {
+      var thHeight = $("table.mytable2 th:first").height();
+      $("table.mytable2 th").resizable({
           handles: "e",
           minHeight: thHeight,
           maxHeight: thHeight,
@@ -1891,6 +1907,8 @@ $(document).on('change','.Apnews_moreimages_class',function(){
     return false;
   
 });
+
+
   </script>
   
   

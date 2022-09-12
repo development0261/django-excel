@@ -312,9 +312,11 @@ def editData(request,id,tableName):
         category_name = cat_obj.name
 
     tableObj = Ap_Wire.objects.get(pk = id)
-    print("?")
+    print("?-------------------")
     print(imnew_id)
-    if not str(imnew_id)=="0":
+    if str(imnew_id)=="0" or str(imnew_id)=="Select New Images":
+        pass
+    else:
         moreimages_obj = moreimages_apwire.objects.create(post = tableObj)
         # moreimages_obj = moreimages_apwire.objects.get(post=tableObj)
         newimageobj = Mangeimages.objects.get(id = imnew_id)       
@@ -433,7 +435,9 @@ def editData2(request,id,tableName):
 
     tableObj = Ap_News.objects.get(pk = id)
 
-    if not imnew_id=="Select New Images":
+    if str(imnew_id)=="0" or str(imnew_id)=="Select New Images":
+        pass
+    else:
         moreimages_obj = moreimages_apnews.objects.create(post = tableObj)
         # moreimages_obj = moreimages_apwire.objects.get(post=tableObj)
         newimageobj = Mangeimages.objects.get(id = imnew_id)
@@ -1942,7 +1946,7 @@ def imageview(request):
         context = None
     ap_wire_img = Ap_Wire.objects.all()
     ap_news_img = Ap_News.objects.all()
-    extra_img = Mangeimages.objects.all()
+    extra_img = reversed(Mangeimages.objects.all())
     return render(request,'images.html',{"img":ap_wire_img,"img2":ap_news_img,"extra_img":extra_img,'context':context})
 
 def uploadimage(request):
@@ -1961,4 +1965,10 @@ def uploadimage(request):
         #     image=request.FILES['image']
         #     blog.image = image
         #     blog.save()
-        
+
+def getImageData(request,id):
+    if id:
+        image = Mangeimages.objects.get(id=id)
+    else:
+        image = None
+    return JsonResponse({"image":image.image.url})
