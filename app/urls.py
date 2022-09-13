@@ -70,7 +70,7 @@ urlpatterns = [
 
     path('viewxmlalldownload/',views.downloadxmlall,name='viewxmlalldownload'),
     
-    path('viewimageexpand/<int:id>/',views.getImageData,name="getImageData"),
+    path('viewimageexpand/<str:id>/',views.getImageData,name="getImageData"),
 ]
 
 if settings.DEBUG:

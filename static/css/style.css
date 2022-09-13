@@ -887,3 +887,10 @@ h5.image_box_title {
     text-align: center;
     margin-left: 25px;
 }
+
+.image_expand_large{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

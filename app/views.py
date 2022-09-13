@@ -1968,7 +1968,15 @@ def uploadimage(request):
 
 def getImageData(request,id):
     if id:
-        image = Mangeimages.objects.get(id=id)
+        type,im_id=id.split("_")
+        if type == "extr":
+            image = Mangeimages.objects.get(id=im_id)
+        elif type == "wire":
+            image = Ap_Wire.objects.get(id=im_id)
+        elif type == "news":
+            image = Ap_News.objects.get(id=im_id)
+        else:
+            image = None
     else:
         image = None
     return JsonResponse({"image":image.image.url})
