@@ -1061,7 +1061,10 @@ def downloadpdf(request,pk):
         image_data = None    
     if moreimages_apwire.objects.filter(post=blogobj):
         for i in moreimages_apwire.objects.filter(post=blogobj):
-            imglist.append("https://shaktidjangoblog-prod.s3.amazonaws.com"+"/"+i.image.name)
+            if str(i.image)[:4] == "http":
+                imglist.append(i.image.name)    
+            else:
+                imglist.append("https://shaktidjangoblog-prod.s3.amazonaws.com"+"/"+i.image.name)
     
     x = blogobj.description.split("\n")
     y = []
@@ -1089,7 +1092,10 @@ def downloadpdf2(request,pk):
         image_data = None    
     if moreimages_apnews.objects.filter(post=blogobj):
         for i in moreimages_apnews.objects.filter(post=blogobj):
-            imglist.append("https://shaktidjangoblog-prod.s3.amazonaws.com"+"/"+i.image.name)
+            if str(i.image)[:4] == "http":
+                imglist.append(i.image.name)    
+            else:
+                imglist.append("https://shaktidjangoblog-prod.s3.amazonaws.com"+"/"+i.image.name)
     
     x = blogobj.description.split("\n")
     y = []
